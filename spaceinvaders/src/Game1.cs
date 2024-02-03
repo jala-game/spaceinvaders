@@ -31,6 +31,9 @@ public class Game1 : Game
         playerPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2,
         _graphics.PreferredBackBufferHeight / 2);
 
+        PlayScreen playScreen = new();
+        ScreenManager.ChangeScreen(playScreen);
+
         base.Initialize();
     }
 
@@ -47,6 +50,8 @@ public class Game1 : Game
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
+
+        ScreenManager.Update();
 
         var kstate = Keyboard.GetState();
         int PLAYER_SPEED = 20;
@@ -65,6 +70,8 @@ public class Game1 : Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         _spriteBatch.Begin();
+
+        ScreenManager.Update();
 
         _spriteBatch.Draw(
             playerTexture,
