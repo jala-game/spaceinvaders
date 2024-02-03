@@ -1,4 +1,31 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
 public class PlayScreen : GameScreenModel
 {
-    // Implemente métodos específicos para o gameplay
+
+    private readonly SpaceShip spaceShip;
+
+    public PlayScreen(SpaceShip ship)
+    {
+        spaceShip = ship;
+    }
+
+
+    public override void LoadContent() {
+        base.Update();
+    }
+
+    public override void Update()
+    {
+        spaceShip.Update();
+        base.Update();
+    }
+
+    public override void Draw()
+    {
+        spaceShip.Draw();
+        base.Draw();
+    }
+
 }
