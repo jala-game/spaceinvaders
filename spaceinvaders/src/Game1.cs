@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -9,10 +8,6 @@ public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-
-    Texture2D playerTexture;
-    Vector2 playerPosition;
-
 
     public Game1()
     {
@@ -28,22 +23,21 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-        playerPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2,
-        _graphics.PreferredBackBufferHeight / 2);
-
-        PlayScreen playScreen = new();
-        ScreenManager.ChangeScreen(playScreen);
-
         base.Initialize();
     }
 
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-        playerTexture = Content.Load<Texture2D>("ship");
+        LoadScreenManager();
 
         // TODO: use this.Content to load your game content here
+    }
+
+    private void LoadScreenManager() {
+        SpaceShip spaceShip = new(_graphics, _spriteBatch, Content);
+        PlayScreen playScreen = new(spaceShip);
+        ScreenManager.ChangeScreen(playScreen);
     }
 
     protected override void Update(GameTime gameTime)
@@ -52,15 +46,6 @@ public class Game1 : Game
             Exit();
 
         ScreenManager.Update();
-
-        var kstate = Keyboard.GetState();
-        int PLAYER_SPEED = 20;
-
-        bool rightLimit = _graphics.PreferredBackBufferWidth > playerPosition.X + playerTexture.Width / 2;
-        if (kstate.IsKeyDown(Keys.D) && rightLimit) playerPosition.X += PLAYER_SPEED;
-
-        bool leftLimit = playerTexture.Width / 2 < playerPosition.X;
-        if (kstate.IsKeyDown(Keys.A) && leftLimit) playerPosition.X -= PLAYER_SPEED;
 
         base.Update(gameTime);
     }
@@ -71,19 +56,7 @@ public class Game1 : Game
 
         _spriteBatch.Begin();
 
-        ScreenManager.Update();
-
-        _spriteBatch.Draw(
-            playerTexture,
-            playerPosition,
-            null,
-            Color.White,
-            0f,
-            new Vector2(playerTexture.Width / 2, - _graphics.PreferredBackBufferHeight / 2 + playerTexture.Height + 50),
-            Vector2.One,
-            SpriteEffects.None,
-            0f
-        );
+        ScreenManager.Draw();
         // TODO: Add you+r drawing code here
 
         _spriteBatch.End();

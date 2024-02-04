@@ -1,16 +1,24 @@
+using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-class SpaceShip {
-    private Texture2D texture;
+public class SpaceShip {
+    private readonly Texture2D texture;
     private Vector2 position;
     private GraphicsDeviceManager graphics;
+    private SpriteBatch _spriteBatch;
 
-    public SpaceShip(Texture2D playerTexture, Vector2 playerPosition, GraphicsDeviceManager _graphics) {
-        texture = playerTexture;
-        position = playerPosition;
+    public SpaceShip(GraphicsDeviceManager _graphics, SpriteBatch spriteBatch, ContentManager contentManager) {
+        Random random = new();
+        int randomShip = random.Next(1, 4);
+        texture = contentManager.Load<Texture2D>($"ship{randomShip}");;
+        position = new Vector2(_graphics.PreferredBackBufferWidth / 2,
+        _graphics.PreferredBackBufferHeight / 2);
+
         graphics = _graphics;
+        _spriteBatch = spriteBatch;
     }
 
     public void Update()
@@ -25,7 +33,7 @@ class SpaceShip {
         if (kstate.IsKeyDown(Keys.A) && leftLimit) position.X -= PLAYER_SPEED;
     }
 
-    public void Draw(SpriteBatch _spriteBatch)
+    public void Draw()
     {
         _spriteBatch.Draw(
             texture,
