@@ -11,7 +11,9 @@ public class SpaceShip {
     private SpriteBatch _spriteBatch;
 
     public SpaceShip(GraphicsDeviceManager _graphics, SpriteBatch spriteBatch, ContentManager contentManager) {
-        texture = contentManager.Load<Texture2D>("ship");;
+        Random random = new();
+        int randomShip = random.Next(1, 4);
+        texture = contentManager.Load<Texture2D>($"ship{randomShip}");;
         position = new Vector2(_graphics.PreferredBackBufferWidth / 2,
         _graphics.PreferredBackBufferHeight / 2);
 
