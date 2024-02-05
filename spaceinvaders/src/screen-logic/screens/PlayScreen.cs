@@ -11,6 +11,11 @@ public class PlayScreen : GameScreenModel
         spaceShip = ship;
     }
 
+    public override void Initialize()
+    {
+        base.Initialize();
+    }
+
 
     public override void LoadContent() {
         base.Update();

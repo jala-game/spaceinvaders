@@ -3,12 +3,16 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
+using MonoGame.Extended.Collisions;
 
-public class SpaceShip {
+public class SpaceShip : ICollisionActor {
     private readonly Texture2D texture;
     private Vector2 position;
     private GraphicsDeviceManager graphics;
     private SpriteBatch _spriteBatch;
+
+    public IShapeF Bounds => throw new NotImplementedException();
 
     public SpaceShip(GraphicsDeviceManager _graphics, SpriteBatch spriteBatch, ContentManager contentManager) {
         Random random = new();
@@ -46,5 +50,10 @@ public class SpaceShip {
             SpriteEffects.None,
             0f
         );
+    }
+
+    public void OnCollision(CollisionEventArgs collisionInfo)
+    {
+        
     }
 }
