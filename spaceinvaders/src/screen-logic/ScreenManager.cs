@@ -8,6 +8,10 @@ public class ScreenManager
         currentScreen.LoadContent();
     }
 
+    public static void Initialize() {
+        currentScreen.Initialize();
+    }
+
     public static void Update()
     {
         currentScreen.Update();
