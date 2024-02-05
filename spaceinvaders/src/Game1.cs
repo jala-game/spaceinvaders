@@ -24,7 +24,6 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-        ScreenManager.Initialize();
         base.Initialize();
     }
 
