@@ -8,6 +8,7 @@ public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
+    Texture2D background;
 
     public Game1()
     {
@@ -29,9 +30,8 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+        background = Content.Load<Texture2D>("background");
         LoadScreenManager();
-
-        // TODO: use this.Content to load your game content here
     }
 
     private void LoadScreenManager() {
@@ -56,6 +56,7 @@ public class Game1 : Game
 
         _spriteBatch.Begin();
 
+        _spriteBatch.Draw(background, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
         ScreenManager.Draw();
         // TODO: Add you+r drawing code here
 
