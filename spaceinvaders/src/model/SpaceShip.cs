@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 
-public class SpaceShip : ICollisionActor {
+public class SpaceShip : Entity {
     private readonly Texture2D texture;
     private GraphicsDeviceManager graphics;
     private SpriteBatch _spriteBatch;

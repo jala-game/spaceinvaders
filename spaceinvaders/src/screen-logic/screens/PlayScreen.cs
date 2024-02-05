@@ -1,30 +1,53 @@
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
+using MonoGame.Extended.Collisions;
 
 public class PlayScreen : GameScreenModel
 {
 
     private readonly SpaceShip spaceShip;
+    private CollisionComponent _collisionComponent;
+    private readonly GraphicsDeviceManager _graphics;
+    private readonly List<Entity> entities = new();
 
-    public PlayScreen(SpaceShip ship)
+    public PlayScreen(SpaceShip ship, GraphicsDeviceManager graphics)
     {
         spaceShip = ship;
+        _graphics = graphics;
+    }
+
+    public override void Initialize() {
+        base.Initialize();
+        _collisionComponent = new CollisionComponent(new RectangleF(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight));
+
+        entities.Add(spaceShip);
+
+        foreach (Entity entity in entities) {
+            _collisionComponent.Insert(entity);
+        }
     }
 
     public override void LoadContent() {
-        base.Update();
+        base.LoadContent();
     }
 
-    public override void Update()
+    public override void Update(GameTime gameTime)
     {
-        spaceShip.Update();
-        base.Update();
+        foreach (Entity entity in entities) {
+            entity.Update();
+        }
+
+        _collisionComponent.Update(gameTime);
+        base.Update(gameTime);
     }
 
-    public override void Draw()
+    public override void Draw(GameTime gameTime)
     {
-        spaceShip.Draw();
-        base.Draw();
-    }
+        foreach (Entity entity in entities) {
+            entity.Draw();
+        }
 
+        base.Draw(gameTime);
+    }
 }
