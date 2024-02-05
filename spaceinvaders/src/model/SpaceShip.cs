@@ -8,18 +8,18 @@ using MonoGame.Extended.Collisions;
 
 public class SpaceShip : ICollisionActor {
     private readonly Texture2D texture;
-    private Vector2 position;
     private GraphicsDeviceManager graphics;
     private SpriteBatch _spriteBatch;
 
-    public IShapeF Bounds => throw new NotImplementedException();
+    public IShapeF Bounds { get; }
 
     public SpaceShip(GraphicsDeviceManager _graphics, SpriteBatch spriteBatch, ContentManager contentManager) {
         Random random = new();
         int randomShip = random.Next(1, 4);
-        texture = contentManager.Load<Texture2D>($"ship{randomShip}");;
-        position = new Vector2(_graphics.PreferredBackBufferWidth / 2,
+        texture = contentManager.Load<Texture2D>($"ship{randomShip}");
+        Vector2 position = new(_graphics.PreferredBackBufferWidth / 2,
         _graphics.PreferredBackBufferHeight / 2);
+        Bounds = new RectangleF(position, new Size2(100, 90));
 
         graphics = _graphics;
         _spriteBatch = spriteBatch;
@@ -30,18 +30,18 @@ public class SpaceShip : ICollisionActor {
         var kstate = Keyboard.GetState();
         int PLAYER_SPEED = 20;
 
-        bool rightLimit = graphics.PreferredBackBufferWidth > position.X + texture.Width / 2;
-        if (kstate.IsKeyDown(Keys.D) && rightLimit) position.X += PLAYER_SPEED;
+        bool rightLimit = graphics.PreferredBackBufferWidth > Bounds.Position.X + texture.Width / 2;
+        if (kstate.IsKeyDown(Keys.D) && rightLimit) Bounds.Position = new Vector2(PLAYER_SPEED + Bounds.Position.X, Bounds.Position.Y);
 
-        bool leftLimit = texture.Width / 2 < position.X;
-        if (kstate.IsKeyDown(Keys.A) && leftLimit) position.X -= PLAYER_SPEED;
+        bool leftLimit = texture.Width / 2 < Bounds.Position.X;
+        if (kstate.IsKeyDown(Keys.A) && leftLimit) Bounds.Position = new Vector2(Bounds.Position.X - PLAYER_SPEED, Bounds.Position.Y);
     }
 
     public void Draw()
     {
         _spriteBatch.Draw(
             texture,
-            position,
+            Bounds.Position,
             null,
             Color.White,
             0f,
