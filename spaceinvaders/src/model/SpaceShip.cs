@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,11 +9,13 @@ using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 
 public class SpaceShip : Entity {
-    private readonly Texture2D texture;
+    public readonly Texture2D texture;
     private GraphicsDeviceManager graphics;
     private SpriteBatch _spriteBatch;
+    private ContentManager _contentManager;
 
     public IShapeF Bounds { get; }
+    public List<Bullet> bullets = new();
 
     public SpaceShip(GraphicsDeviceManager _graphics, SpriteBatch spriteBatch, ContentManager contentManager) {
         Random random = new();
@@ -19,9 +23,10 @@ public class SpaceShip : Entity {
         texture = contentManager.Load<Texture2D>($"ship{randomShip}");
         Vector2 position = new(_graphics.PreferredBackBufferWidth / 2,
         _graphics.PreferredBackBufferHeight / 2);
-        Bounds = new RectangleF(position, new Size2(100, 90));
-
         graphics = _graphics;
+        Bounds = new RectangleF(position, new Size2(texture.Width, texture.Height));
+
+        _contentManager = contentManager;
         _spriteBatch = spriteBatch;
     }
 
@@ -35,6 +40,11 @@ public class SpaceShip : Entity {
 
         bool leftLimit = texture.Width / 2 < Bounds.Position.X;
         if (kstate.IsKeyDown(Keys.A) && leftLimit) Bounds.Position = new Vector2(Bounds.Position.X - PLAYER_SPEED, Bounds.Position.Y);
+
+        Texture2D bulletTexture = _contentManager.Load<Texture2D>("red-bullet");
+        if (kstate.IsKeyDown(Keys.Space)) bullets.Add(new Bullet(new Vector2(Bounds.Position.X, Bounds.Position.Y), bulletTexture, _spriteBatch, graphics));
+
+        bullets.RemoveAll(b => b.Bounds.Position.Y < -graphics.PreferredBackBufferHeight / 2);
     }
 
     public void Draw()
@@ -54,6 +64,6 @@ public class SpaceShip : Entity {
 
     public void OnCollision(CollisionEventArgs collisionInfo)
     {
-        
+        Console.WriteLine("colidiu garaio");
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
@@ -23,6 +24,7 @@ public class PlayScreen : GameScreenModel
 
         entities.Add(spaceShip);
 
+
         foreach (Entity entity in entities) {
             _collisionComponent.Insert(entity);
         }
@@ -34,6 +36,13 @@ public class PlayScreen : GameScreenModel
 
     public override void Update(GameTime gameTime)
     {
+        foreach (Bullet bullet in spaceShip.bullets) {
+            bullet.Update();
+            if (spaceShip.Bounds.Intersects(bullet.Bounds)) {
+                spaceShip.OnCollision(null);
+            }
+        }
+
         foreach (Entity entity in entities) {
             entity.Update();
         }
@@ -44,6 +53,10 @@ public class PlayScreen : GameScreenModel
 
     public override void Draw(GameTime gameTime)
     {
+        foreach (Bullet bullet in spaceShip.bullets) {
+            bullet.Draw();
+        }
+
         foreach (Entity entity in entities) {
             entity.Draw();
         }
