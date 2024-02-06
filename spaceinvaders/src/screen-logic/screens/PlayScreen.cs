@@ -36,31 +36,50 @@ public class PlayScreen : GameScreenModel
 
     public override void Update(GameTime gameTime)
     {
-        foreach (Bullet bullet in spaceShip.bullets) {
-            bullet.Update();
-            if (spaceShip.Bounds.Intersects(bullet.Bounds)) {
-                spaceShip.OnCollision(null);
-            }
-        }
-
-        foreach (Entity entity in entities) {
-            entity.Update();
-        }
+       this.SpaceShipBulletUpdate();
+       this.EntitiesUpdate();
 
         _collisionComponent.Update(gameTime);
         base.Update(gameTime);
     }
 
+    private void SpaceShipBulletUpdate() {
+        spaceShip.bullet?.Update();
+
+        // foreach (Bullet bullet in enemy.bullets) {
+        //     bullet.Update();
+        //     if (shield.Bound.Intersects(bullet.Bounds)) {
+        //         // shield collision
+        //     }
+
+        //     if (spaceShip.Bounds.Intersects(bullet.Bounds)) {  You can use that to detect collisions between enemy and the bullet
+        //         spaceShip.OnCollision(null); // spaceShip collision
+        //     }
+        // }
+    }
+
+    private void EntitiesUpdate() {
+        foreach (Entity entity in entities) {
+            entity.Update();
+        }
+    }
+
     public override void Draw(GameTime gameTime)
     {
-        foreach (Bullet bullet in spaceShip.bullets) {
-            bullet.Draw();
-        }
 
+        this.DrawSpaceShip();
+        this.DrawEntities();
+
+        base.Draw(gameTime);
+    }
+
+    private void DrawSpaceShip() {
+        spaceShip.bullet?.Draw();
+    }
+
+    private void DrawEntities() {
         foreach (Entity entity in entities) {
             entity.Draw();
         }
-
-        base.Draw(gameTime);
     }
 }
