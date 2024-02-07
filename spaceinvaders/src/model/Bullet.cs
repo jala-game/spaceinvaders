@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -8,7 +7,7 @@ using MonoGame.Extended.Collisions;
 public class Bullet : Entity
 {
     private readonly Texture2D _texture;
-    private readonly float SPEED = 30f;
+    private readonly float SPEED = 10f;
     private readonly SpriteBatch _spriteBatch;
     private readonly GraphicsDeviceManager _graphics;
 
@@ -17,7 +16,8 @@ public class Bullet : Entity
     public Bullet(Vector2 position, Texture2D texture, SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
     {
         _texture = texture;
-        Bounds = new RectangleF(position, new Size2(texture.Width, texture.Height));
+        Vector2 bulletPosition = new(position.X + texture.Width / 2, position.Y + texture.Height / 2);
+        Bounds = new RectangleF(bulletPosition, new Size2(texture.Width, texture.Height));
         _spriteBatch = spriteBatch;
         _graphics = graphics;
     }
@@ -32,13 +32,7 @@ public class Bullet : Entity
         _spriteBatch.Draw(
             _texture,
             Bounds.Position,
-            null,
-            Color.White,
-            0f,
-            new Vector2(_texture.Width / 2, - _graphics.PreferredBackBufferHeight / 2 + _texture.Height + 50),
-            Vector2.One,
-            SpriteEffects.None,
-            0f
+            Color.White
         );
 
     }

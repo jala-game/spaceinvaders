@@ -68,12 +68,12 @@ public class SpaceShip : Entity {
     private void Shoot(KeyboardState kstate) {
         if (kstate.IsKeyDown(Keys.Space) && bullet == null) {
             Texture2D bulletTexture = _contentManager.Load<Texture2D>("red-bullet");
-            bullet = new Bullet(new Vector2(Bounds.Position.X, Bounds.Position.Y), bulletTexture, _spriteBatch, graphics);
+            bullet = new Bullet(Bounds.Position, bulletTexture, _spriteBatch, graphics);
         }
     }
 
     private void RemoveBulletWhenLeaveFromMap() {
-        if (bullet != null && bullet.Bounds.Position.Y < -graphics.PreferredBackBufferHeight / 2) {
+        if (bullet != null && bullet.Bounds.Position.Y < 0) {
             bullet = null;
         }
     }
