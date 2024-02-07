@@ -24,19 +24,20 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
+        _spriteBatch = new SpriteBatch(GraphicsDevice);
+        LoadScreenManager();
+        ScreenManager.Initialize();
         base.Initialize();
     }
 
     protected override void LoadContent()
     {
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
         background = Content.Load<Texture2D>("background");
-        LoadScreenManager();
     }
 
     private void LoadScreenManager() {
         SpaceShip spaceShip = new(_graphics, _spriteBatch, Content);
-        PlayScreen playScreen = new(spaceShip);
+        PlayScreen playScreen = new(spaceShip, _graphics);
         ScreenManager.ChangeScreen(playScreen);
     }
 
@@ -45,7 +46,7 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        ScreenManager.Update();
+        ScreenManager.Update(gameTime);
 
         base.Update(gameTime);
     }
@@ -57,8 +58,7 @@ public class Game1 : Game
         _spriteBatch.Begin();
 
         _spriteBatch.Draw(background, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
-        ScreenManager.Draw();
-        // TODO: Add you+r drawing code here
+        ScreenManager.Draw(gameTime);
 
         _spriteBatch.End();
 

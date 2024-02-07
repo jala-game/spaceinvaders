@@ -1,3 +1,5 @@
+using Microsoft.Xna.Framework;
+
 public class ScreenManager
 {
     private static GameScreenModel currentScreen;
@@ -8,13 +10,17 @@ public class ScreenManager
         currentScreen.LoadContent();
     }
 
-    public static void Update()
-    {
-        currentScreen.Update();
+    public static void Initialize() {
+        currentScreen.Initialize();
     }
 
-    public static void Draw()
+    public static void Update(GameTime gameTime)
     {
-        currentScreen.Draw();
+        currentScreen.Update(gameTime);
+    }
+
+    public static void Draw(GameTime gameTime)
+    {
+        currentScreen.Draw(gameTime);
     }
 }
