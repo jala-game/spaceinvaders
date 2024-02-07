@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
-using MonoGame.Extended.Collisions;
 
 public class PlayScreen : GameScreenModel
 {
@@ -10,17 +11,23 @@ public class PlayScreen : GameScreenModel
     private readonly SpaceShip spaceShip;
     private readonly GraphicsDeviceManager _graphics;
     private readonly List<Entity> entities = new();
+    private readonly List<Entity> enemies = new();
+    private readonly ContentManager _contentManager;
+    private readonly SpriteBatch _spriteBatch;
 
-    public PlayScreen(SpaceShip ship, GraphicsDeviceManager graphics)
+    public PlayScreen(SpaceShip ship, GraphicsDeviceManager graphics, ContentManager contentManager, SpriteBatch spriteBatch)
     {
         spaceShip = ship;
         _graphics = graphics;
+        _contentManager = contentManager;
+        _spriteBatch = spriteBatch;
     }
 
     public override void Initialize() {
-        base.Initialize();
-
         entities.Add(spaceShip);
+        enemies.Add(new RedEnemy(_contentManager, _spriteBatch, _graphics ));
+
+        base.Initialize();
     }
 
     public override void LoadContent() {
@@ -29,30 +36,37 @@ public class PlayScreen : GameScreenModel
 
     public override void Update(GameTime gameTime)
     {
-       this.SpaceShipBulletUpdate();
+       this.EnemiesUpdate();
        this.EntitiesUpdate();
-
-        base.Update(gameTime);
+       this.SpaceShipBulletUpdate();
+ 
+       base.Update(gameTime);
     }
 
     private void SpaceShipBulletUpdate() {
-        spaceShip.bullet?.Update();
+        if (spaceShip.bullet == null) return;
 
-        // foreach (Bullet bullet in enemy.bullets) {
-        //     bullet.Update();
-        //     if (shield.Bound.Intersects(bullet.Bounds)) {
-        //         // shield collision
-        //     }
+        spaceShip.bullet.Update();
 
-        //     if (spaceShip.Bounds.Intersects(bullet.Bounds)) {  You can use that to detect collisions between enemy and the bullet
-        //         spaceShip.OnCollision(null); // spaceShip collision
-        //     }
-        // }
+        foreach (Entity enemy in enemies) {
+            Console.WriteLine(enemy.Bounds.Position.Y);
+            Console.WriteLine(spaceShip.bullet.Bounds.Position.Y);
+            Console.WriteLine(spaceShip.bullet.Bounds.Intersects(enemy.Bounds));
+            if (spaceShip.bullet.Bounds.Intersects(enemy.Bounds)) {
+                enemy.OnCollision(null);
+            }
+        }
     }
 
     private void EntitiesUpdate() {
         foreach (Entity entity in entities) {
             entity.Update();
+        }
+    }
+
+    private void EnemiesUpdate() {
+        foreach (Entity enemy in enemies) {
+            enemy.Update();
         }
     }
 
@@ -72,6 +86,10 @@ public class PlayScreen : GameScreenModel
     private void DrawEntities() {
         foreach (Entity entity in entities) {
             entity.Draw();
+        }
+
+        foreach (Entity enemy in enemies) {
+            enemy.Draw();
         }
     }
 }

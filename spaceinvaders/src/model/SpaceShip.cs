@@ -19,11 +19,18 @@ public class SpaceShip : Entity {
 
     public SpaceShip(GraphicsDeviceManager _graphics, SpriteBatch spriteBatch, ContentManager contentManager) {
         Random random = new();
-        int randomShip = random.Next(1, 4);
+        int randomShip = random.Next(1, 5);
         texture = contentManager.Load<Texture2D>($"ship{randomShip}");
 
-        Vector2 position = new(_graphics.PreferredBackBufferWidth / 2,
-        _graphics.PreferredBackBufferHeight / 2);
+
+        int heightTop = _graphics.PreferredBackBufferHeight - texture.Height / 2;
+        int widthCenter = _graphics.PreferredBackBufferWidth / 2;
+
+        int centralizeByTextureWidth = widthCenter - texture.Width / 2;
+        int centralizeByTextureHeight = heightTop - texture.Height / 2;
+
+        Vector2 position = new(centralizeByTextureWidth, centralizeByTextureHeight);
+
         Bounds = new RectangleF(position, new Size2(texture.Width, texture.Height));
 
         graphics = _graphics;
@@ -76,13 +83,7 @@ public class SpaceShip : Entity {
         _spriteBatch.Draw(
             texture,
             Bounds.Position,
-            null,
-            Color.White,
-            0f,
-            new Vector2(texture.Width / 2, - graphics.PreferredBackBufferHeight / 2 + texture.Height + 50),
-            Vector2.One,
-            SpriteEffects.None,
-            0f
+            Color.White
         );
     }
 

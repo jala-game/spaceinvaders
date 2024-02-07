@@ -37,7 +37,7 @@ public class Game1 : Game
 
     private void LoadScreenManager() {
         SpaceShip spaceShip = new(_graphics, _spriteBatch, Content);
-        PlayScreen playScreen = new(spaceShip, _graphics);
+        PlayScreen playScreen = new(spaceShip, _graphics, Content, _spriteBatch);
         ScreenManager.ChangeScreen(playScreen);
     }
 
