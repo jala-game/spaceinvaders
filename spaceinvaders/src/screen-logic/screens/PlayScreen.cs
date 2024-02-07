@@ -49,9 +49,6 @@ public class PlayScreen : GameScreenModel
         spaceShip.bullet.Update();
 
         foreach (Entity enemy in enemies) {
-            Console.WriteLine(enemy.Bounds.Position.Y);
-            Console.WriteLine(spaceShip.bullet.Bounds.Position.Y);
-            Console.WriteLine(spaceShip.bullet.Bounds.Intersects(enemy.Bounds));
             if (spaceShip.bullet.Bounds.Intersects(enemy.Bounds)) {
                 enemy.OnCollision(null);
             }

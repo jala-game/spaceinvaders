@@ -42,7 +42,6 @@ public class RedEnemy : IEnemyEntity
 
     public void Update()
     {
-        Console.WriteLine(isDead);
         IsOutsideFromMap();
         Movement();
     }

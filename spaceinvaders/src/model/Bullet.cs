@@ -40,6 +40,6 @@ public class Bullet : Entity
     public void OnCollision(CollisionEventArgs collisionInfo)
     {
 
-        Console.WriteLine("colidiu garaio");
+        // 
     }
 }
