@@ -14,6 +14,7 @@ public class PlayScreen : GameScreenModel
     private readonly List<IEnemyEntity> enemies = new();
     private readonly ContentManager _contentManager;
     private readonly SpriteBatch _spriteBatch;
+    private int initialTime = 0;
 
     public PlayScreen(SpaceShip ship, GraphicsDeviceManager graphics, ContentManager contentManager, SpriteBatch spriteBatch)
     {
@@ -25,7 +26,6 @@ public class PlayScreen : GameScreenModel
 
     public override void Initialize() {
         entities.Add(spaceShip);
-        enemies.Add(new RedEnemy(_contentManager, _spriteBatch, _graphics ));
 
         base.Initialize();
     }
@@ -36,10 +36,15 @@ public class PlayScreen : GameScreenModel
 
     public override void Update(GameTime gameTime)
     {
+       int differenceToSpawnRedShip = int.Parse(gameTime.TotalGameTime.Minutes.ToString()) - initialTime;
+       if (differenceToSpawnRedShip == 1) {
+            entities.Add(new RedEnemy(_contentManager, _spriteBatch, _graphics ));
+            initialTime = differenceToSpawnRedShip;
+            return;
+        }
        this.EnemiesUpdate();
        this.EntitiesUpdate();
        this.SpaceShipBulletUpdate();
- 
        base.Update(gameTime);
     }
 
