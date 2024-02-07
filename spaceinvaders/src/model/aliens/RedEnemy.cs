@@ -5,15 +5,14 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 
-public class RedEnemy : Entity
+public class RedEnemy : IEnemyEntity
 {
     public IShapeF Bounds { get; }
 
     private readonly GraphicsDeviceManager _graphics;
     private readonly SpriteBatch _spriteBatch;
     private readonly Texture2D _texture;
-    public bool isDead = false;
-
+    private bool isDead = false;
     private readonly float ALIEN_SPEED_Y = 0f;
     private readonly float ALIEN_SPEED_X = 0f;
     private readonly int changePositionDirectionDelay = 200;
@@ -109,4 +108,7 @@ public class RedEnemy : Entity
         );
     }
 
+    public bool IsDead() {
+        return isDead;
+    }
 }

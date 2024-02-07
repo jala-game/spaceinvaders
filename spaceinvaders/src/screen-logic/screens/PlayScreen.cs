@@ -11,7 +11,7 @@ public class PlayScreen : GameScreenModel
     private readonly SpaceShip spaceShip;
     private readonly GraphicsDeviceManager _graphics;
     private readonly List<Entity> entities = new();
-    private readonly List<Entity> enemies = new();
+    private readonly List<IEnemyEntity> enemies = new();
     private readonly ContentManager _contentManager;
     private readonly SpriteBatch _spriteBatch;
 
@@ -56,6 +56,8 @@ public class PlayScreen : GameScreenModel
                 enemy.OnCollision(null);
             }
         }
+
+        enemies.RemoveAll(e => e.IsDead() == true);
     }
 
     private void EntitiesUpdate() {
