@@ -7,7 +7,7 @@ using MonoGame.Extended.Collisions;
 public class Bullet : Entity
 {
     private readonly Texture2D _texture;
-    private readonly float SPEED = 10f;
+    private readonly float SPEED = 25f;
     private readonly SpriteBatch _spriteBatch;
     private readonly GraphicsDeviceManager _graphics;
 
@@ -16,7 +16,7 @@ public class Bullet : Entity
     public Bullet(Vector2 position, Texture2D texture, SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
     {
         _texture = texture;
-        Vector2 bulletPosition = new(position.X + texture.Width / 2, position.Y + texture.Height / 2);
+        Vector2 bulletPosition = new(position.X + texture.Width / 2, position.Y + texture.Height / 2 + 50);
         Bounds = new RectangleF(bulletPosition, new Size2(texture.Width, texture.Height));
         _spriteBatch = spriteBatch;
         _graphics = graphics;

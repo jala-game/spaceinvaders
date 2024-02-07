@@ -8,7 +8,7 @@ using MonoGame.Extended.Collisions;
 
 public class SpaceShip : Entity {
     public readonly Texture2D texture;
-    private GraphicsDeviceManager graphics;
+    private readonly GraphicsDeviceManager graphics;
     private readonly SpriteBatch _spriteBatch;
     private readonly ContentManager _contentManager;
 
@@ -23,13 +23,16 @@ public class SpaceShip : Entity {
         texture = contentManager.Load<Texture2D>($"ship{randomShip}");
 
 
-        int heightTop = _graphics.PreferredBackBufferHeight - texture.Height / 2;
+        int heightTop = _graphics.PreferredBackBufferHeight;
         int widthCenter = _graphics.PreferredBackBufferWidth / 2;
 
         int centralizeByTextureWidth = widthCenter - texture.Width / 2;
-        int centralizeByTextureHeight = heightTop - texture.Height / 2;
+        int centralizeByTextureHeight = heightTop - texture.Height;
 
-        Vector2 position = new(centralizeByTextureWidth, centralizeByTextureHeight);
+        int MARGIN = 50;
+        int heightWithMargin = centralizeByTextureHeight - MARGIN;
+
+        Vector2 position = new(centralizeByTextureWidth, heightWithMargin);
 
         Bounds = new RectangleF(position, new Size2(texture.Width, texture.Height));
 

@@ -27,10 +27,9 @@ public class RedEnemy : Entity
         Texture2D texture = contentManager.Load<Texture2D>("aliens/red-alien-ship");
         _graphics = graphics;
 
-        int heightTop = _graphics.PreferredBackBufferHeight / 2 ;
-
+        int heightTop = 0;
         int randomWidthPosition = random.Next(-400, 400);
-        int widthCenter = _graphics.PreferredBackBufferWidth / 2 + randomWidthPosition;
+        int widthCenter = _graphics.PreferredBackBufferWidth / 2 - texture.Width / 2;
         Vector2 position = new(widthCenter, heightTop);
         Bounds = new RectangleF(position, new Size2(texture.Width, texture.Height));
 
