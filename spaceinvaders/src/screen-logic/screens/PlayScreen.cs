@@ -8,7 +8,6 @@ public class PlayScreen : GameScreenModel
 {
 
     private readonly SpaceShip spaceShip;
-    private CollisionComponent _collisionComponent;
     private readonly GraphicsDeviceManager _graphics;
     private readonly List<Entity> entities = new();
 
@@ -20,14 +19,8 @@ public class PlayScreen : GameScreenModel
 
     public override void Initialize() {
         base.Initialize();
-        _collisionComponent = new CollisionComponent(new RectangleF(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight));
 
         entities.Add(spaceShip);
-
-
-        foreach (Entity entity in entities) {
-            _collisionComponent.Insert(entity);
-        }
     }
 
     public override void LoadContent() {
@@ -39,7 +32,6 @@ public class PlayScreen : GameScreenModel
        this.SpaceShipBulletUpdate();
        this.EntitiesUpdate();
 
-        _collisionComponent.Update(gameTime);
         base.Update(gameTime);
     }
 
