@@ -12,7 +12,7 @@ public class AlienQueue : IEnemyEntity
     private readonly GraphicsDeviceManager _graphics;
     private readonly SpriteBatch _spriteBatch;
     private readonly Texture2D _texture;
-    private bool isDead = false;
+    private readonly bool isDead = false;
 
     public AlienQueue(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, AlienEnum enemyType) {
         _graphics = graphics;
@@ -34,8 +34,10 @@ public class AlienQueue : IEnemyEntity
         foreach (IEnemyGroup enemy in enemies) {
             enemy.IncreaseX(1);
 
-            if (enemy.Bounds.Position.X + enemy.GetTexture().Width >= _graphics.PreferredBackBufferWidth) {
-                enemies.ForEach(e => e.SetInitialPosition());
+            bool rightLimit = enemy.Bounds.Position.X + enemy.GetTexture().Width >= _graphics.PreferredBackBufferWidth;
+            bool leftLimit = enemy.Bounds.Position.X <= 0;
+            if (rightLimit || leftLimit) {
+                enemies.ForEach(e => e.InvertDirection());
             }
         }
     }

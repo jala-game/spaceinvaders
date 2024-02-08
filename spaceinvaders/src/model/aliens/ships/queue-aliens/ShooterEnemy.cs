@@ -13,6 +13,7 @@ public class ShooterEnemy : IEnemyGroup
     private readonly Texture2D _texture;
     private Vector2 originalPosition;
     private bool isDead = false;
+    private bool directionRight = true;
 
     public ShooterEnemy(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, int x) {
         Texture2D texture = contentManager.Load<Texture2D>("aliens/shooter-alien-ship");
@@ -52,12 +53,13 @@ public class ShooterEnemy : IEnemyGroup
         );
     }
 
-    public void SetInitialPosition() {
-        Bounds.Position = originalPosition;
+    public void InvertDirection() {
+        directionRight = !directionRight;
     }
 
     public void IncreaseX(int value) {
-        Bounds.Position += new Vector2(value, 0);
+        int valueModified = directionRight ? value : -value;
+        Bounds.Position += new Vector2(valueModified, 0);
     }
 
     public Texture2D GetTexture() {
