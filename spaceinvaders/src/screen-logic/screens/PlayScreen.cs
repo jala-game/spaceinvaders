@@ -44,14 +44,12 @@ public class PlayScreen : GameScreenModel
     }
 
     private void SpawnRedShip(GameTime gameTime) {
-        int differenceToSpawnRedShip = int.Parse(gameTime.TotalGameTime.Minutes.ToString()) - initialTime;
-        Console.WriteLine(differenceToSpawnRedShip);
+        int actualMinute = int.Parse(gameTime.TotalGameTime.Minutes.ToString());
+        int differenceToSpawnRedShip = actualMinute - initialTime;
         int MINUTES = 1;
         if (differenceToSpawnRedShip == MINUTES) {
             enemies.Add(new RedEnemy(_contentManager, _spriteBatch, _graphics ));
-            initialTime = differenceToSpawnRedShip;
-            Console.WriteLine("initialTime");
-            Console.WriteLine(initialTime);
+            initialTime = actualMinute;
         }
     }
 
