@@ -25,7 +25,7 @@ public class RedEnemy : IEnemyEntity
 
         isRightOrLeft = random.Next(0, 2);
 
-        int height = 10;
+        int height = 30;
         int widthInitialLocation = isRightOrLeft == 0 ? -50 : _graphics.PreferredBackBufferWidth + 50;
         int width = widthInitialLocation - texture.Width / 2;
         Vector2 position = new(width, height);

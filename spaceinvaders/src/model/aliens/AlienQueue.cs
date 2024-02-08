@@ -7,9 +7,9 @@ public class AlienQueue : Entity
     public IShapeF Bounds { get; }
     private readonly List<IEnemyEntity> enemies = new();
 
-    public void Draw()
+    public void Update()
     {
-        throw new System.NotImplementedException();
+        
     }
 
     public void OnCollision(CollisionEventArgs collisionInfo)
@@ -17,8 +17,9 @@ public class AlienQueue : Entity
         throw new System.NotImplementedException();
     }
 
-    public void Update()
+    public void Draw()
     {
         throw new System.NotImplementedException();
     }
+
 }

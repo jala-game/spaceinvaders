@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using MonoGame.Extended.ViewportAdapters;
 
 public class PlayScreen : GameScreenModel
 {
@@ -25,6 +26,7 @@ public class PlayScreen : GameScreenModel
 
     public override void Initialize() {
         base.Initialize();
+        enemies.Add(new ShooterEnemy(_contentManager, _spriteBatch, _graphics, 0));
     }
 
     public override void LoadContent() {

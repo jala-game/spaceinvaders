@@ -25,6 +25,18 @@
 /processorParam:TextureFormat=Color
 /build:aliens/red-alien-ship.png
 
+#begin aliens/shooter-alien-ship.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:aliens/shooter-alien-ship.png
+
 #begin background.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
