@@ -10,7 +10,6 @@ public class PlayScreen : GameScreenModel
 
     private readonly SpaceShip spaceShip;
     private readonly GraphicsDeviceManager _graphics;
-    private readonly List<Entity> entities = new();
     private readonly List<IEnemyEntity> enemies = new();
     private readonly ContentManager _contentManager;
     private readonly SpriteBatch _spriteBatch;
@@ -25,8 +24,6 @@ public class PlayScreen : GameScreenModel
     }
 
     public override void Initialize() {
-        entities.Add(spaceShip);
-
         base.Initialize();
     }
 
@@ -38,7 +35,7 @@ public class PlayScreen : GameScreenModel
     {
        this.SpawnRedShip(gameTime);
        this.EnemiesUpdate();
-       this.EntitiesUpdate();
+       this.spaceShip.Update();
        this.SpaceShipBulletUpdate();
        base.Update(gameTime);
     }
@@ -61,17 +58,13 @@ public class PlayScreen : GameScreenModel
         foreach (Entity enemy in enemies) {
             if (spaceShip.bullet.Bounds.Intersects(enemy.Bounds)) {
                 enemy.OnCollision(null);
+                spaceShip.OnCollision(null);
             }
         }
 
         enemies.RemoveAll(e => e.IsDead() == true);
     }
 
-    private void EntitiesUpdate() {
-        foreach (Entity entity in entities) {
-            entity.Update();
-        }
-    }
 
     private void EnemiesUpdate() {
         foreach (Entity enemy in enemies) {
@@ -81,22 +74,14 @@ public class PlayScreen : GameScreenModel
 
     public override void Draw(GameTime gameTime)
     {
-
-        this.DrawSpaceShip();
-        this.DrawEntities();
+        this.spaceShip.Draw();
+        this.DrawEnemies();
+        spaceShip.bullet?.Draw();
 
         base.Draw(gameTime);
     }
 
-    private void DrawSpaceShip() {
-        spaceShip.bullet?.Draw();
-    }
-
-    private void DrawEntities() {
-        foreach (Entity entity in entities) {
-            entity.Draw();
-        }
-
+    private void DrawEnemies() {
         foreach (Entity enemy in enemies) {
             enemy.Draw();
         }
