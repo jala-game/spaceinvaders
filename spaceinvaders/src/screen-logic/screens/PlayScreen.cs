@@ -11,7 +11,7 @@ public class PlayScreen : GameScreenModel
 
     private readonly SpaceShip spaceShip;
     private readonly GraphicsDeviceManager _graphics;
-    private readonly List<IEnemyEntity> enemies = new();
+    public readonly List<IEnemyEntity> enemies = new();
     private readonly ContentManager _contentManager;
     private readonly SpriteBatch _spriteBatch;
     private int initialTime = 0;
@@ -26,7 +26,12 @@ public class PlayScreen : GameScreenModel
 
     public override void Initialize() {
         base.Initialize();
-        enemies.Add(new ShooterEnemy(_contentManager, _spriteBatch, _graphics, 0));
+
+        AlienQueue queue = new(_contentManager, _spriteBatch, _graphics, AlienEnum.SHOOTER);
+
+        foreach (IEnemyEntity enemy in queue.GetEnemies()) {
+            enemies.Add(enemy);
+        }
     }
 
     public override void LoadContent() {
@@ -58,7 +63,8 @@ public class PlayScreen : GameScreenModel
         spaceShip.bullet.Update();
 
         foreach (Entity enemy in enemies) {
-            if (spaceShip.bullet.Bounds.Intersects(enemy.Bounds)) {
+            if (spaceShip.bullet != null && spaceShip.bullet.Bounds.Intersects(enemy.Bounds)) {
+                Console.WriteLine(enemy);
                 enemy.OnCollision(null);
                 spaceShip.OnCollision(null);
             }
