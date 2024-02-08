@@ -36,16 +36,23 @@ public class PlayScreen : GameScreenModel
 
     public override void Update(GameTime gameTime)
     {
-       int differenceToSpawnRedShip = int.Parse(gameTime.TotalGameTime.Minutes.ToString()) - initialTime;
-       if (differenceToSpawnRedShip == 1) {
-            entities.Add(new RedEnemy(_contentManager, _spriteBatch, _graphics ));
-            initialTime = differenceToSpawnRedShip;
-            return;
-        }
+       this.SpawnRedShip(gameTime);
        this.EnemiesUpdate();
        this.EntitiesUpdate();
        this.SpaceShipBulletUpdate();
        base.Update(gameTime);
+    }
+
+    private void SpawnRedShip(GameTime gameTime) {
+        int differenceToSpawnRedShip = int.Parse(gameTime.TotalGameTime.Minutes.ToString()) - initialTime;
+        Console.WriteLine(differenceToSpawnRedShip);
+        int MINUTES = 1;
+        if (differenceToSpawnRedShip == MINUTES) {
+            enemies.Add(new RedEnemy(_contentManager, _spriteBatch, _graphics ));
+            initialTime = differenceToSpawnRedShip;
+            Console.WriteLine("initialTime");
+            Console.WriteLine(initialTime);
+        }
     }
 
     private void SpaceShipBulletUpdate() {
