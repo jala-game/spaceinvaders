@@ -8,7 +8,7 @@ using MonoGame.Extended.Collisions;
 public class AlienQueue : IEnemyEntity
 {
     public IShapeF Bounds { get; }
-    private readonly List<IEnemyEntity> enemies = new();
+    private readonly List<IEnemyGroup> enemies = new();
     private readonly GraphicsDeviceManager _graphics;
     private readonly SpriteBatch _spriteBatch;
     private readonly Texture2D _texture;
@@ -22,7 +22,8 @@ public class AlienQueue : IEnemyEntity
             case AlienEnum.SHOOTER:
                 int ENEMY_LIMIT = 11;
                 for (int i = 1; i <= ENEMY_LIMIT; i++) {
-                    enemies.Add(new ShooterEnemy(contentManager, spriteBatch, _graphics, i * 100));
+                    int MARGIN = 90;
+                    enemies.Add(new ShooterEnemy(contentManager, spriteBatch, _graphics, i * MARGIN));
                 }
                 break;
         }
@@ -30,7 +31,7 @@ public class AlienQueue : IEnemyEntity
 
     public void Update()
     {
-        foreach (IEnemyEntity enemy in enemies) {
+        foreach (IEnemyGroup enemy in enemies) {
             enemy.IncreaseX(1);
         }
     }
@@ -49,12 +50,7 @@ public class AlienQueue : IEnemyEntity
         return isDead;
     }
 
-    public List<IEnemyEntity> GetEnemies() {
+    public List<IEnemyGroup> GetEnemies() {
         return enemies;
-    }
-
-    public void IncreaseX(int x)
-    {
-        throw new System.NotImplementedException();
     }
 }
