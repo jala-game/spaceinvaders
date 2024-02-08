@@ -13,7 +13,7 @@ public class RedEnemy : IEnemyEntity
     private readonly SpriteBatch _spriteBatch;
     private readonly Texture2D _texture;
     private bool isDead = false;
-    private readonly float ALIEN_SPEED_X = 4f;
+    private readonly float ALIEN_SPEED_X = 2.5f;
     private readonly Random random = new();
     private readonly int isRightOrLeft;
 

@@ -22,7 +22,7 @@ public class AlienQueue : IEnemyEntity
             case AlienEnum.SHOOTER:
                 int ENEMY_LIMIT = 11;
                 for (int i = 1; i <= ENEMY_LIMIT; i++) {
-                    int MARGIN = 90;
+                    int MARGIN = 80;
                     enemies.Add(new ShooterEnemy(contentManager, spriteBatch, _graphics, i * MARGIN));
                 }
                 break;
@@ -33,16 +33,21 @@ public class AlienQueue : IEnemyEntity
     {
         foreach (IEnemyGroup enemy in enemies) {
             enemy.IncreaseX(1);
+
+            if (enemy.Bounds.Position.X + enemy.GetTexture().Width >= _graphics.PreferredBackBufferWidth) {
+                enemies.ForEach(e => e.SetInitialPosition());
+            }
         }
     }
 
     public void OnCollision(CollisionEventArgs collisionInfo)
     {
-        throw new System.NotImplementedException();
+        //
     }
 
     public void Draw()
     {
+        //
     }
 
     public bool IsDead()

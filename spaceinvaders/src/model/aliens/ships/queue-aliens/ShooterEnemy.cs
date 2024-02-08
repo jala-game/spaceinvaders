@@ -59,4 +59,8 @@ public class ShooterEnemy : IEnemyGroup
     public void IncreaseX(int value) {
         Bounds.Position += new Vector2(value, 0);
     }
+
+    public Texture2D GetTexture() {
+        return _texture;
+    }
 }
