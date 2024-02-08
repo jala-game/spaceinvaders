@@ -13,10 +13,12 @@ public class Bullet : Entity
 
     public IShapeF Bounds { get; }
 
-    public Bullet(Vector2 position, Texture2D texture, SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
+    public Bullet(Vector2 position, Texture2D texture, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, int shipTextureWidth)
     {
         _texture = texture;
-        Vector2 bulletPosition = new(position.X + texture.Width / 2, position.Y + texture.Height / 2 + 50);
+        float bulletWidth = texture.Width / 2;
+        float shipWidth = shipTextureWidth / 2;
+        Vector2 bulletPosition = new(position.X + shipWidth - bulletWidth, position.Y + texture.Height / 2 + 50);
         Bounds = new RectangleF(bulletPosition, new Size2(texture.Width, texture.Height));
         _spriteBatch = spriteBatch;
         _graphics = graphics;

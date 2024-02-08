@@ -71,7 +71,7 @@ public class SpaceShip : Entity {
     private void Shoot(KeyboardState kstate) {
         if (kstate.IsKeyDown(Keys.Space) && bullet == null) {
             Texture2D bulletTexture = _contentManager.Load<Texture2D>("red-bullet");
-            bullet = new Bullet(Bounds.Position, bulletTexture, _spriteBatch, graphics);
+            bullet = new Bullet(Bounds.Position, bulletTexture, _spriteBatch, graphics, texture.Width);
         }
     }
 
