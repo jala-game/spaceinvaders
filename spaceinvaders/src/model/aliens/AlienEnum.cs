@@ -1,4 +1,5 @@
 public enum AlienEnum {
     SHOOTER,
-    BIRD
+    BIRD,
+    FRONT
 }

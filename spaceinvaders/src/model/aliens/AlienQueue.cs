@@ -32,6 +32,11 @@ public class AlienQueue : IEnemyEntity
                     enemies.Add(new BirdEnemy(contentManager, spriteBatch, _graphics, i * MARGIN, y));
                 }
                 break;
+            case AlienEnum.FRONT:
+                for (int i = 1; i <= ENEMY_LIMIT; i++) {
+                    enemies.Add(new FrontEnemy(contentManager, spriteBatch, _graphics, i * MARGIN, y));
+                }
+                break;
         }
     }
 
