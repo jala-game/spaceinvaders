@@ -12,6 +12,7 @@ public class FrontEnemy : IEnemyGroup {
     private readonly Texture2D _texture;
     private bool isDead = false;
     private bool directionRight = true;
+    private float rotator = 0;
 
     public FrontEnemy(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, int x, int y) {
         Texture2D texture = contentManager.Load<Texture2D>("aliens/front-alien-ship");
@@ -38,16 +39,24 @@ public class FrontEnemy : IEnemyGroup {
 
     public void Update()
     {
-        
+        rotator +=  directionRight ? 0.1f : -0.1f;
     }
 
     public void Draw()
     {
-        _spriteBatch.Draw(
-            _texture,
-            Bounds.Position,
-            Color.White
-        );
+        Vector2 origin = new(_texture.Width / 2, _texture.Height / 2);
+
+    _spriteBatch.Draw(
+        _texture,
+        new Vector2(Bounds.Position.X + _texture.Width / 2, Bounds.Position.Y + _texture.Height / 2),
+        null,
+        Color.White,
+        rotator,
+        origin,
+        Vector2.One,
+        SpriteEffects.None,
+        0f
+    );
     }
 
     public void InvertDirection() {
