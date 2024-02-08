@@ -74,9 +74,9 @@ public class PlayScreen : GameScreenModel
 
     public override void Draw(GameTime gameTime)
     {
+        spaceShip.bullet?.Draw();
         this.spaceShip.Draw();
         this.DrawEnemies();
-        spaceShip.bullet?.Draw();
 
         base.Draw(gameTime);
     }

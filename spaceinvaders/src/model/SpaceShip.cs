@@ -20,7 +20,7 @@ public class SpaceShip : Entity {
     public SpaceShip(GraphicsDeviceManager _graphics, SpriteBatch spriteBatch, ContentManager contentManager) {
         Random random = new();
         int randomShip = random.Next(1, 5);
-        texture = contentManager.Load<Texture2D>($"ship{randomShip}");
+        texture = contentManager.Load<Texture2D>($"ship2");
 
 
         int heightTop = _graphics.PreferredBackBufferHeight;
