@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,22 +12,55 @@ public class AlienRound : IEnemyEntity
 
     private readonly GraphicsDeviceManager _graphics;
     private readonly SpriteBatch _spriteBatch;
-    private readonly Texture2D _texture;
+    private readonly List<IEnemyEntity> enemies = new();
 
     public AlienRound(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics) {
         _graphics = graphics;
         _spriteBatch = spriteBatch;
+        int ORIGINAL_POSITION = 100;
+        int MARGIN_BOTTOM = 70;
+        AlienQueue shooterQueue =
+            new(contentManager, _spriteBatch, _graphics, AlienEnum.SHOOTER, ORIGINAL_POSITION);
+        AlienQueue firstBirdQueue =
+            new(contentManager, _spriteBatch, _graphics, AlienEnum.BIRD, ORIGINAL_POSITION + MARGIN_BOTTOM);
+        AlienQueue secondBirdQueue =
+            new(contentManager, _spriteBatch, _graphics, AlienEnum.BIRD, ORIGINAL_POSITION + MARGIN_BOTTOM * 2);
+        AlienQueue firstFrontQueue =
+            new(contentManager, _spriteBatch, _graphics, AlienEnum.FRONT, ORIGINAL_POSITION + MARGIN_BOTTOM * 3);
+        AlienQueue secondFrontQueue =
+            new(contentManager, _spriteBatch, _graphics, AlienEnum.FRONT, ORIGINAL_POSITION + MARGIN_BOTTOM * 4);
 
-        AlienQueue queue = new(contentManager, _spriteBatch, _graphics, AlienEnum.SHOOTER, 100);
-        AlienQueue queue1 = new(contentManager, _spriteBatch, _graphics, AlienEnum.BIRD, 100 + 70);
-        AlienQueue queue2 = new(contentManager, _spriteBatch, _graphics, AlienEnum.BIRD, 100 + 70 * 2);
-        AlienQueue queue3 = new(contentManager, _spriteBatch, _graphics, AlienEnum.FRONT, 100 + 70 * 3);
-        AlienQueue queue4 = new(contentManager, _spriteBatch, _graphics, AlienEnum.FRONT, 100 + 70 * 4);
+        var allEnemies = shooterQueue.GetEnemies()
+        .Concat(firstBirdQueue.GetEnemies())
+        .Concat(secondBirdQueue.GetEnemies())
+        .Concat(firstFrontQueue.GetEnemies())
+        .Concat(secondFrontQueue.GetEnemies());
+
+        List<AlienQueue> allLogic = new()
+        {
+            shooterQueue,
+            firstBirdQueue,
+            secondBirdQueue,
+            firstFrontQueue,
+            secondFrontQueue
+        };
+
+
+        foreach (var enemy in allEnemies) {
+            enemies.Add(enemy);
+        }
+
+        foreach (AlienQueue queue in allLogic) {
+            enemies.Add(queue);
+        }
+
     }
 
     public void Draw()
     {
-        throw new System.NotImplementedException();
+        foreach (IEnemyEntity enemy in enemies) {
+            enemy.Draw();
+        }
     }
 
     public bool IsDead()
@@ -40,6 +75,12 @@ public class AlienRound : IEnemyEntity
 
     public void Update()
     {
-        throw new System.NotImplementedException();
+        foreach (IEnemyEntity enemy in enemies) {
+            enemy.Update();
+        }
+    }
+
+    public List<IEnemyEntity> GetEnemies() {
+        return enemies;
     }
 }

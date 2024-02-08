@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
-using MonoGame.Extended.ViewportAdapters;
 
 public class PlayScreen : GameScreenModel
 {
@@ -27,33 +25,8 @@ public class PlayScreen : GameScreenModel
     public override void Initialize() {
         base.Initialize();
 
-        AlienQueue queue = new(_contentManager, _spriteBatch, _graphics, AlienEnum.SHOOTER, 100);
-        AlienQueue queue1 = new(_contentManager, _spriteBatch, _graphics, AlienEnum.BIRD, 100 + 70);
-        AlienQueue queue2 = new(_contentManager, _spriteBatch, _graphics, AlienEnum.BIRD, 100 + 70 * 2);
-        AlienQueue queue3 = new(_contentManager, _spriteBatch, _graphics, AlienEnum.FRONT, 100 + 70 * 3);
-        AlienQueue queue4 = new(_contentManager, _spriteBatch, _graphics, AlienEnum.FRONT, 100 + 70 * 4);
-
-
-        foreach (IEnemyEntity enemy in queue.GetEnemies()) {
-            enemies.Add(enemy);
-        }
-
-        foreach (IEnemyEntity enemy in queue1.GetEnemies()) {
-            enemies.Add(enemy);
-        }
-                foreach (IEnemyEntity enemy in queue2.GetEnemies()) {
-            enemies.Add(enemy);
-        }        foreach (IEnemyEntity enemy in queue3.GetEnemies()) {
-            enemies.Add(enemy);
-        }        foreach (IEnemyEntity enemy in queue4.GetEnemies()) {
-            enemies.Add(enemy);
-        }      
-
-        enemies.Add(queue);
-        enemies.Add(queue1);
-        enemies.Add(queue2);
-        enemies.Add(queue3);
-        enemies.Add(queue4);
+        AlienRound alienRound = new(_contentManager, _spriteBatch, _graphics);
+        alienRound.GetEnemies().ForEach(e => enemies.Add(e));
     }
 
     public override void LoadContent() {
