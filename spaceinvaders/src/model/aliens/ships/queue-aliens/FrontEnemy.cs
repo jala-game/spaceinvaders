@@ -69,7 +69,7 @@ public class FrontEnemy : IEnemyGroup {
     }
 
     public void Fall() {
-        Bounds.Position += new Vector2(0, _texture.Height + 10);
+        Bounds.Position += new Vector2(0, _texture.Height + _texture.Height / 2 - 8);
     }
 
     public Texture2D GetTexture() {

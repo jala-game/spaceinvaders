@@ -28,10 +28,10 @@ public class PlayScreen : GameScreenModel
         base.Initialize();
 
         AlienQueue queue = new(_contentManager, _spriteBatch, _graphics, AlienEnum.SHOOTER, 100);
-        AlienQueue queue1 = new(_contentManager, _spriteBatch, _graphics, AlienEnum.BIRD, 100 + 90);
-        AlienQueue queue2 = new(_contentManager, _spriteBatch, _graphics, AlienEnum.BIRD, 100 + 90 * 2);
-        AlienQueue queue3 = new(_contentManager, _spriteBatch, _graphics, AlienEnum.FRONT, 100 + 90 * 3);
-        AlienQueue queue4 = new(_contentManager, _spriteBatch, _graphics, AlienEnum.FRONT, 100 + 90 * 4);
+        AlienQueue queue1 = new(_contentManager, _spriteBatch, _graphics, AlienEnum.BIRD, 100 + 70);
+        AlienQueue queue2 = new(_contentManager, _spriteBatch, _graphics, AlienEnum.BIRD, 100 + 70 * 2);
+        AlienQueue queue3 = new(_contentManager, _spriteBatch, _graphics, AlienEnum.FRONT, 100 + 70 * 3);
+        AlienQueue queue4 = new(_contentManager, _spriteBatch, _graphics, AlienEnum.FRONT, 100 + 70 * 4);
 
 
         foreach (IEnemyEntity enemy in queue.GetEnemies()) {
