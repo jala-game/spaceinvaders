@@ -27,13 +27,33 @@ public class PlayScreen : GameScreenModel
     public override void Initialize() {
         base.Initialize();
 
-        AlienQueue queue = new(_contentManager, _spriteBatch, _graphics, AlienEnum.SHOOTER);
+        AlienQueue queue = new(_contentManager, _spriteBatch, _graphics, AlienEnum.SHOOTER, 100);
+        AlienQueue queue1 = new(_contentManager, _spriteBatch, _graphics, AlienEnum.BIRD, 100 + 90);
+        AlienQueue queue2 = new(_contentManager, _spriteBatch, _graphics, AlienEnum.BIRD, 100 + 90 * 2);
+        AlienQueue queue3 = new(_contentManager, _spriteBatch, _graphics, AlienEnum.SHOOTER, 100 + 90 * 3);
+        AlienQueue queue4 = new(_contentManager, _spriteBatch, _graphics, AlienEnum.SHOOTER, 100 + 90 * 4);
+
 
         foreach (IEnemyEntity enemy in queue.GetEnemies()) {
             enemies.Add(enemy);
         }
 
+        foreach (IEnemyEntity enemy in queue1.GetEnemies()) {
+            enemies.Add(enemy);
+        }
+                foreach (IEnemyEntity enemy in queue2.GetEnemies()) {
+            enemies.Add(enemy);
+        }        foreach (IEnemyEntity enemy in queue3.GetEnemies()) {
+            enemies.Add(enemy);
+        }        foreach (IEnemyEntity enemy in queue4.GetEnemies()) {
+            enemies.Add(enemy);
+        }      
+
         enemies.Add(queue);
+        enemies.Add(queue1);
+        enemies.Add(queue2);
+        enemies.Add(queue3);
+        enemies.Add(queue4);
     }
 
     public override void LoadContent() {
@@ -66,7 +86,6 @@ public class PlayScreen : GameScreenModel
 
         foreach (Entity enemy in enemies) {
             if (spaceShip.bullet != null && spaceShip.bullet.Bounds.Intersects(enemy.Bounds)) {
-                Console.WriteLine(enemy);
                 enemy.OnCollision(null);
                 spaceShip.OnCollision(null);
             }

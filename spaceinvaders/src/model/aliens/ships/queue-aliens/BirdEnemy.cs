@@ -4,8 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 
-public class ShooterEnemy : IEnemyGroup
-{
+public class BirdEnemy : IEnemyGroup {
     public IShapeF Bounds { get; }
 
     private readonly GraphicsDeviceManager _graphics;
@@ -14,8 +13,8 @@ public class ShooterEnemy : IEnemyGroup
     private bool isDead = false;
     private bool directionRight = true;
 
-    public ShooterEnemy(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, int x, int y) {
-        Texture2D texture = contentManager.Load<Texture2D>("aliens/shooter-alien-ship");
+    public BirdEnemy(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, int x, int y) {
+        Texture2D texture = contentManager.Load<Texture2D>("aliens/bird-alien-ship");
         _graphics = graphics;
         _texture = texture;
 
@@ -50,6 +49,7 @@ public class ShooterEnemy : IEnemyGroup
             Color.White
         );
     }
+
 
     public void InvertDirection() {
         directionRight = !directionRight;

@@ -18,12 +18,18 @@ public class AlienQueue : IEnemyEntity
         _graphics = graphics;
         _spriteBatch = spriteBatch;
 
+        int ENEMY_LIMIT = 11;
+        int MARGIN = 80;
         switch (enemyType) {
             case AlienEnum.SHOOTER:
-                int ENEMY_LIMIT = 11;
                 for (int i = 1; i <= ENEMY_LIMIT; i++) {
-                    int MARGIN = 80;
                     enemies.Add(new ShooterEnemy(contentManager, spriteBatch, _graphics, i * MARGIN, y));
+                }
+                break;
+
+            case AlienEnum.BIRD:
+                for (int i = 1; i <= ENEMY_LIMIT; i++) {
+                    enemies.Add(new BirdEnemy(contentManager, spriteBatch, _graphics, i * MARGIN, y));
                 }
                 break;
         }
