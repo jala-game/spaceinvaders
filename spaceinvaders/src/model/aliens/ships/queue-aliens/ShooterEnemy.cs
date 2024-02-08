@@ -15,12 +15,12 @@ public class ShooterEnemy : IEnemyGroup
     private bool isDead = false;
     private bool directionRight = true;
 
-    public ShooterEnemy(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, int x) {
+    public ShooterEnemy(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, int x, int y) {
         Texture2D texture = contentManager.Load<Texture2D>("aliens/shooter-alien-ship");
         _graphics = graphics;
         _texture = texture;
 
-        int height = 200;
+        int height = y;
         int width = x - texture.Width / 2;
         Vector2 position = new(width, height);
         originalPosition = position;
@@ -60,6 +60,10 @@ public class ShooterEnemy : IEnemyGroup
     public void IncreaseX(int value) {
         int valueModified = directionRight ? value : -value;
         Bounds.Position += new Vector2(valueModified, 0);
+    }
+
+    public void Fall() {
+        Bounds.Position += new Vector2(0, _texture.Height + 10);
     }
 
     public Texture2D GetTexture() {
