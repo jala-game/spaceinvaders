@@ -32,6 +32,8 @@ public class PlayScreen : GameScreenModel
         foreach (IEnemyEntity enemy in queue.GetEnemies()) {
             enemies.Add(enemy);
         }
+
+        enemies.Add(queue);
     }
 
     public override void LoadContent() {

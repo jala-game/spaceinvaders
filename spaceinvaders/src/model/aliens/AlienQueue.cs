@@ -31,7 +31,7 @@ public class AlienQueue : IEnemyEntity
     public void Update()
     {
         foreach (IEnemyEntity enemy in enemies) {
-            enemy.Update();
+            enemy.IncreaseX(1);
         }
     }
 
@@ -42,9 +42,6 @@ public class AlienQueue : IEnemyEntity
 
     public void Draw()
     {
-        foreach (IEnemyEntity enemy in enemies) {
-            enemy.Draw();
-        }
     }
 
     public bool IsDead()
@@ -54,5 +51,10 @@ public class AlienQueue : IEnemyEntity
 
     public List<IEnemyEntity> GetEnemies() {
         return enemies;
+    }
+
+    public void IncreaseX(int x)
+    {
+        throw new System.NotImplementedException();
     }
 }

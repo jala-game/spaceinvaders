@@ -80,4 +80,9 @@ public class RedEnemy : IEnemyEntity
     public bool IsDead() {
         return isDead;
     }
+
+    public void IncreaseX(int x)
+    {
+        throw new NotImplementedException();
+    }
 }
