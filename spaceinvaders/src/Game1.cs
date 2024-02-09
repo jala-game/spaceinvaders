@@ -1,12 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using spaceinvaders.model;
 
 namespace spaceinvaders;
 
 public class Game1 : Game
 {
     private readonly GraphicsDeviceManager _graphics;
+    private Barricades _barricades;
+
+    private Texture2D _barricadeTexture;
     private SpriteBatch _spriteBatch;
     private Texture2D background;
 
@@ -15,25 +19,26 @@ public class Game1 : Game
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
-
-        _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 300;
-        _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - 100;
-
-        _graphics.ApplyChanges();
     }
 
     protected override void Initialize()
     {
+        _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 300;
+        _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - 100;
+        _graphics.ApplyChanges();
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+        Services.AddService(typeof(SpriteBatch), _spriteBatch);
         LoadScreenManager();
         ScreenManager.Initialize();
         base.Initialize();
     }
 
-    /*TODO: Não entendi a lógica desse LoadContent juntamente com o LoadScreenManager, sendo que ambos estão carregando*/
     protected override void LoadContent()
     {
         background = Content.Load<Texture2D>("background");
+        _barricadeTexture = Content.Load<Texture2D>("barricades/barricade");
+        _barricades = new Barricades(this);
+        Components.Add(_barricades);
     }
 
     private void LoadScreenManager()
@@ -62,6 +67,7 @@ public class Game1 : Game
 
         _spriteBatch.Draw(background,
             new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
+
         ScreenManager.Draw(gameTime);
 
         _spriteBatch.End();

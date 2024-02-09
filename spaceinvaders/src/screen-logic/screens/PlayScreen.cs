@@ -3,23 +3,24 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
-using MonoGame.Extended.Collisions;
 using spaceinvaders.model;
 
 public class PlayScreen : GameScreenModel
 {
+    private readonly Barricades _barricades;
     private readonly ContentManager _contentManager;
-    private readonly GraphicsDeviceManager _graphics;
-    private readonly SpriteBatch _spriteBatch;
     private readonly List<IEnemyEntity> _enemies = new();
+    private readonly GraphicsDeviceManager _graphics;
 
-    private readonly SpaceShip spaceShip;
+    private readonly SpaceShip _spaceShip;
+    private readonly SpriteBatch _spriteBatch;
+
     private int initialTime;
 
     public PlayScreen(SpaceShip ship, GraphicsDeviceManager graphics, ContentManager contentManager,
         SpriteBatch spriteBatch)
     {
-        spaceShip = ship;
+        _spaceShip = ship;
         _graphics = graphics;
         _contentManager = contentManager;
         _spriteBatch = spriteBatch;
@@ -33,12 +34,12 @@ public class PlayScreen : GameScreenModel
         alienRound.GetEnemies().ForEach(e => _enemies.Add(e));
     }
 
-    //TODO: Dá para fazer um Observer ness caso aqui, em vez de chamar um por um
+    //TODO: Dá para fazer um Observer ness caso aqui de ação do Update, em vez de chamar um por um.
     public override void Update(GameTime gameTime)
     {
         SpawnRedShip(gameTime);
         EnemiesUpdate();
-        spaceShip.Update();
+        _spaceShip.Update();
         SpaceShipBulletUpdate();
     }
 
@@ -56,15 +57,15 @@ public class PlayScreen : GameScreenModel
 
     private void SpaceShipBulletUpdate()
     {
-        if (spaceShip.bullet == null) return;
+        if (_spaceShip.bullet == null) return;
 
-        spaceShip.bullet.Update();
+        _spaceShip.bullet.Update();
 
-        foreach (IEnemyEntity enemy in _enemies)
-            if (spaceShip.bullet != null && spaceShip.bullet.Bounds.Intersects(enemy.Bounds))
+        foreach (var enemy in _enemies)
+            if (_spaceShip.bullet != null && _spaceShip.bullet.Bounds.Intersects(enemy.Bounds))
             {
                 enemy.OnCollision(null);
-                spaceShip.OnCollision(null);
+                _spaceShip.OnCollision(null);
             }
 
         _enemies.RemoveAll(e => e.IsDead());
@@ -77,16 +78,10 @@ public class PlayScreen : GameScreenModel
 
     public override void Draw(GameTime gameTime)
     {
-        spaceShip.bullet?.Draw();
-        spaceShip.Draw();
+        _spaceShip.bullet?.Draw();
+        _spaceShip.Draw();
         DrawEnemies();
-
         base.Draw(gameTime);
-    }
-
-    private void DrawBarricades()
-    {
-
     }
 
     private void DrawEnemies()

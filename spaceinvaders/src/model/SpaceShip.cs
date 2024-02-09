@@ -86,8 +86,6 @@ public class SpaceShip : Entity
             Vector2 newPosition = new(Bounds.Position.X - PLAYER_SPEED, Bounds.Position.Y);
             Bounds.Position = newPosition;
         }
-
-        ;
     }
 
     private void Shoot(KeyboardState kstate)
