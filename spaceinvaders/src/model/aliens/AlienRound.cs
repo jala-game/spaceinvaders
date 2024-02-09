@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -75,7 +76,8 @@ public class AlienRound : IEnemyEntity
 
     public void Update()
     {
-        foreach (IEnemyEntity enemy in enemies) {
+        foreach (IEnemyGroup enemy in enemies)
+        {
             enemy.Update();
         }
     }

@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,8 +12,10 @@ public class ShooterEnemy : IEnemyGroup
     private readonly GraphicsDeviceManager _graphics;
     private readonly SpriteBatch _spriteBatch;
     private readonly Texture2D _texture;
+    private readonly ContentManager _contentManager;
     private bool isDead = false;
     private bool directionRight = true;
+    public Bullet bullet;
 
     public ShooterEnemy(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, int x, int y) {
         Texture2D texture = contentManager.Load<Texture2D>("aliens/shooter-alien-ship");
@@ -25,6 +28,7 @@ public class ShooterEnemy : IEnemyGroup
         Bounds = new RectangleF(position, new Size2(texture.Width, texture.Height));
 
         _spriteBatch = spriteBatch;
+        _contentManager = contentManager;
     }
 
     public bool IsDead()
@@ -39,8 +43,26 @@ public class ShooterEnemy : IEnemyGroup
 
     public void Update()
     {
+        int randomShotValue = RandomShotValue();
+        Shoot(0);
         
     }
+
+    private void Shoot(int randomShotValue){
+        if (randomShotValue == 0 && bullet == null){
+            Texture2D bulletTexture = _contentManager.Load<Texture2D>("blue-bullet");
+            bullet = new Bullet(Bounds.Position, bulletTexture, _spriteBatch, _graphics, _texture.Width, TypeBulletEnum.ALIEN);
+        }
+
+        bullet.Update();
+        
+    }
+    
+    /*private void RemoveBulletWhenLeaveFromMap() {
+        if (bullet!= null && bullet.Bounds.Position.Y < 0) {
+            bullet = null;
+        }
+    }*/
 
     public void Draw()
     {
@@ -49,6 +71,7 @@ public class ShooterEnemy : IEnemyGroup
             Bounds.Position,
             Color.White
         );
+        bullet.Draw();
     }
 
     public void InvertDirection() {
@@ -64,7 +87,17 @@ public class ShooterEnemy : IEnemyGroup
         Bounds.Position += new Vector2(0, _texture.Height + 10);
     }
 
+    public Bullet GetBullet()
+    {
+        return bullet;
+    }
+
     public Texture2D GetTexture() {
         return _texture;
+    }
+
+    private int RandomShotValue(){
+        Random random = new Random();
+        return random.Next(0, 10);
     }
 }

@@ -64,6 +64,12 @@ public class BirdEnemy : IEnemyGroup {
         Bounds.Position += new Vector2(0, _texture.Height + 10);
     }
 
+    public Bullet GetBullet()
+    {
+        return null;
+    }
+
+
     public Texture2D GetTexture() {
         return _texture;
     }

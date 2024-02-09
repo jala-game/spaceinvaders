@@ -72,7 +72,13 @@ public class FrontEnemy : IEnemyGroup {
         Bounds.Position += new Vector2(0, _texture.Height + _texture.Height / 2 - 8);
     }
 
+    public Bullet GetBullet()
+    {
+        return null;
+    }
+
     public Texture2D GetTexture() {
         return _texture;
     }
+    
 }
