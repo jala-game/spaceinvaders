@@ -10,10 +10,13 @@ public class Bullet : Entity
     private readonly float SPEED = 25f;
     private readonly SpriteBatch _spriteBatch;
     private readonly GraphicsDeviceManager _graphics;
+    private bool isDead = false;
+
+    private readonly TypeBulletEnum _typeBulletEnum;
 
     public IShapeF Bounds { get; }
 
-    public Bullet(Vector2 position, Texture2D texture, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, int shipTextureWidth)
+    public Bullet(Vector2 position, Texture2D texture, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, int shipTextureWidth,TypeBulletEnum typeBulletEnum )
     {
         _texture = texture;
         float bulletWidth = texture.Width / 2;
@@ -22,11 +25,20 @@ public class Bullet : Entity
         Bounds = new RectangleF(bulletPosition, new Size2(texture.Width, texture.Height));
         _spriteBatch = spriteBatch;
         _graphics = graphics;
+        _typeBulletEnum = typeBulletEnum;
     }
 
     public void Update()
     {
-        Bounds.Position = new Vector2(Bounds.Position.X, Bounds.Position.Y - SPEED);
+        switch (_typeBulletEnum){
+            case TypeBulletEnum.PLAYER:
+                Bounds.Position = new Vector2(Bounds.Position.X, Bounds.Position.Y - SPEED);
+                break;
+            case TypeBulletEnum.ALIEN:
+                Bounds.Position = new Vector2(Bounds.Position.X, Bounds.Position.Y + SPEED - (SPEED / 2));
+                break;
+        }
+        
     }
 
     public void Draw()
@@ -41,7 +53,11 @@ public class Bullet : Entity
 
     public void OnCollision(CollisionEventArgs collisionInfo)
     {
+        isDead = true;
+    }
 
-        // 
+    public bool GetIsDead()
+    {
+        return isDead;
     }
 }

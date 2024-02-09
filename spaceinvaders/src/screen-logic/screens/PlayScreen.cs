@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -9,7 +10,9 @@ public class PlayScreen : GameScreenModel
 
     private readonly SpaceShip spaceShip;
     private readonly GraphicsDeviceManager _graphics;
-    public readonly List<IEnemyEntity> enemies = new();
+    private readonly List<IEnemyGroup> enemies = new();
+    private readonly List<IEnemyEntity> groupLogics = new();
+    private RedEnemy _redEnemy;
     private readonly ContentManager _contentManager;
     private readonly SpriteBatch _spriteBatch;
     private int initialTime = 0;
@@ -27,6 +30,7 @@ public class PlayScreen : GameScreenModel
 
         AlienRound alienRound = new(_contentManager, _spriteBatch, _graphics);
         alienRound.GetEnemies().ForEach(e => enemies.Add(e));
+        alienRound.GetLogics().ForEach(e => groupLogics.Add(e));
     }
 
     public override void LoadContent() {
@@ -36,10 +40,18 @@ public class PlayScreen : GameScreenModel
     public override void Update(GameTime gameTime)
     {
        this.SpawnRedShip(gameTime);
+       this.RemoveRedShip();
        this.EnemiesUpdate();
+       this.EmeniesLogicUpdate();
+       this.EnemyBulletUpdate();
        this.spaceShip.Update();
        this.SpaceShipBulletUpdate();
        base.Update(gameTime);
+    }
+
+    private void EmeniesLogicUpdate()
+    {
+        groupLogics.ForEach(e => e.Update());
     }
 
     private void SpawnRedShip(GameTime gameTime) {
@@ -47,8 +59,16 @@ public class PlayScreen : GameScreenModel
         int differenceToSpawnRedShip = actualMinute - initialTime;
         int MINUTES = 1;
         if (differenceToSpawnRedShip == MINUTES) {
-            enemies.Add(new RedEnemy(_contentManager, _spriteBatch, _graphics ));
+            _redEnemy = new RedEnemy(_contentManager, _spriteBatch, _graphics);
             initialTime = actualMinute;
+        }
+    }
+
+    private void RemoveRedShip()
+    {
+        if (_redEnemy !=null && _redEnemy.IsDead())
+        {
+            _redEnemy = null;
         }
     }
 
@@ -57,21 +77,47 @@ public class PlayScreen : GameScreenModel
 
         spaceShip.bullet.Update();
 
-        foreach (Entity enemy in enemies) {
+        foreach (IEnemyGroup enemy in enemies) {
             if (spaceShip.bullet != null && spaceShip.bullet.Bounds.Intersects(enemy.Bounds)) {
                 enemy.OnCollision(null);
                 spaceShip.OnCollision(null);
             }
         }
-
+        
         enemies.RemoveAll(e => e.IsDead() == true);
+
+
+        if (_redEnemy == null) return;
+        
+        bool intersectBetweenRedEnemyAndBullet = spaceShip.bullet.Bounds.Intersects(_redEnemy.Bounds);
+        bool spaceShipBulletExists = spaceShip.bullet != null;
+        
+        if (spaceShipBulletExists && intersectBetweenRedEnemyAndBullet) _redEnemy.OnCollision(null);
+        
+    }
+
+    private void EnemyBulletUpdate()
+    {
+        foreach (IEnemyGroup enemy in enemies)
+        {
+            Bullet bullet = enemy.GetBullet();
+            bullet?.Update();
+            
+            if (bullet != null && bullet.Bounds.Intersects(spaceShip.Bounds))
+            {
+                bullet.OnCollision(null);
+            }
+                
+        }
     }
 
 
     private void EnemiesUpdate() {
-        foreach (Entity enemy in enemies) {
+        foreach (IEnemyGroup enemy in enemies) {
             enemy.Update();
         }
+        _redEnemy?.Update();
+        
     }
 
     public override void Draw(GameTime gameTime)
@@ -79,13 +125,17 @@ public class PlayScreen : GameScreenModel
         spaceShip.bullet?.Draw();
         this.spaceShip.Draw();
         this.DrawEnemies();
+        _redEnemy?.Draw();
 
         base.Draw(gameTime);
     }
 
     private void DrawEnemies() {
-        foreach (Entity enemy in enemies) {
+        foreach (IEnemyGroup enemy in enemies) {
             enemy.Draw();
+            
+            Bullet bullet = enemy.GetBullet();
+            bullet?.Draw();
         }
     }
 }
