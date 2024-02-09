@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -12,7 +13,8 @@ public class AlienRound : IEnemyEntity
 
     private readonly GraphicsDeviceManager _graphics;
     private readonly SpriteBatch _spriteBatch;
-    private readonly List<IEnemyEntity> enemies = new();
+    private readonly List<IEnemyGroup> enemies = new();
+    private readonly List<IEnemyEntity> logics = new();
 
     public AlienRound(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics) {
         _graphics = graphics;
@@ -51,7 +53,7 @@ public class AlienRound : IEnemyEntity
         }
 
         foreach (AlienQueue queue in allLogic) {
-            enemies.Add(queue);
+            logics.Add(queue);
         }
 
     }
@@ -75,12 +77,17 @@ public class AlienRound : IEnemyEntity
 
     public void Update()
     {
-        foreach (IEnemyEntity enemy in enemies) {
+        foreach (IEnemyGroup enemy in enemies)
+        {
             enemy.Update();
         }
     }
 
-    public List<IEnemyEntity> GetEnemies() {
+    public List<IEnemyGroup> GetEnemies() {
         return enemies;
+    }
+    
+    public List<IEnemyEntity> GetLogics() {
+        return logics;
     }
 }

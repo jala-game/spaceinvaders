@@ -14,6 +14,8 @@ public class SpaceShip : Entity {
 
     public IShapeF Bounds { get; }
     public Bullet bullet;
+    private bool _isDead;
+    private int _numberOfLives;
 
     private readonly int PLAYER_SPEED = 20;
 
@@ -39,6 +41,8 @@ public class SpaceShip : Entity {
         graphics = _graphics;
         _contentManager = contentManager;
         _spriteBatch = spriteBatch;
+        _isDead = false;
+        _numberOfLives = 3;
     }
 
     public void Update()
@@ -71,7 +75,7 @@ public class SpaceShip : Entity {
     private void Shoot(KeyboardState kstate) {
         if (kstate.IsKeyDown(Keys.Space) && bullet == null) {
             Texture2D bulletTexture = _contentManager.Load<Texture2D>("red-bullet");
-            bullet = new Bullet(Bounds.Position, bulletTexture, _spriteBatch, graphics, texture.Width);
+            bullet = new Bullet(Bounds.Position, bulletTexture, _spriteBatch, graphics, texture.Width, TypeBulletEnum.PLAYER);
         }
     }
 
@@ -93,5 +97,21 @@ public class SpaceShip : Entity {
     public void OnCollision(CollisionEventArgs collisionInfo)
     {
         bullet = null;
+    }
+
+    public void AddLifeForShip()
+    {
+        if (_numberOfLives <= 6) _numberOfLives += 1;
+    }
+    
+    public void RemoveLifeForShip()
+    {
+        if (_numberOfLives > 0) _numberOfLives -= 1;
+        if (_numberOfLives == 0) _isDead = true;
+    }
+
+    public bool GetIsDead()
+    {
+        return _isDead;
     }
 }
