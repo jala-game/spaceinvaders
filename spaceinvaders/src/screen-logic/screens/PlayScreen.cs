@@ -11,6 +11,7 @@ public class PlayScreen : GameScreenModel
     private readonly SpaceShip spaceShip;
     private readonly GraphicsDeviceManager _graphics;
     private readonly List<IEnemyGroup> enemies = new();
+    private readonly List<IEnemyEntity> groupLogics = new();
     private RedEnemy _redEnemy;
     private readonly ContentManager _contentManager;
     private readonly SpriteBatch _spriteBatch;
@@ -29,6 +30,7 @@ public class PlayScreen : GameScreenModel
 
         AlienRound alienRound = new(_contentManager, _spriteBatch, _graphics);
         alienRound.GetEnemies().ForEach(e => enemies.Add(e));
+        alienRound.GetLogics().ForEach(e => groupLogics.Add(e));
     }
 
     public override void LoadContent() {
@@ -40,10 +42,16 @@ public class PlayScreen : GameScreenModel
        this.SpawnRedShip(gameTime);
        this.RemoveRedShip();
        this.EnemiesUpdate();
+       this.EmeniesLogicUpdate();
        this.EnemyBulletUpdate();
        this.spaceShip.Update();
        this.SpaceShipBulletUpdate();
        base.Update(gameTime);
+    }
+
+    private void EmeniesLogicUpdate()
+    {
+        groupLogics.ForEach(e => e.Update());
     }
 
     private void SpawnRedShip(GameTime gameTime) {
@@ -109,6 +117,7 @@ public class PlayScreen : GameScreenModel
             enemy.Update();
         }
         _redEnemy?.Update();
+        
     }
 
     public override void Draw(GameTime gameTime)
