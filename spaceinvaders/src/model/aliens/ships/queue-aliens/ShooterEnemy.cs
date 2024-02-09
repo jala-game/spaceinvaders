@@ -46,6 +46,7 @@ public class ShooterEnemy : IEnemyGroup
         int randomShotValue = RandomShotValue();
         Shoot(0);
         RemoveBulletIfIsDead();
+        RemoveBulletWhenLeaveFromMap();
 
     }
 
@@ -54,16 +55,15 @@ public class ShooterEnemy : IEnemyGroup
             Texture2D bulletTexture = _contentManager.Load<Texture2D>("blue-bullet");
             bullet = new Bullet(Bounds.Position, bulletTexture, _spriteBatch, _graphics, _texture.Width, TypeBulletEnum.ALIEN);
         }
-
-        bullet.Update();
+        /*bullet.Update();*/
         
     }
     
-    /*private void RemoveBulletWhenLeaveFromMap() {
-        if (bullet!= null && bullet.Bounds.Position.Y < 0) {
+    private void RemoveBulletWhenLeaveFromMap() {
+        if (bullet!= null && bullet.Bounds.Position.Y > _graphics.PreferredBackBufferHeight) {
             bullet = null;
         }
-    }*/
+    }
 
     public void RemoveBulletIfIsDead()
     {
@@ -77,7 +77,6 @@ public class ShooterEnemy : IEnemyGroup
             Bounds.Position,
             Color.White
         );
-        bullet?.Draw();
     }
 
     public void InvertDirection() {

@@ -93,10 +93,11 @@ public class PlayScreen : GameScreenModel
         foreach (IEnemyGroup enemy in enemies)
         {
             Bullet bullet = enemy.GetBullet();
+            bullet?.Update();
+            
             if (bullet != null && bullet.Bounds.Intersects(spaceShip.Bounds))
             {
                 bullet.OnCollision(null);
-                Console.WriteLine("Matou a nave");
             }
                 
         }
@@ -123,6 +124,9 @@ public class PlayScreen : GameScreenModel
     private void DrawEnemies() {
         foreach (IEnemyGroup enemy in enemies) {
             enemy.Draw();
+            
+            Bullet bullet = enemy.GetBullet();
+            bullet?.Draw();
         }
     }
 }
