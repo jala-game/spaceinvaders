@@ -1,3 +1,4 @@
-﻿
-using var game = new spaceinvaders.Game1();
+﻿using spaceinvaders;
+
+using var game = new Game1();
 game.Run();

@@ -6,9 +6,9 @@ namespace spaceinvaders;
 
 public class Game1 : Game
 {
-    private GraphicsDeviceManager _graphics;
+    private readonly GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-    Texture2D background;
+    private Texture2D background;
 
     public Game1()
     {
@@ -17,7 +17,7 @@ public class Game1 : Game
         IsMouseVisible = true;
 
         _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 300;
-        _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height -100;
+        _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - 100;
 
         _graphics.ApplyChanges();
     }
@@ -30,12 +30,14 @@ public class Game1 : Game
         base.Initialize();
     }
 
+    /*TODO: Não entendi a lógica desse LoadContent juntamente com o LoadScreenManager, sendo que ambos estão carregando*/
     protected override void LoadContent()
     {
         background = Content.Load<Texture2D>("background");
     }
 
-    private void LoadScreenManager() {
+    private void LoadScreenManager()
+    {
         SpaceShip spaceShip = new(_graphics, _spriteBatch, Content);
         PlayScreen playScreen = new(spaceShip, _graphics, Content, _spriteBatch);
         ScreenManager.ChangeScreen(playScreen);
@@ -43,7 +45,8 @@ public class Game1 : Game
 
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+            Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
         ScreenManager.Update(gameTime);
@@ -57,7 +60,8 @@ public class Game1 : Game
 
         _spriteBatch.Begin();
 
-        _spriteBatch.Draw(background, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
+        _spriteBatch.Draw(background,
+            new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
         ScreenManager.Draw(gameTime);
 
         _spriteBatch.End();
