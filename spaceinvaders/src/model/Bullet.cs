@@ -35,7 +35,7 @@ public class Bullet : Entity
                 Bounds.Position = new Vector2(Bounds.Position.X, Bounds.Position.Y - SPEED);
                 break;
             case TypeBulletEnum.ALIEN:
-                Bounds.Position = new Vector2(Bounds.Position.X, Bounds.Position.Y + 2);
+                Bounds.Position = new Vector2(Bounds.Position.X, Bounds.Position.Y + SPEED - (SPEED / 2));
                 break;
         }
         

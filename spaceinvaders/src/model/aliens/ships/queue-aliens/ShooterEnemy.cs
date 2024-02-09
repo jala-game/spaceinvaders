@@ -44,19 +44,17 @@ public class ShooterEnemy : IEnemyGroup
     public void Update()
     {
         int randomShotValue = RandomShotValue();
-        Shoot(0);
+        Shoot(randomShotValue);
         RemoveBulletIfIsDead();
         RemoveBulletWhenLeaveFromMap();
 
     }
 
     private void Shoot(int randomShotValue){
-        if (randomShotValue == 0 && bullet == null){
+        if (randomShotValue == 5 && bullet == null){
             Texture2D bulletTexture = _contentManager.Load<Texture2D>("blue-bullet");
             bullet = new Bullet(Bounds.Position, bulletTexture, _spriteBatch, _graphics, _texture.Width, TypeBulletEnum.ALIEN);
         }
-        /*bullet.Update();*/
-        
     }
     
     private void RemoveBulletWhenLeaveFromMap() {
@@ -103,6 +101,6 @@ public class ShooterEnemy : IEnemyGroup
 
     private int RandomShotValue(){
         Random random = new Random();
-        return random.Next(0, 10);
+        return random.Next(0, 500);
     }
 }
