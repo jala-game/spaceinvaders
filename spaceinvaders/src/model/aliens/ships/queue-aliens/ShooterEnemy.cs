@@ -45,7 +45,8 @@ public class ShooterEnemy : IEnemyGroup
     {
         int randomShotValue = RandomShotValue();
         Shoot(0);
-        
+        RemoveBulletIfIsDead();
+
     }
 
     private void Shoot(int randomShotValue){
@@ -64,6 +65,11 @@ public class ShooterEnemy : IEnemyGroup
         }
     }*/
 
+    public void RemoveBulletIfIsDead()
+    {
+        if (bullet != null && bullet.GetIsDead()) bullet = null;
+    }
+
     public void Draw()
     {
         _spriteBatch.Draw(
@@ -71,7 +77,7 @@ public class ShooterEnemy : IEnemyGroup
             Bounds.Position,
             Color.White
         );
-        bullet.Draw();
+        bullet?.Draw();
     }
 
     public void InvertDirection() {

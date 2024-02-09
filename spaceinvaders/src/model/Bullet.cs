@@ -10,6 +10,7 @@ public class Bullet : Entity
     private readonly float SPEED = 25f;
     private readonly SpriteBatch _spriteBatch;
     private readonly GraphicsDeviceManager _graphics;
+    private bool isDead = false;
 
     private readonly TypeBulletEnum _typeBulletEnum;
 
@@ -34,7 +35,7 @@ public class Bullet : Entity
                 Bounds.Position = new Vector2(Bounds.Position.X, Bounds.Position.Y - SPEED);
                 break;
             case TypeBulletEnum.ALIEN:
-                Bounds.Position = new Vector2(Bounds.Position.X, Bounds.Position.Y + SPEED);
+                Bounds.Position = new Vector2(Bounds.Position.X, Bounds.Position.Y + 2);
                 break;
         }
         
@@ -52,7 +53,11 @@ public class Bullet : Entity
 
     public void OnCollision(CollisionEventArgs collisionInfo)
     {
+        isDead = true;
+    }
 
-        // 
+    public bool GetIsDead()
+    {
+        return isDead;
     }
 }

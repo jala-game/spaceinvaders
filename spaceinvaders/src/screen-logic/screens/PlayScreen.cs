@@ -40,6 +40,7 @@ public class PlayScreen : GameScreenModel
        this.SpawnRedShip(gameTime);
        this.RemoveRedShip();
        this.EnemiesUpdate();
+       this.EnemyBulletUpdate();
        this.spaceShip.Update();
        this.SpaceShipBulletUpdate();
        base.Update(gameTime);
@@ -85,6 +86,20 @@ public class PlayScreen : GameScreenModel
         
         if (spaceShipBulletExists && intersectBetweenRedEnemyAndBullet) _redEnemy.OnCollision(null);
         
+    }
+
+    private void EnemyBulletUpdate()
+    {
+        foreach (IEnemyGroup enemy in enemies)
+        {
+            Bullet bullet = enemy.GetBullet();
+            if (bullet != null && bullet.Bounds.Intersects(spaceShip.Bounds))
+            {
+                bullet.OnCollision(null);
+                Console.WriteLine("Matou a nave");
+            }
+                
+        }
     }
 
 
