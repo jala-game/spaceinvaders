@@ -54,6 +54,7 @@ public class SpaceShip : Entity {
 
         Shoot(kstate);
         RemoveBulletWhenLeaveFromMap();
+        RemoveBulletIfIsDead();
     }
 
     private void MoveToRight(KeyboardState kstate) {
@@ -96,18 +97,28 @@ public class SpaceShip : Entity {
 
     public void OnCollision(CollisionEventArgs collisionInfo)
     {
-        bullet = null;
+        RemoveLifeForShip();
+    }
+    
+    public void RemoveBulletIfIsDead()
+    {
+        if (bullet != null && bullet.GetIsDead()) bullet = null;
     }
 
     public void AddLifeForShip()
     {
-        if (_numberOfLives <= 6) _numberOfLives += 1;
+        if (_numberOfLives < 6) _numberOfLives += 1;
     }
     
-    public void RemoveLifeForShip()
+    private void RemoveLifeForShip()
     {
-        if (_numberOfLives > 0) _numberOfLives -= 1;
-        if (_numberOfLives == 0) _isDead = true;
+        if (_numberOfLives > 0)
+        {
+            _numberOfLives -= 1;
+            return;
+        }
+        
+        _isDead = true;
     }
 
     public bool GetIsDead()
