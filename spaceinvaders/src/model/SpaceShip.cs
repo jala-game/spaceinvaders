@@ -17,7 +17,7 @@ public class SpaceShip : Entity {
     private bool _isDead;
     private int _numberOfLives;
 
-    private readonly int PLAYER_SPEED = 20;
+    private readonly int PLAYER_SPEED = 10;
 
     public SpaceShip(GraphicsDeviceManager _graphics, SpriteBatch spriteBatch, ContentManager contentManager) {
         Random random = new();
