@@ -59,7 +59,7 @@ public class SpaceShip : Entity {
 
     private void MoveToRight(KeyboardState kstate) {
         bool rightLimit = graphics.PreferredBackBufferWidth > Bounds.Position.X + texture.Width;
-        if (kstate.IsKeyDown(Keys.D) && rightLimit) {
+        if ((kstate.IsKeyDown(Keys.D) || kstate.IsKeyDown(Keys.Right)) && rightLimit) {
             Vector2 newPosition = new(PLAYER_SPEED + Bounds.Position.X, Bounds.Position.Y);
             Bounds.Position = newPosition;
         }
@@ -67,7 +67,7 @@ public class SpaceShip : Entity {
 
     private void MoveToLeft(KeyboardState kstate) {
         bool leftLimit = 0 < Bounds.Position.X;
-        if (kstate.IsKeyDown(Keys.A) && leftLimit) {
+        if ((kstate.IsKeyDown(Keys.A) || kstate.IsKeyDown(Keys.Left)) && leftLimit) {
             Vector2 newPosition = new(Bounds.Position.X - PLAYER_SPEED, Bounds.Position.Y);
             Bounds.Position = newPosition;
         };
@@ -112,7 +112,7 @@ public class SpaceShip : Entity {
     
     private void RemoveLifeForShip()
     {
-        if (_numberOfLives > 0)
+        if (_numberOfLives > 1)
         {
             _numberOfLives -= 1;
             return;

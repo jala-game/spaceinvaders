@@ -39,17 +39,16 @@ public class PlayScreen : GameScreenModel
 
     public override void Update(GameTime gameTime)
     {
-        if (!spaceShip.GetIsDead())
-        {
-            this.SpawnRedShip(gameTime);
-            this.RemoveRedShip();
-            this.EnemiesUpdate();
-            this.EmeniesLogicUpdate();
-            this.EnemyBulletUpdate();
-            this.spaceShip.Update();
-            this.SpaceShipBulletUpdate();
-            base.Update(gameTime);
-        }
+        if (spaceShip.GetIsDead()) return;
+        
+        this.SpawnRedShip(gameTime);
+        this.RemoveRedShip();
+        this.EnemiesUpdate();
+        this.EmeniesLogicUpdate();
+        this.EnemyBulletUpdate();
+        this.spaceShip.Update();
+        this.SpaceShipBulletUpdate();
+        base.Update(gameTime);
     }
 
     private void EmeniesLogicUpdate()
