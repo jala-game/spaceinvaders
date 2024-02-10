@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 
-public class SpaceShip : Entity
+public class SpaceShip : GameComponent, Entity
 {
     private readonly ContentManager _contentManager;
     private readonly SpriteBatch _spriteBatch;
@@ -16,7 +16,7 @@ public class SpaceShip : Entity
     public readonly Texture2D texture;
     public Bullet bullet;
 
-    public SpaceShip(GraphicsDeviceManager _graphics, SpriteBatch spriteBatch, ContentManager contentManager)
+    public SpaceShip(Game game, GraphicsDeviceManager _graphics, SpriteBatch spriteBatch, ContentManager contentManager) : base(game)
     {
         Random random = new();
         var randomShip = random.Next(1, 5);
@@ -93,7 +93,7 @@ public class SpaceShip : Entity
         if (kstate.IsKeyDown(Keys.Space) && bullet == null)
         {
             var bulletTexture = _contentManager.Load<Texture2D>("red-bullet");
-            bullet = new Bullet(Bounds.Position, bulletTexture, _spriteBatch, graphics, texture.Width);
+            bullet = new Bullet(Game, Bounds.Position, bulletTexture, _spriteBatch, graphics, texture.Width);
         }
     }
 

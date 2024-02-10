@@ -1,25 +1,37 @@
+using System;
 using Microsoft.Xna.Framework;
 
-namespace spaceinvaders.model
+namespace spaceinvaders.model;
+
+public class Barricades : GameComponent
 {
-    public class Barricades : GameComponent
+    public BarricadeBlock[] BarricadeBlocks { get; }
+    private const int BarricadeQuantity = 4;
+
+    public Barricades(Game game) : base(game)
     {
-        private readonly BarricadeBlock[] _barricadeBlocks;
-        private const int BarricadeQuantity = 4;
+        BarricadeBlocks = new BarricadeBlock[BarricadeQuantity];
+        Game.Components.Add(this);
+        Initialize();
+    }
 
-        public Barricades(Game game) : base(game)
+    public override void Initialize()
+    {
+        GraphicsDeviceManager gdm = Game.Services.GetService<GraphicsDeviceManager>();
+        int totalGapWidth = 100 * (BarricadeQuantity - 1);
+        int availableWidth = gdm.PreferredBackBufferWidth - totalGapWidth;
+        int barricadeWidth = availableWidth / BarricadeQuantity;
+
+        int startPointX = (gdm.PreferredBackBufferWidth - availableWidth) / 2;
+        int startPointY = gdm.PreferredBackBufferHeight - 300;
+        var barricadeBlockPoint = new Point(startPointX, startPointY);
+
+        for (int i = 0; i < BarricadeQuantity; i++)
         {
-            _barricadeBlocks = new BarricadeBlock[BarricadeQuantity];
+            BarricadeBlocks[i] = new BarricadeBlock(Game, barricadeBlockPoint);
+            barricadeBlockPoint.X += barricadeWidth + 100;
         }
 
-        public override void Initialize()
-        {
-            for (int i = 0; i < BarricadeQuantity; i++)
-            {
-                _barricadeBlocks[i] = new BarricadeBlock(Game, new Point(100, 100));
-                Game.Components.Add(_barricadeBlocks[i]);
-            }
-            base.Initialize();
-        }
+        base.Initialize();
     }
 }

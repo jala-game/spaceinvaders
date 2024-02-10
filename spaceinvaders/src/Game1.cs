@@ -1,6 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Collisions;
 using spaceinvaders.model;
 
 namespace spaceinvaders;
@@ -8,11 +11,10 @@ namespace spaceinvaders;
 public class Game1 : Game
 {
     private readonly GraphicsDeviceManager _graphics;
-    private Barricades _barricades;
 
-    private Texture2D _barricadeTexture;
     private SpriteBatch _spriteBatch;
     private Texture2D background;
+    private List<GameComponent> _gameComponents;
 
     public Game1()
     {
@@ -28,6 +30,7 @@ public class Game1 : Game
         _graphics.ApplyChanges();
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         Services.AddService(typeof(SpriteBatch), _spriteBatch);
+        Services.AddService(typeof(GraphicsDeviceManager), _graphics);
         LoadScreenManager();
         ScreenManager.Initialize();
         base.Initialize();
@@ -36,14 +39,15 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         background = Content.Load<Texture2D>("background");
-        _barricadeTexture = Content.Load<Texture2D>("barricades/barricade");
-        _barricades = new Barricades(this);
-        Components.Add(_barricades);
+        Content.Load<Texture2D>("barricades/barricade");
+        Barricades _barricades = new Barricades(this);
+
+        base.LoadContent();
     }
 
     private void LoadScreenManager()
     {
-        SpaceShip spaceShip = new(_graphics, _spriteBatch, Content);
+        SpaceShip spaceShip = new(this, _graphics, _spriteBatch, Content);
         PlayScreen playScreen = new(spaceShip, _graphics, Content, _spriteBatch);
         ScreenManager.ChangeScreen(playScreen);
     }
@@ -53,9 +57,7 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
-
         ScreenManager.Update(gameTime);
-
         base.Update(gameTime);
     }
 

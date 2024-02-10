@@ -1,17 +1,19 @@
+using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
+using spaceinvaders.model;
 
-public class Bullet : Entity
+public class Bullet : DrawableGameComponent, Entity
 {
     private readonly GraphicsDeviceManager _graphics;
     private readonly SpriteBatch _spriteBatch;
     private readonly Texture2D _texture;
     private readonly float SPEED = 25f;
 
-    public Bullet(Vector2 position, Texture2D texture, SpriteBatch spriteBatch, GraphicsDeviceManager graphics,
-        int shipTextureWidth)
+    public Bullet(Game game, Vector2 position, Texture2D texture, SpriteBatch spriteBatch, GraphicsDeviceManager graphics,
+        int shipTextureWidth) : base(game)
     {
         _texture = texture;
         float bulletWidth = texture.Width / 2;
@@ -20,6 +22,7 @@ public class Bullet : Entity
         Bounds = new RectangleF(bulletPosition, new Size2(texture.Width, texture.Height));
         _spriteBatch = spriteBatch;
         _graphics = graphics;
+        Game.Components.Add(this);
     }
 
     public IShapeF Bounds { get; }
@@ -40,6 +43,9 @@ public class Bullet : Entity
 
     public void OnCollision(CollisionEventArgs collisionInfo)
     {
-        // 
+        if (collisionInfo.Other is BarricadeBlockPart)
+        {
+            ((BarricadeBlockPart)collisionInfo.Other).TakeDamage();
+        }
     }
 }
