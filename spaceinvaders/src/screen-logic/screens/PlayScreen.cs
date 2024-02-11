@@ -39,14 +39,16 @@ public class PlayScreen : GameScreenModel
 
     public override void Update(GameTime gameTime)
     {
-       this.SpawnRedShip(gameTime);
-       this.RemoveRedShip();
-       this.EnemiesUpdate();
-       this.EmeniesLogicUpdate();
-       this.EnemyBulletUpdate();
-       this.spaceShip.Update();
-       this.SpaceShipBulletUpdate();
-       base.Update(gameTime);
+        if (spaceShip.GetIsDead()) return;
+        
+        this.SpawnRedShip(gameTime);
+        this.RemoveRedShip();
+        this.EnemiesUpdate();
+        this.EmeniesLogicUpdate();
+        this.EnemyBulletUpdate();
+        this.spaceShip.Update();
+        this.SpaceShipBulletUpdate();
+        base.Update(gameTime);
     }
 
     private void EmeniesLogicUpdate()
@@ -80,7 +82,7 @@ public class PlayScreen : GameScreenModel
         foreach (IEnemyGroup enemy in enemies) {
             if (spaceShip.bullet != null && spaceShip.bullet.Bounds.Intersects(enemy.Bounds)) {
                 enemy.OnCollision(null);
-                spaceShip.OnCollision(null);
+                spaceShip.bullet.OnCollision(null);
             }
         }
         
@@ -106,6 +108,7 @@ public class PlayScreen : GameScreenModel
             if (bullet != null && bullet.Bounds.Intersects(spaceShip.Bounds))
             {
                 bullet.OnCollision(null);
+                spaceShip.OnCollision(null);
             }
                 
         }

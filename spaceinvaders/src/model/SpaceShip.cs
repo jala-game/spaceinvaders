@@ -14,8 +14,10 @@ public class SpaceShip : Entity {
 
     public IShapeF Bounds { get; }
     public Bullet bullet;
+    private bool _isDead;
+    private int _numberOfLives;
 
-    private readonly int PLAYER_SPEED = 20;
+    private readonly int PLAYER_SPEED = 10;
 
     public SpaceShip(GraphicsDeviceManager _graphics, SpriteBatch spriteBatch, ContentManager contentManager) {
         Random random = new();
@@ -39,6 +41,8 @@ public class SpaceShip : Entity {
         graphics = _graphics;
         _contentManager = contentManager;
         _spriteBatch = spriteBatch;
+        _isDead = false;
+        _numberOfLives = 3;
     }
 
     public void Update()
@@ -50,11 +54,12 @@ public class SpaceShip : Entity {
 
         Shoot(kstate);
         RemoveBulletWhenLeaveFromMap();
+        RemoveBulletIfIsDead();
     }
 
     private void MoveToRight(KeyboardState kstate) {
         bool rightLimit = graphics.PreferredBackBufferWidth > Bounds.Position.X + texture.Width;
-        if (kstate.IsKeyDown(Keys.D) && rightLimit) {
+        if ((kstate.IsKeyDown(Keys.D) || kstate.IsKeyDown(Keys.Right)) && rightLimit) {
             Vector2 newPosition = new(PLAYER_SPEED + Bounds.Position.X, Bounds.Position.Y);
             Bounds.Position = newPosition;
         }
@@ -62,7 +67,7 @@ public class SpaceShip : Entity {
 
     private void MoveToLeft(KeyboardState kstate) {
         bool leftLimit = 0 < Bounds.Position.X;
-        if (kstate.IsKeyDown(Keys.A) && leftLimit) {
+        if ((kstate.IsKeyDown(Keys.A) || kstate.IsKeyDown(Keys.Left)) && leftLimit) {
             Vector2 newPosition = new(Bounds.Position.X - PLAYER_SPEED, Bounds.Position.Y);
             Bounds.Position = newPosition;
         };
@@ -92,6 +97,32 @@ public class SpaceShip : Entity {
 
     public void OnCollision(CollisionEventArgs collisionInfo)
     {
-        bullet = null;
+        RemoveLifeForShip();
+    }
+    
+    public void RemoveBulletIfIsDead()
+    {
+        if (bullet != null && bullet.GetIsDead()) bullet = null;
+    }
+
+    public void AddLifeForShip()
+    {
+        if (_numberOfLives < 6) _numberOfLives += 1;
+    }
+    
+    private void RemoveLifeForShip()
+    {
+        if (_numberOfLives > 1)
+        {
+            _numberOfLives -= 1;
+            return;
+        }
+        
+        _isDead = true;
+    }
+
+    public bool GetIsDead()
+    {
+        return _isDead;
     }
 }
