@@ -16,6 +16,7 @@ public class ShooterEnemy : IEnemyGroup
     private bool isDead = false;
     private bool directionRight = true;
     public Bullet bullet;
+    private int _point = 40;
 
     public ShooterEnemy(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, int x, int y) {
         Texture2D texture = contentManager.Load<Texture2D>("aliens/shooter-alien-ship");
@@ -102,5 +103,10 @@ public class ShooterEnemy : IEnemyGroup
     private int RandomShotValue(){
         Random random = new Random();
         return random.Next(0, 500);
+    }
+
+    public int GetPoint()
+    {
+        return _point;
     }
 }

@@ -80,4 +80,11 @@ public class RedEnemy : IEnemyEntity
     public bool IsDead() {
         return isDead;
     }
+    
+    public int GetPoint()
+    {
+        Random random = new Random();
+        int[] points = new[] { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 };
+        return points[random.Next(0, points.Length)];
+    }
 }

@@ -7,4 +7,6 @@ public interface IEnemyGroup : IEnemyEntity {
     public void Fall();
 
     public Bullet GetBullet();
+    public int GetPoint();
+
 }
