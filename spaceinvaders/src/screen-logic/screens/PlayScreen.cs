@@ -18,6 +18,7 @@ public class PlayScreen : GameScreenModel
     private readonly SpriteBatch _spriteBatch;
     private int initialTime = 0;
     private readonly Score _score;
+    private int _addLifeManage = 1000;
 
     public PlayScreen(SpaceShip ship, GraphicsDeviceManager graphics, ContentManager contentManager, SpriteBatch spriteBatch)
     {
@@ -49,6 +50,7 @@ public class PlayScreen : GameScreenModel
         this.EmeniesLogicUpdate();
         this.EnemyBulletUpdate();
         this.spaceShip.Update();
+        this.UpdateLife();
         this.SpaceShipBulletUpdate();
         base.Update(gameTime);
     }
@@ -56,6 +58,15 @@ public class PlayScreen : GameScreenModel
     private void EmeniesLogicUpdate()
     {
         groupLogics.ForEach(e => e.Update());
+    }
+
+    private void UpdateLife()
+    {
+        if (_score.GetScore() >= _addLifeManage)
+        {
+            _addLifeManage += 1000;
+            spaceShip.AddLifeForShip();
+        }
     }
 
     private void SpawnRedShip(GameTime gameTime) {
@@ -130,10 +141,10 @@ public class PlayScreen : GameScreenModel
     {
         spaceShip.bullet?.Draw();
         this.spaceShip.Draw();
+        _score.Draw();
+        DrawLife();
         this.DrawEnemies();
         _redEnemy?.Draw();
-        _score.Draw();
-
         base.Draw(gameTime);
     }
 
@@ -143,7 +154,6 @@ public class PlayScreen : GameScreenModel
 
             Bullet bullet = enemy.GetBullet();
             bullet?.Draw();
-            DrawLife();
         }
     }
 
