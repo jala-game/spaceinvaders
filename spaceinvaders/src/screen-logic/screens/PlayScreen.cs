@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using spaceinvaders.model;
 
 public class PlayScreen : GameScreenModel
 {
@@ -16,6 +17,7 @@ public class PlayScreen : GameScreenModel
     private readonly ContentManager _contentManager;
     private readonly SpriteBatch _spriteBatch;
     private int initialTime = 0;
+    private Score _score;
 
     public PlayScreen(SpaceShip ship, GraphicsDeviceManager graphics, ContentManager contentManager, SpriteBatch spriteBatch)
     {
@@ -23,6 +25,7 @@ public class PlayScreen : GameScreenModel
         _graphics = graphics;
         _contentManager = contentManager;
         _spriteBatch = spriteBatch;
+        _score = new Score(graphics, spriteBatch,contentManager);
     }
 
     public override void Initialize() {
@@ -40,7 +43,7 @@ public class PlayScreen : GameScreenModel
     public override void Update(GameTime gameTime)
     {
         if (spaceShip.GetIsDead()) return;
-        
+        Console.WriteLine(_score.GetScore());
         this.SpawnRedShip(gameTime);
         this.RemoveRedShip();
         this.EnemiesUpdate();
@@ -81,6 +84,7 @@ public class PlayScreen : GameScreenModel
 
         foreach (IEnemyGroup enemy in enemies) {
             if (spaceShip.bullet != null && spaceShip.bullet.Bounds.Intersects(enemy.Bounds)) {
+                _score.SetScore(enemy.GetPoint());
                 enemy.OnCollision(null);
                 spaceShip.bullet.OnCollision(null);
             }
@@ -129,6 +133,7 @@ public class PlayScreen : GameScreenModel
         this.spaceShip.Draw();
         this.DrawEnemies();
         _redEnemy?.Draw();
+        /*_score.Draw();*/
 
         base.Draw(gameTime);
     }
@@ -141,4 +146,5 @@ public class PlayScreen : GameScreenModel
             bullet?.Draw();
         }
     }
+    
 }

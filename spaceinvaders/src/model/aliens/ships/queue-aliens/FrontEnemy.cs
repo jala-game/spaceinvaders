@@ -13,6 +13,7 @@ public class FrontEnemy : IEnemyGroup {
     private bool isDead = false;
     private bool directionRight = true;
     private float rotator = 0;
+    private int _point = 10;
 
     public FrontEnemy(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, int x, int y) {
         Texture2D texture = contentManager.Load<Texture2D>("aliens/front-alien-ship");
@@ -79,6 +80,11 @@ public class FrontEnemy : IEnemyGroup {
 
     public Texture2D GetTexture() {
         return _texture;
+    }
+    
+    public int GetPoint()
+    {
+        return _point;
     }
     
 }

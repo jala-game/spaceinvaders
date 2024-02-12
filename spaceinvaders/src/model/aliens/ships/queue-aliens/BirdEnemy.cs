@@ -12,6 +12,7 @@ public class BirdEnemy : IEnemyGroup {
     private readonly Texture2D _texture;
     private bool isDead = false;
     private bool directionRight = true;
+    private int _point = 20;
 
     public BirdEnemy(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, int x, int y) {
         Texture2D texture = contentManager.Load<Texture2D>("aliens/bird-alien-ship");
@@ -69,8 +70,15 @@ public class BirdEnemy : IEnemyGroup {
         return null;
     }
 
+    public int GetPoint()
+    {
+        return _point;
+    }
+
 
     public Texture2D GetTexture() {
         return _texture;
     }
+    
+    
 }
