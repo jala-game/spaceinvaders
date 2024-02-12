@@ -143,6 +143,13 @@ public class PlayScreen : GameScreenModel
 
             Bullet bullet = enemy.GetBullet();
             bullet?.Draw();
+            DrawLife();
         }
+    }
+
+    private void DrawLife()
+    {
+        SpriteFont _spriteFont = _contentManager.Load<SpriteFont>("fonts/PixeloidMono");
+        _spriteBatch.DrawString(_spriteFont, $"Lifes {spaceShip.GetLifes()}", new Vector2( 50, 50), Color.White);
     }
 }
