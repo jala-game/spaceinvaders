@@ -17,7 +17,7 @@ public class PlayScreen : GameScreenModel
     private readonly ContentManager _contentManager;
     private readonly SpriteBatch _spriteBatch;
     private int initialTime = 0;
-    private Score _score;
+    private readonly Score _score;
 
     public PlayScreen(SpaceShip ship, GraphicsDeviceManager graphics, ContentManager contentManager, SpriteBatch spriteBatch)
     {
@@ -42,7 +42,7 @@ public class PlayScreen : GameScreenModel
 
     public override void Update(GameTime gameTime)
     {
-        if (spaceShip.GetIsDead()) return;
+        if (spaceShip.GetIsDead() || _score.GetScore() >= 500) return;
         this.SpawnRedShip(gameTime);
         this.RemoveRedShip();
         this.EnemiesUpdate();
