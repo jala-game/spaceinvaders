@@ -88,20 +88,19 @@ public class PlayScreen : GameScreenModel
                 spaceShip.bullet.OnCollision(null);
             }
         }
-        
+
         enemies.RemoveAll(e => e.IsDead() == true);
 
 
         if (_redEnemy == null) return;
-        
+
         bool intersectBetweenRedEnemyAndBullet = spaceShip.bullet.Bounds.Intersects(_redEnemy.Bounds);
         bool spaceShipBulletExists = spaceShip.bullet != null;
-        
-        if (spaceShipBulletExists && intersectBetweenRedEnemyAndBullet){ 
+
+        if (spaceShipBulletExists && intersectBetweenRedEnemyAndBullet){
             _score.SetScore(_redEnemy.GetPoint());;
             _redEnemy.OnCollision(null);
         };
-        
     }
 
     private void EnemyBulletUpdate()
@@ -110,13 +109,12 @@ public class PlayScreen : GameScreenModel
         {
             Bullet bullet = enemy.GetBullet();
             bullet?.Update();
-            
+
             if (bullet != null && bullet.Bounds.Intersects(spaceShip.Bounds))
             {
                 bullet.OnCollision(null);
                 spaceShip.OnCollision(null);
             }
-                
         }
     }
 
@@ -126,7 +124,6 @@ public class PlayScreen : GameScreenModel
             enemy.Update();
         }
         _redEnemy?.Update();
-        
     }
 
     public override void Draw(GameTime gameTime)
@@ -143,10 +140,9 @@ public class PlayScreen : GameScreenModel
     private void DrawEnemies() {
         foreach (IEnemyGroup enemy in enemies) {
             enemy.Draw();
-            
+
             Bullet bullet = enemy.GetBullet();
             bullet?.Draw();
         }
     }
-    
 }
