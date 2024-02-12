@@ -43,7 +43,6 @@ public class PlayScreen : GameScreenModel
     public override void Update(GameTime gameTime)
     {
         if (spaceShip.GetIsDead()) return;
-        Console.WriteLine(_score.GetScore());
         this.SpawnRedShip(gameTime);
         this.RemoveRedShip();
         this.EnemiesUpdate();
@@ -98,7 +97,10 @@ public class PlayScreen : GameScreenModel
         bool intersectBetweenRedEnemyAndBullet = spaceShip.bullet.Bounds.Intersects(_redEnemy.Bounds);
         bool spaceShipBulletExists = spaceShip.bullet != null;
         
-        if (spaceShipBulletExists && intersectBetweenRedEnemyAndBullet) _redEnemy.OnCollision(null);
+        if (spaceShipBulletExists && intersectBetweenRedEnemyAndBullet){ 
+            _score.SetScore(_redEnemy.GetPoint());;
+            _redEnemy.OnCollision(null);
+        };
         
     }
 
@@ -133,7 +135,7 @@ public class PlayScreen : GameScreenModel
         this.spaceShip.Draw();
         this.DrawEnemies();
         _redEnemy?.Draw();
-        /*_score.Draw();*/
+        _score.Draw();
 
         base.Draw(gameTime);
     }

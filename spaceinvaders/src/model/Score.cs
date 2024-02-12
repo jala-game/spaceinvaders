@@ -17,7 +17,7 @@ public class Score
         _graphics = graphics;
         _spriteBatch = spriteBatch;
         _contentManager = contentManager;
-        /*_spriteFont = contentManager.Load<SpriteFont>("Arial");*/
+        _spriteFont = contentManager.Load<SpriteFont>("fonts/PixeloidMono");
         _score = 0;
     }
 
@@ -35,6 +35,6 @@ public class Score
 
     public void Draw()
     {
-        /*_spriteBatch.DrawString(_spriteFont, $"SCORE {_score}", new Vector2(100, 100), Color.White);*/
+        _spriteBatch.DrawString(_spriteFont, $"SCORE {_score}", new Vector2(100, 100), Color.White);
     }
 }
