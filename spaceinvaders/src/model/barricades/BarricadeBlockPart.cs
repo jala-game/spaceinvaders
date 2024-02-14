@@ -55,15 +55,8 @@ public class BarricadeBlockPart : DrawableGameComponent, ICollisionActor
         base.Draw(gameTime);
     }
 
-    public override void Update(GameTime gameTime)
-    {
-        Console.WriteLine("Updated");
-        base.Update(gameTime);
-    }
-
     private void TakeDamage()
     {
-        Console.WriteLine(Life);
         Life -= 1;
         if (Life <= 0)
         {
@@ -76,7 +69,6 @@ public class BarricadeBlockPart : DrawableGameComponent, ICollisionActor
         if (collisionInfo.Other is Bullet)
         {
             TakeDamage();
-            Console.WriteLine("a");
         }
     }
 
