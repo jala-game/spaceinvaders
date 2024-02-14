@@ -11,6 +11,8 @@ public class AlienRound : IEnemyEntity
 {
     private readonly GraphicsDeviceManager _graphics;
     private readonly SpriteBatch _spriteBatch;
+    public Texture2D Texture { get; set; }
+    public Rectangle Rect { get; set; }
     private readonly List<IEnemyEntity> enemies = new();
 
     public AlienRound(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics)

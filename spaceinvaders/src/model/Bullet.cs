@@ -1,28 +1,33 @@
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
+using spaceinvaders;
 using spaceinvaders.model;
 
 public class Bullet : DrawableGameComponent, Entity
 {
     private readonly GraphicsDeviceManager _graphics;
     private readonly SpriteBatch _spriteBatch;
-    private readonly Texture2D _texture;
+    public Texture2D Texture { get; set; }
+    public Rectangle Rect { get; set; }
     private readonly float SPEED = 25f;
 
     public Bullet(Game game, Vector2 position, Texture2D texture, SpriteBatch spriteBatch, GraphicsDeviceManager graphics,
         int shipTextureWidth) : base(game)
     {
-        _texture = texture;
+        Texture = texture;
         float bulletWidth = texture.Width / 2;
         float shipWidth = shipTextureWidth / 2;
         Vector2 bulletPosition = new(position.X + shipWidth - bulletWidth, position.Y + texture.Height / 2 + 50);
-        Bounds = new RectangleF(bulletPosition, new Size2(texture.Width, texture.Height));
+        RectangleF rectangleF = new RectangleF(bulletPosition, new Size2(texture.Width, texture.Height));
+        Bounds = rectangleF;
         _spriteBatch = spriteBatch;
         _graphics = graphics;
-        Game.Components.Add(this);
+        Game.Services.AddService(typeof(Bullet), this);
     }
 
     public IShapeF Bounds { get; }
@@ -35,7 +40,7 @@ public class Bullet : DrawableGameComponent, Entity
     public void Draw()
     {
         _spriteBatch.Draw(
-            _texture,
+            Texture,
             Bounds.Position,
             Color.White
         );
@@ -43,9 +48,9 @@ public class Bullet : DrawableGameComponent, Entity
 
     public void OnCollision(CollisionEventArgs collisionInfo)
     {
-        if (collisionInfo.Other is BarricadeBlockPart)
+        if (collisionInfo.Other is BarricadeBlockPart barricadeBlockPart)
         {
-            ((BarricadeBlockPart)collisionInfo.Other).TakeDamage();
+            barricadeBlockPart.TakeDamage();
         }
     }
 }

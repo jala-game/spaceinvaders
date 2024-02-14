@@ -8,7 +8,8 @@ public class ShooterEnemy : IEnemyGroup
 {
     private readonly GraphicsDeviceManager _graphics;
     private readonly SpriteBatch _spriteBatch;
-    private readonly Texture2D _texture;
+    public Texture2D Texture { get; set; }
+    public Rectangle Rect { get; set; }
     private bool directionRight = true;
     private bool isDead;
 
@@ -17,7 +18,7 @@ public class ShooterEnemy : IEnemyGroup
     {
         var texture = contentManager.Load<Texture2D>("aliens/shooter-alien-ship");
         _graphics = graphics;
-        _texture = texture;
+        Texture = texture;
 
         var height = y;
         var width = x - texture.Width / 2;
@@ -46,7 +47,7 @@ public class ShooterEnemy : IEnemyGroup
     public void Draw()
     {
         _spriteBatch.Draw(
-            _texture,
+            Texture,
             Bounds.Position,
             Color.White
         );
@@ -65,11 +66,11 @@ public class ShooterEnemy : IEnemyGroup
 
     public void Fall()
     {
-        Bounds.Position += new Vector2(0, _texture.Height + 10);
+        Bounds.Position += new Vector2(0, Texture.Height + 10);
     }
 
     public Texture2D GetTexture()
     {
-        return _texture;
+        return Texture;
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
+using spaceinvaders.model;
 
 public class SpaceShip : GameComponent, Entity
 {
@@ -13,28 +14,29 @@ public class SpaceShip : GameComponent, Entity
     private readonly GraphicsDeviceManager graphics;
 
     private readonly int PLAYER_SPEED = 20;
-    public readonly Texture2D texture;
+    public Texture2D Texture { get; set; }
+    public Rectangle Rect { get; set; }
     public Bullet bullet;
 
     public SpaceShip(Game game, GraphicsDeviceManager _graphics, SpriteBatch spriteBatch, ContentManager contentManager) : base(game)
     {
         Random random = new();
         var randomShip = random.Next(1, 5);
-        texture = contentManager.Load<Texture2D>("ship2");
+        Texture = contentManager.Load<Texture2D>("ship2");
 
 
         var heightTop = _graphics.PreferredBackBufferHeight;
         var widthCenter = _graphics.PreferredBackBufferWidth / 2;
 
-        var centralizeByTextureWidth = widthCenter - texture.Width / 2;
-        var centralizeByTextureHeight = heightTop - texture.Height;
+        var centralizeByTextureWidth = widthCenter - Texture.Width / 2;
+        var centralizeByTextureHeight = heightTop - Texture.Height;
 
         var MARGIN = 50;
         var heightWithMargin = centralizeByTextureHeight - MARGIN;
 
         Vector2 position = new(centralizeByTextureWidth, heightWithMargin);
 
-        Bounds = new RectangleF(position, new Size2(texture.Width, texture.Height));
+        Bounds = new RectangleF(position, new Size2(Texture.Width, Texture.Height));
 
         graphics = _graphics;
         _contentManager = contentManager;
@@ -57,7 +59,7 @@ public class SpaceShip : GameComponent, Entity
     public void Draw()
     {
         _spriteBatch.Draw(
-            texture,
+            Texture,
             Bounds.Position,
             Color.White
         );
@@ -70,7 +72,7 @@ public class SpaceShip : GameComponent, Entity
 
     private void MoveToRight(KeyboardState kstate)
     {
-        var rightLimit = graphics.PreferredBackBufferWidth > Bounds.Position.X + texture.Width;
+        var rightLimit = graphics.PreferredBackBufferWidth > Bounds.Position.X + Texture.Width;
         if (kstate.IsKeyDown(Keys.D) && rightLimit)
         {
             Vector2 newPosition = new(PLAYER_SPEED + Bounds.Position.X, Bounds.Position.Y);
@@ -93,7 +95,7 @@ public class SpaceShip : GameComponent, Entity
         if (kstate.IsKeyDown(Keys.Space) && bullet == null)
         {
             var bulletTexture = _contentManager.Load<Texture2D>("red-bullet");
-            bullet = new Bullet(Game, Bounds.Position, bulletTexture, _spriteBatch, graphics, texture.Width);
+            bullet = new Bullet(Game, Bounds.Position, bulletTexture, _spriteBatch, graphics, Texture.Width);
         }
     }
 

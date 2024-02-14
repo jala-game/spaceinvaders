@@ -9,7 +9,8 @@ public class AlienQueue : IEnemyEntity
 {
     private readonly GraphicsDeviceManager _graphics;
     private readonly SpriteBatch _spriteBatch;
-    private readonly Texture2D _texture;
+    public Texture2D Texture { get; set; }
+    public Rectangle Rect { get; set; }
     private readonly List<IEnemyGroup> enemies = new();
     private readonly bool isDead = false;
 

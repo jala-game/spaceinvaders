@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using spaceinvaders.model;
 
@@ -13,8 +14,8 @@ public class Game1 : Game
     private readonly GraphicsDeviceManager _graphics;
 
     private SpriteBatch _spriteBatch;
-    private Texture2D background;
-    private List<GameComponent> _gameComponents;
+    private Texture2D _background;
+    private Barricades _barricades;
 
     public Game1()
     {
@@ -38,9 +39,9 @@ public class Game1 : Game
 
     protected override void LoadContent()
     {
-        background = Content.Load<Texture2D>("background");
+        _background = Content.Load<Texture2D>("background");
         Content.Load<Texture2D>("barricades/barricade");
-        Barricades _barricades = new Barricades(this);
+        _barricades = new Barricades(this);
 
         base.LoadContent();
     }
@@ -58,6 +59,20 @@ public class Game1 : Game
             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
         ScreenManager.Update(gameTime);
+        if (_barricades != null)
+        {
+            foreach (var barricadeBlock in _barricades.BarricadeBlocks)
+            {
+                foreach (var barricadeBlockPart in barricadeBlock.BarricadeBlockParts)
+                {
+                    if (barricadeBlockPart.Value.Rectangle.Intersects(Services.GetService<Bullet>().Rect))
+                    {
+                        Console.WriteLine("a");
+                    }
+                }
+            }
+
+        }
         base.Update(gameTime);
     }
 
@@ -67,7 +82,7 @@ public class Game1 : Game
 
         _spriteBatch.Begin();
 
-        _spriteBatch.Draw(background,
+        _spriteBatch.Draw(_background,
             new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
 
         ScreenManager.Draw(gameTime);
@@ -75,5 +90,10 @@ public class Game1 : Game
         _spriteBatch.End();
 
         base.Draw(gameTime);
+    }
+
+    private void CheckCollisions()
+    {
+
     }
 }

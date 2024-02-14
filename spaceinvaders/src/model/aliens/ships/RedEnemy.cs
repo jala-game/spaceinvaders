@@ -9,7 +9,8 @@ public class RedEnemy : IEnemyEntity
 {
     private readonly GraphicsDeviceManager _graphics;
     private readonly SpriteBatch _spriteBatch;
-    private readonly Texture2D _texture;
+    public Texture2D Texture { get; set; }
+    public Rectangle Rect { get; set; }
     private readonly float ALIEN_SPEED_X = 2.5f;
     private readonly int isRightOrLeft;
     private readonly Random random = new();
@@ -30,7 +31,7 @@ public class RedEnemy : IEnemyEntity
         Bounds = new RectangleF(position, new Size2(texture.Width, texture.Height));
 
         _spriteBatch = spriteBatch;
-        _texture = texture;
+        Texture = texture;
     }
 
     public IShapeF Bounds { get; }
@@ -49,7 +50,7 @@ public class RedEnemy : IEnemyEntity
     public void Draw()
     {
         _spriteBatch.Draw(
-            _texture,
+            Texture,
             Bounds.Position,
             Color.White
         );
@@ -62,8 +63,8 @@ public class RedEnemy : IEnemyEntity
 
     private void IsOutsideFromMap()
     {
-        var rightLimit = _graphics.PreferredBackBufferWidth > Bounds.Position.X + _texture.Width / 2;
-        var leftLimit = 0 + _texture.Width / 2 < Bounds.Position.X;
+        var rightLimit = _graphics.PreferredBackBufferWidth > Bounds.Position.X + Texture.Width / 2;
+        var leftLimit = 0 + Texture.Width / 2 < Bounds.Position.X;
         if ((isRightOrLeft == 0 && !rightLimit) || (isRightOrLeft == 1 && !leftLimit)) isDead = true;
     }
 

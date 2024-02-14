@@ -8,7 +8,8 @@ public class FrontEnemy : IEnemyGroup
 {
     private readonly GraphicsDeviceManager _graphics;
     private readonly SpriteBatch _spriteBatch;
-    private readonly Texture2D _texture;
+    public Texture2D Texture { get; set; }
+    public Rectangle Rect { get; set; }
     private bool directionRight = true;
     private bool isDead;
     private float rotator;
@@ -18,7 +19,7 @@ public class FrontEnemy : IEnemyGroup
     {
         var texture = contentManager.Load<Texture2D>("aliens/front-alien-ship");
         _graphics = graphics;
-        _texture = texture;
+        Texture = texture;
 
         var height = y;
         var width = x - texture.Width / 2;
@@ -47,11 +48,11 @@ public class FrontEnemy : IEnemyGroup
 
     public void Draw()
     {
-        Vector2 origin = new(_texture.Width / 2, _texture.Height / 2);
+        Vector2 origin = new(Texture.Width / 2, Texture.Height / 2);
 
         _spriteBatch.Draw(
-            _texture,
-            new Vector2(Bounds.Position.X + _texture.Width / 2, Bounds.Position.Y + _texture.Height / 2),
+            Texture,
+            new Vector2(Bounds.Position.X + Texture.Width / 2, Bounds.Position.Y + Texture.Height / 2),
             null,
             Color.White,
             rotator,
@@ -75,11 +76,11 @@ public class FrontEnemy : IEnemyGroup
 
     public void Fall()
     {
-        Bounds.Position += new Vector2(0, _texture.Height + _texture.Height / 2 - 8);
+        Bounds.Position += new Vector2(0, Texture.Height + Texture.Height / 2 - 8);
     }
 
     public Texture2D GetTexture()
     {
-        return _texture;
+        return Texture;
     }
 }

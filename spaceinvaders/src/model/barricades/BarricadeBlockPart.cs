@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Timers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -44,15 +46,6 @@ public class BarricadeBlockPart : DrawableGameComponent, ICollisionActor
         return croppedTexture;
     }
 
-    public override void Update(GameTime gameTime)
-    {
-        if (Life == 0)
-        {
-            Dispose();
-        }
-        base.Update(gameTime);
-    }
-
     public override void Draw(GameTime gameTime)
     {
         SpriteBatch spriteBatch = Game.Services.GetService<SpriteBatch>();
@@ -62,9 +55,23 @@ public class BarricadeBlockPart : DrawableGameComponent, ICollisionActor
         base.Draw(gameTime);
     }
 
+    public override void Update(GameTime gameTime)
+    {
+        foreach (var sprite in Game.Services.GetService<List<Sprite>>())
+        {
+            Console.WriteLine(sprite);
+        }
+        base.Update(gameTime);
+    }
+
     public void TakeDamage()
     {
+        Console.WriteLine(Life);
         Life -= 1;
+        if (Life <= 0)
+        {
+            Game.Components.Remove(this);
+        }
     }
 
     public void OnCollision(CollisionEventArgs collisionInfo)
@@ -72,6 +79,7 @@ public class BarricadeBlockPart : DrawableGameComponent, ICollisionActor
         if (collisionInfo.Other is Bullet)
         {
             TakeDamage();
+            Console.WriteLine("a");
         }
     }
 

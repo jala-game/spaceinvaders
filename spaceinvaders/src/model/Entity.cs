@@ -1,6 +1,8 @@
 using MonoGame.Extended.Collisions;
 
-public interface Entity : ICollisionActor
+namespace spaceinvaders.model;
+
+public interface Entity : ICollisionActor, Sprite
 {
     public void Update();
     public void Draw();
