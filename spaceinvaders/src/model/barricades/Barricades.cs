@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using spaceinvaders.model.barricades;
 
@@ -5,18 +7,19 @@ namespace spaceinvaders.model;
 
 public class Barricades : GameComponent
 {
-    public BarricadeBlock[] BarricadeBlocks { get; }
+    public List<BarricadeBlock> BarricadeBlocks { get; }
     private const int BarricadeQuantity = 4;
 
     public Barricades(Game game) : base(game)
     {
-        BarricadeBlocks = new BarricadeBlock[BarricadeQuantity];
+        BarricadeBlocks = new List<BarricadeBlock>(BarricadeQuantity);
         Game.Components.Add(this);
         Initialize();
     }
 
     public override void Initialize()
     {
+        base.Initialize();
         GraphicsDeviceManager gdm = Game.Services.GetService<GraphicsDeviceManager>();
         int totalGapWidth = 100 * (BarricadeQuantity - 1);
         int availableWidth = gdm.PreferredBackBufferWidth - totalGapWidth;
@@ -28,10 +31,14 @@ public class Barricades : GameComponent
 
         for (int i = 0; i < BarricadeQuantity; i++)
         {
-            BarricadeBlocks[i] = new BarricadeBlock(Game, barricadeBlockPoint);
+            BarricadeBlocks.Add(new BarricadeBlock(Game, barricadeBlockPoint));
             barricadeBlockPoint.X += barricadeWidth + 100;
         }
+    }
 
-        base.Initialize();
+    public override void Update(GameTime gameTime)
+    {
+        BarricadeBlocks.ForEach(e => e.Update(gameTime));
+        base.Update(gameTime);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
@@ -7,13 +8,13 @@ public class BarricadeBlock : GameComponent
 {
     private int _blockPartRows = 3;
     private int _blockPartCollumns = 4;
-    public Dictionary<int, BarricadeBlockPart> BarricadeBlockParts { get; }
+    public List<BarricadeBlockPart> BarricadeBlockParts { get; }
     private Point _point;
 
     public BarricadeBlock(Game game, Point point) : base(game)
     {
         _point = point;
-        BarricadeBlockParts = new Dictionary<int, BarricadeBlockPart>();
+        BarricadeBlockParts = new (_blockPartCollumns * _blockPartRows);
         Game.Components.Add(this);
         Initialize();
     }
@@ -21,7 +22,6 @@ public class BarricadeBlock : GameComponent
     public override void Initialize()
     {
         Point pseudoPoint = _point;
-        int blockIndex = 0;
         int blockGap = BarricadeFormatList.GetFormat(BarricadeGeometry.SQUARE).BlockSize;
         int lastColumnIndex = _blockPartCollumns - 1;
         int lastRowIndex = _blockPartRows - 1;
@@ -32,7 +32,7 @@ public class BarricadeBlock : GameComponent
             {
                 BarricadeGeometry geometry;
 
-                if (j == 0  && (i == 0 || i == lastColumnIndex))
+                if (j == 0 && (i == 0 || i == lastColumnIndex))
                 {
                     geometry = BarricadeGeometry.LEFT_TRIANGLE;
                 }
@@ -47,19 +47,26 @@ public class BarricadeBlock : GameComponent
                 else if (i == lastRowIndex && j == lastColumnIndex - 1)
                 {
                     geometry = BarricadeGeometry.LITTLE_RIGHT_TRIANGLE;
+                    pseudoPoint.X += 16;
                 }
                 else
                 {
                     geometry = BarricadeGeometry.SQUARE;
                 }
 
-                BarricadeBlockParts[blockIndex] = new BarricadeBlockPart(Game, geometry, pseudoPoint);
+                BarricadeBlockParts.Add(new BarricadeBlockPart(Game, geometry, pseudoPoint));
+                if (geometry == BarricadeGeometry.LITTLE_RIGHT_TRIANGLE) pseudoPoint.X -= 16;
                 pseudoPoint.X += blockGap;
-                blockIndex++;
             }
 
             pseudoPoint.X = _point.X;
             pseudoPoint.Y += blockGap;
         }
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+        BarricadeBlockParts.ForEach(e => e.Update(gameTime));
+        base.Update(gameTime);
     }
 }

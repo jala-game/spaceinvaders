@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using MonoGame.Extended.Collisions;
 using spaceinvaders.model;
 
 namespace spaceinvaders.screen_logic.screens;
@@ -17,18 +20,39 @@ public class PlayScreen(
 {
     private readonly List<IEnemyGroup> _enemies = new();
     private readonly List<IEnemyEntity> _groupLogics = new();
+    private readonly List<Entity> _entities = new();
     private RedEnemy _redEnemy;
     private int _initialTime;
-    private readonly Score _score = new(graphics, spriteBatch,contentManager);
-    private readonly Barricades _barricades = new(game);
+    private readonly Score _score = new(graphics, spriteBatch, contentManager);
+    private CollisionComponent _collisionComponent;
+    private Barricades _barricades = new(game);
     private int _addLifeManage = 1000;
 
-    public override void Initialize() {
+    public override void Initialize()
+    {
         base.Initialize();
-
+        _collisionComponent =
+            new(new RectangleF(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight));
+        foreach (var blockPart in _barricades.BarricadeBlocks.SelectMany(barricadeBlock =>
+                     barricadeBlock.BarricadeBlockParts))
+        {
+            _entities.Add(blockPart);
+        }
         AlienRound alienRound = new(contentManager, spriteBatch, graphics);
-        alienRound.GetEnemies().ForEach(e => _enemies.Add(e));
-        alienRound.GetLogics().ForEach(e => _groupLogics.Add(e));
+        alienRound.GetEnemies().ForEach(e =>
+        {
+            _enemies.Add(e);
+            _entities.Add(e);
+        });
+        alienRound.GetLogics().ForEach(e =>
+        {
+            _groupLogics.Add(e);
+            _entities.Add(e);
+        });
+        foreach (var entity in _entities)
+        {
+            _collisionComponent.Insert(entity);
+        }
     }
 
     public override void Update(GameTime gameTime)
@@ -42,12 +66,21 @@ public class PlayScreen(
         ship.Update();
         UpdateLife();
         SpaceShipBulletUpdate();
+        UpdateBarricades(gameTime);
+
+        _entities.ForEach(entity => entity.Update());
+        _collisionComponent.Update(gameTime);
         base.Update(gameTime);
     }
 
     private void EnemiesLogicUpdate()
     {
         _groupLogics.ForEach(e => e.Update());
+    }
+
+    private void UpdateBarricades(GameTime gameTime)
+    {
+        _barricades.Update(gameTime);
     }
 
     private void UpdateLife()
@@ -59,11 +92,13 @@ public class PlayScreen(
         }
     }
 
-    private void SpawnRedShip(GameTime gameTime) {
+    private void SpawnRedShip(GameTime gameTime)
+    {
         int actualMinute = int.Parse(gameTime.TotalGameTime.Minutes.ToString());
         int differenceToSpawnRedShip = actualMinute - _initialTime;
         const int minutes = 1;
-        if (differenceToSpawnRedShip == minutes) {
+        if (differenceToSpawnRedShip == minutes)
+        {
             _redEnemy = new RedEnemy(contentManager, spriteBatch, graphics);
             _initialTime = actualMinute;
         }
@@ -71,19 +106,22 @@ public class PlayScreen(
 
     private void RemoveRedShip()
     {
-        if (_redEnemy !=null && _redEnemy.IsDead())
+        if (_redEnemy != null && _redEnemy.IsDead())
         {
             _redEnemy = null;
         }
     }
 
-    private void SpaceShipBulletUpdate() {
+    private void SpaceShipBulletUpdate()
+    {
         if (ship.bullet == null) return;
 
         ship.bullet.Update();
 
-        foreach (IEnemyGroup enemy in _enemies) {
-            if (ship.bullet != null && ship.bullet.Bounds.Intersects(enemy.Bounds)) {
+        foreach (IEnemyGroup enemy in _enemies)
+        {
+            if (ship.bullet != null && ship.bullet.Bounds.Intersects(enemy.Bounds))
+            {
                 _score.SetScore(enemy.GetPoint());
                 enemy.OnCollision(null);
                 ship.bullet.OnCollision(null);
@@ -98,7 +136,8 @@ public class PlayScreen(
         bool intersectBetweenRedEnemyAndBullet = ship.bullet.Bounds.Intersects(_redEnemy.Bounds);
         bool spaceShipBulletExists = ship.bullet != null;
 
-        if (spaceShipBulletExists && intersectBetweenRedEnemyAndBullet){
+        if (spaceShipBulletExists && intersectBetweenRedEnemyAndBullet)
+        {
             _score.SetScore(_redEnemy.GetPoint());
             _redEnemy.OnCollision(null);
         }
@@ -120,10 +159,13 @@ public class PlayScreen(
     }
 
 
-    private void EnemiesUpdate() {
-        foreach (IEnemyGroup enemy in _enemies) {
+    private void EnemiesUpdate()
+    {
+        foreach (IEnemyGroup enemy in _enemies)
+        {
             enemy.Update();
         }
+
         _redEnemy?.Update();
     }
 
@@ -138,8 +180,10 @@ public class PlayScreen(
         base.Draw(gameTime);
     }
 
-    private void DrawEnemies() {
-        foreach (IEnemyGroup enemy in _enemies) {
+    private void DrawEnemies()
+    {
+        foreach (IEnemyGroup enemy in _enemies)
+        {
             enemy.Draw();
 
             Bullet bullet = enemy.GetBullet();
@@ -150,6 +194,6 @@ public class PlayScreen(
     private void DrawLife()
     {
         SpriteFont spriteFont = contentManager.Load<SpriteFont>("fonts/PixeloidMono");
-        spriteBatch.DrawString(spriteFont, $"Lives {ship.GetLifes()}", new Vector2( 50, 50), Color.White);
+        spriteBatch.DrawString(spriteFont, $"Lives {ship.GetLifes()}", new Vector2(50, 50), Color.White);
     }
 }

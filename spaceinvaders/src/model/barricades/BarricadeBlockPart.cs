@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Timers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -12,7 +10,7 @@ using RectangleF = MonoGame.Extended.RectangleF;
 
 namespace spaceinvaders.model;
 
-public class BarricadeBlockPart : DrawableGameComponent, ICollisionActor
+public class BarricadeBlockPart : DrawableGameComponent, Entity
 {
     private Texture2D _texture2D;
     public Rectangle Rectangle { get; set; }
@@ -57,6 +55,7 @@ public class BarricadeBlockPart : DrawableGameComponent, ICollisionActor
 
     private void TakeDamage()
     {
+        Console.WriteLine("a");
         Life -= 1;
         if (Life <= 0)
         {
@@ -66,11 +65,18 @@ public class BarricadeBlockPart : DrawableGameComponent, ICollisionActor
 
     public void OnCollision(CollisionEventArgs collisionInfo)
     {
-        if (collisionInfo.Other is Bullet)
-        {
-            TakeDamage();
-        }
+        Console.WriteLine("a");
+        Console.WriteLine(collisionInfo.PenetrationVector);
+        TakeDamage();
     }
 
     public IShapeF Bounds { get; private set; }
+
+    public void Update()
+    {
+    }
+
+    public void Draw()
+    {
+    }
 }
