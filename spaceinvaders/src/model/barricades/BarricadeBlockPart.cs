@@ -8,15 +8,15 @@ using Point = Microsoft.Xna.Framework.Point;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using RectangleF = MonoGame.Extended.RectangleF;
 
-namespace spaceinvaders.model;
+namespace spaceinvaders.model.barricades;
 
 public class BarricadeBlockPart : DrawableGameComponent, Entity
 {
     private Texture2D _texture2D;
-    public Rectangle Rectangle { get; set; }
+    private Rectangle Rectangle { get; set; }
     private Point _point;
     private BarricadeGeometry _barricadeGeometry;
-    public short Life { get; set; } = 4;
+    private short Life { get; set; } = 4;
 
     public BarricadeBlockPart(Game game, BarricadeGeometry barricadeGeometry, Point point) : base(game)
     {

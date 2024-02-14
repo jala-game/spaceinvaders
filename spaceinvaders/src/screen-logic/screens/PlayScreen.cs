@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using spaceinvaders.model;
+using spaceinvaders.model.barricades;
 
 namespace spaceinvaders.screen_logic.screens;
 

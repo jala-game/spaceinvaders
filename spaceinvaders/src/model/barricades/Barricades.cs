@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using spaceinvaders.model.barricades;
 
-namespace spaceinvaders.model;
+namespace spaceinvaders.model.barricades;
 
 public class Barricades : GameComponent
 {

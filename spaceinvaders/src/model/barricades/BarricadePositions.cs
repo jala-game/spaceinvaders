@@ -1,4 +1,4 @@
-namespace spaceinvaders.model;
+namespace spaceinvaders.model.barricades;
 
 public class BarricadePositions(int x, int y, int blockSize)
 {

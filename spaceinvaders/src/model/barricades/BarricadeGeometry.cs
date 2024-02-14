@@ -1,10 +1,10 @@
-namespace spaceinvaders.model;
+namespace spaceinvaders.model.barricades;
 
 public enum BarricadeGeometry
 {
-    LEFT_TRIANGLE = 0,
-    SQUARE = 1,
-    RIGHT_TRIANGLE = 2,
-    LITTLE_LEFT_TRIANGLE = 3,
-    LITTLE_RIGHT_TRIANGLE = 4
+    LeftTriangle = 0,
+    Square = 1,
+    RightTriangle = 2,
+    LittleLeftTriangle = 3,
+    LittleRightTriangle = 4
 }
