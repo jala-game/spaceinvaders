@@ -33,6 +33,7 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         background = Content.Load<Texture2D>("background");
+        Content.Load<Texture2D>("barricades/barricade.png");
     }
 
     private void LoadScreenManager() {
