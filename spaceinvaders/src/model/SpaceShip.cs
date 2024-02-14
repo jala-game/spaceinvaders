@@ -125,4 +125,9 @@ public class SpaceShip : Entity {
     {
         return _isDead;
     }
+
+    public int GetLifes()
+    {
+        return _numberOfLives;
+    }
 }
