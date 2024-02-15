@@ -21,40 +21,21 @@ public class PlayScreen(
 {
     private readonly List<IEnemyGroup> _enemies = new();
     private readonly List<IEnemyEntity> _groupLogics = new();
-    private readonly List<Entity> _entities = new();
     private RedEnemy _redEnemy;
     private int _initialTime;
     private readonly Score _score = new(graphics, spriteBatch, contentManager);
-    private CollisionComponent _collisionComponent;
     private Barricades _barricades = new(game);
     private int _addLifeManage = 1000;
 
     public override void Initialize()
     {
         base.Initialize();
-        _collisionComponent =
-            new(new RectangleF(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight));
-        game.Services.AddService(typeof(CollisionComponent), _collisionComponent);
-        foreach (var blockPart in _barricades.BarricadeBlocks.SelectMany(barricadeBlock =>
-                     barricadeBlock.BarricadeBlockParts))
-        {
-            _entities.Add(blockPart);
-        }
         AlienRound alienRound = new(contentManager, spriteBatch, graphics);
         alienRound.GetEnemies().ForEach(e =>
         {
             _enemies.Add(e);
-            _entities.Add(e);
         });
-        alienRound.GetLogics().ForEach(e =>
-        {
-            _groupLogics.Add(e);
-            _entities.Add(e);
-        });
-        foreach (var entity in _entities)
-        {
-            _collisionComponent.Insert(entity);
-        }
+        alienRound.GetLogics().ForEach(e => _groupLogics.Add(e));
     }
 
     public override void Update(GameTime gameTime)
@@ -69,10 +50,20 @@ public class PlayScreen(
         UpdateLife();
         SpaceShipBulletUpdate();
         UpdateBarricades(gameTime);
-
-        _entities.ForEach(entity => entity.Update());
-        _collisionComponent.Update(gameTime);
         base.Update(gameTime);
+    }
+
+    private void CollisionBulletAndBarricades(Bullet bullet)
+    {
+        foreach (var blockPart in _barricades.BarricadeBlocks.SelectMany(barricadeBlock =>
+                     barricadeBlock.BarricadeBlockParts))
+        {
+            if (blockPart.Bounds.Intersects(bullet.Bounds))
+            {
+                blockPart.OnCollision(null);
+                bullet.OnCollision(null);
+            }
+        }
     }
 
     private void EnemiesLogicUpdate()
@@ -132,6 +123,10 @@ public class PlayScreen(
 
         _enemies.RemoveAll(e => e.IsDead());
 
+        if (ship.bullet != null)
+        {
+            CollisionBulletAndBarricades(ship.bullet);
+        }
 
         if (_redEnemy == null) return;
 
@@ -156,6 +151,11 @@ public class PlayScreen(
             {
                 bullet.OnCollision(null);
                 ship.OnCollision(null);
+            }
+
+            if (bullet != null)
+            {
+                CollisionBulletAndBarricades(bullet);
             }
         }
     }

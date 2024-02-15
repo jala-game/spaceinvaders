@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace spaceinvaders.model.barricades;
@@ -13,7 +14,7 @@ public class BarricadeBlock : GameComponent
     public BarricadeBlock(Game game, Point point) : base(game)
     {
         _point = point;
-        BarricadeBlockParts = new (BlockPartColumns * BlockPartRows);
+        BarricadeBlockParts = new();
         Game.Components.Add(this);
         Initialize();
     }
@@ -66,6 +67,7 @@ public class BarricadeBlock : GameComponent
     public override void Update(GameTime gameTime)
     {
         BarricadeBlockParts.ForEach(e => e.Update(gameTime));
+        BarricadeBlockParts.RemoveAll(a => a.IsBroked);
         base.Update(gameTime);
     }
 }

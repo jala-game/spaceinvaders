@@ -11,7 +11,6 @@ public class Barricades : GameComponent
     public Barricades(Game game) : base(game)
     {
         BarricadeBlocks = new List<BarricadeBlock>(BarricadeQuantity);
-        Game.Components.Add(this);
         Initialize();
     }
 

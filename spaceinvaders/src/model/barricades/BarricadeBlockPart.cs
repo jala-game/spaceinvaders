@@ -16,13 +16,15 @@ public class BarricadeBlockPart : DrawableGameComponent, Entity
     private Rectangle Rectangle { get; set; }
     private Point _point;
     private BarricadeGeometry _barricadeGeometry;
-    private short Life { get; set; } = 4;
+    private BarricadePositions _newDesgin;
+    public short Life { get; set; } = 0;
+    public bool IsBroked { get; set; }
 
     public BarricadeBlockPart(Game game, BarricadeGeometry barricadeGeometry, Point point) : base(game)
     {
         _point = point;
         _barricadeGeometry = barricadeGeometry;
-        Game.Components.Add(this);
+        game.Components.Add(this);
         Initialize();
     }
 
@@ -55,11 +57,15 @@ public class BarricadeBlockPart : DrawableGameComponent, Entity
 
     private void TakeDamage()
     {
-        Life -= 1;
-        if (Life <= 0)
-        {
-            Game.Components.Remove(this);
-        }
+        Life += 1;
+        var newSize = BarricadeFormatList.GetFormat(_barricadeGeometry).BlockSize;
+        var newY = BarricadeFormatList.GetFormat(_barricadeGeometry).Y;
+        var newX = BarricadeFormatList.GetFormat(_barricadeGeometry).X + newSize * Life;
+        _newDesgin = new BarricadePositions(newX, newY, newSize);
+        _texture2D = CropTexture(_newDesgin);
+        if (Life < 3) return;
+        Game.Components.Remove(this);
+        IsBroked = true;
     }
 
     public void OnCollision(CollisionEventArgs collisionInfo)
