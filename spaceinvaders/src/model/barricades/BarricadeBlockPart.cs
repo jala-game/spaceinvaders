@@ -55,7 +55,6 @@ public class BarricadeBlockPart : DrawableGameComponent, Entity
 
     private void TakeDamage()
     {
-        Console.WriteLine("a");
         Life -= 1;
         if (Life <= 0)
         {
@@ -65,8 +64,6 @@ public class BarricadeBlockPart : DrawableGameComponent, Entity
 
     public void OnCollision(CollisionEventArgs collisionInfo)
     {
-        Console.WriteLine("a");
-        Console.WriteLine(collisionInfo.PenetrationVector);
         TakeDamage();
     }
 

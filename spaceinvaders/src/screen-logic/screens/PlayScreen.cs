@@ -34,6 +34,7 @@ public class PlayScreen(
         base.Initialize();
         _collisionComponent =
             new(new RectangleF(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight));
+        game.Services.AddService(typeof(CollisionComponent), _collisionComponent);
         foreach (var blockPart in _barricades.BarricadeBlocks.SelectMany(barricadeBlock =>
                      barricadeBlock.BarricadeBlockParts))
         {
