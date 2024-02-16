@@ -40,7 +40,7 @@ public class PlayScreen(
 
     public override void Update(GameTime gameTime)
     {
-        if (ship.GetIsDead() || _score.GetScore() >= 500) return;
+        if (ship.GetIsDead()) return;
         SpawnRedShip(gameTime);
         RemoveRedShip();
         EnemiesUpdate();
