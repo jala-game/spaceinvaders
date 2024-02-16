@@ -47,7 +47,7 @@ public class BarricadeBlock : GameComponent
                 else if (i == lastRowIndex && j == lastColumnIndex - 1)
                 {
                     geometry = BarricadeGeometry.LittleRightTriangle;
-                    pseudoPoint.X += 16;
+                    pseudoPoint.X += 13;
                 }
                 else
                 {
@@ -55,7 +55,7 @@ public class BarricadeBlock : GameComponent
                 }
 
                 BarricadeBlockParts.Add(new BarricadeBlockPart(Game, geometry, pseudoPoint));
-                if (geometry == BarricadeGeometry.LittleRightTriangle) pseudoPoint.X -= 16;
+                if (geometry == BarricadeGeometry.LittleRightTriangle) pseudoPoint.X -= 13;
                 pseudoPoint.X += blockGap;
             }
 
