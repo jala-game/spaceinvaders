@@ -38,7 +38,7 @@ public class BarricadeBlockPart : DrawableGameComponent, Entity
     private Texture2D CropTexture(BarricadePositions b)
     {
         var croppedTexture = new Texture2D(GraphicsDevice, b.BlockSize, b.BlockSize);
-        Rectangle = new Rectangle(_point, new Point(b.BlockSize, b.BlockSize));
+        Rectangle = new Rectangle(_point, new Point(b.BlockSize));
         var data = new Color[b.BlockSize * b.BlockSize];
         var rectangle = new Rectangle(b.X, b.Y, b.BlockSize, b.BlockSize);
         Game.Content.Load<Texture2D>("barricades/barricade").GetData(0, rectangle, data, 0, b.BlockSize * b.BlockSize);
