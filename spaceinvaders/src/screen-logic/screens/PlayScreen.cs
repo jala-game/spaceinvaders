@@ -171,7 +171,6 @@ public class PlayScreen(
 
     public override void Draw(GameTime gameTime)
     {
-        
         ship.bullet?.Draw();
         ship.Draw();
         _score.Draw();

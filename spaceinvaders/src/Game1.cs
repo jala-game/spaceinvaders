@@ -42,7 +42,9 @@ public class Game1 : Game
     private void LoadScreenManager() {
         SpaceShip spaceShip = new(_graphics, _spriteBatch, Content);
         PlayScreen playScreen = new(this, spaceShip, _graphics, Content, _spriteBatch);
-        ScreenManager.ChangeScreen(playScreen);
+
+        GameOverScreen gameOverScreen = new(_graphics, Content, _spriteBatch, 1000);
+        ScreenManager.ChangeScreen(gameOverScreen);
     }
 
     protected override void Update(GameTime gameTime)
