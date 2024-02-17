@@ -195,7 +195,7 @@ public class PlayScreen(
     private void DrawLife()
     {
         SpriteFont spriteFont = contentManager.Load<SpriteFont>("fonts/PixeloidMono");
-        spriteBatch.DrawString(spriteFont, $"Lives {ship.GetLifes()}", new Vector2(50, 50), Color.White);
+        spriteBatch.DrawString(spriteFont, $"LIFE {ship.GetLifes()}", new Vector2(50, 50), Color.White);
     }
 
     private void GenerateNewHordeOfEnemies()
@@ -213,7 +213,7 @@ public class PlayScreen(
 
     private void DrawHorderText()
     {
-        string textHorder = $"Horde:{_numberOfHordes}";
+        string textHorder = $"HORDE {_numberOfHordes}";
         
         SpriteFont spriteFont = contentManager.Load<SpriteFont>("fonts/PixeloidMono");
 

@@ -56,8 +56,8 @@ public class BirdEnemy : IEnemyGroup {
         directionRight = !directionRight;
     }
 
-    public void IncreaseX(int value) {
-        int valueModified = directionRight ? value : -value;
+    public void IncreaseX(float value) {
+        float valueModified = directionRight ? value : -value;
         Bounds.Position += new Vector2(valueModified, 0);
     }
 
