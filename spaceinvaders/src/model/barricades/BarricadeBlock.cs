@@ -15,7 +15,6 @@ public class BarricadeBlock : GameComponent
     {
         _point = point;
         BarricadeBlockParts = new();
-        Game.Components.Add(this);
         Initialize();
     }
 
