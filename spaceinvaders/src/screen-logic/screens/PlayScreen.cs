@@ -46,6 +46,7 @@ public class PlayScreen(
         UpdateLife();
         SpaceShipBulletUpdate();
         GenerateNewHordeOfEnemies();
+        ColisionEnemyWithSpaceShip();
         UpdateBarricades(gameTime);
         base.Update(gameTime);
     }
@@ -221,5 +222,16 @@ public class PlayScreen(
         
         spriteBatch.DrawString(spriteFont, textHorder, 
             new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidth , 50), Color.White);
+    }
+
+    private void ColisionEnemyWithSpaceShip()
+    {
+        _enemies.ForEach(e =>
+        {
+            if (ship.Bounds.Intersects(e.Bounds))
+            {
+                ship.SetIsDead();
+            }
+        });
     }
 }
