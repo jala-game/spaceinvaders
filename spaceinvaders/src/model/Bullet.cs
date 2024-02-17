@@ -7,7 +7,7 @@ using MonoGame.Extended.Collisions;
 public class Bullet : Entity
 {
     private readonly Texture2D _texture;
-    private readonly float SPEED = 16f;
+    private readonly float SPEED = 14f;
     private readonly SpriteBatch _spriteBatch;
     private readonly GraphicsDeviceManager _graphics;
     private bool isDead = false;

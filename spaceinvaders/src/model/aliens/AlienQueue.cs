@@ -13,6 +13,7 @@ public class AlienQueue : IEnemyEntity
     private readonly SpriteBatch _spriteBatch;
     private readonly Texture2D _texture;
     private readonly bool isDead = false;
+    private float SPEED = 1f;
 
     public AlienQueue(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, AlienEnum enemyType, int y=200) {
         _graphics = graphics;
@@ -43,7 +44,7 @@ public class AlienQueue : IEnemyEntity
     public void Update()
     {
         foreach (IEnemyGroup enemy in enemies) {
-            enemy.IncreaseX(1);
+            enemy.IncreaseX(SPEED);
 
             bool rightLimit = enemy.Bounds.Position.X + enemy.GetTexture().Width >= _graphics.PreferredBackBufferWidth;
             bool leftLimit = enemy.Bounds.Position.X <= 0;
@@ -52,6 +53,7 @@ public class AlienQueue : IEnemyEntity
                     e.InvertDirection();
                     e.Fall();
                 });
+                SPEED+= 0.3f;
             }
         }
     }
