@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -26,16 +27,11 @@ public class PlayScreen(
     private readonly Score _score = new(graphics, spriteBatch, contentManager);
     private Barricades _barricades = new(game);
     private int _addLifeManage = 1000;
+    private int _numberOfHordes = 0;
 
     public override void Initialize()
     {
         base.Initialize();
-        AlienRound alienRound = new(contentManager, spriteBatch, graphics);
-        alienRound.GetEnemies().ForEach(e =>
-        {
-            _enemies.Add(e);
-        });
-        alienRound.GetLogics().ForEach(e => _groupLogics.Add(e));
     }
 
     public override void Update(GameTime gameTime)
@@ -49,6 +45,7 @@ public class PlayScreen(
         ship.Update();
         UpdateLife();
         SpaceShipBulletUpdate();
+        GenerateNewHordeOfEnemies();
         UpdateBarricades(gameTime);
         base.Update(gameTime);
     }
@@ -173,12 +170,14 @@ public class PlayScreen(
 
     public override void Draw(GameTime gameTime)
     {
+        
         ship.bullet?.Draw();
         ship.Draw();
         _score.Draw();
         DrawLife();
         DrawEnemies();
         _redEnemy?.Draw();
+        DrawHorderText();
         base.Draw(gameTime);
     }
 
@@ -197,5 +196,30 @@ public class PlayScreen(
     {
         SpriteFont spriteFont = contentManager.Load<SpriteFont>("fonts/PixeloidMono");
         spriteBatch.DrawString(spriteFont, $"Lives {ship.GetLifes()}", new Vector2(50, 50), Color.White);
+    }
+
+    private void GenerateNewHordeOfEnemies()
+    {
+        if (_enemies.Count > 0) return;
+        _groupLogics.Clear();
+        AlienRound alienRound = new(contentManager, spriteBatch, graphics);
+        alienRound.GetEnemies().ForEach(e =>
+        {
+            _enemies.Add(e);
+        });
+        alienRound.GetLogics().ForEach(e => _groupLogics.Add(e));
+        _numberOfHordes += 1;
+    }
+
+    private void DrawHorderText()
+    {
+        string textHorder = $"Horde:{_numberOfHordes}";
+        
+        SpriteFont spriteFont = contentManager.Load<SpriteFont>("fonts/PixeloidMono");
+
+        float textWidth = spriteFont.MeasureString(textHorder).X / 2;
+        
+        spriteBatch.DrawString(spriteFont, textHorder, 
+            new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidth , 50), Color.White);
     }
 }
