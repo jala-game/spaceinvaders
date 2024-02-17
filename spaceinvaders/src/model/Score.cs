@@ -35,6 +35,6 @@ public class Score
 
     public void Draw()
     {
-        _spriteBatch.DrawString(_spriteFont, $"SCORE {_score}", new Vector2(_graphics.PreferredBackBufferWidth - 200, 50), Color.White);
+        _spriteBatch.DrawString(_spriteFont, $"SCORE {_score}", new Vector2(_graphics.PreferredBackBufferWidth - 250, 50), Color.White);
     }
 }
