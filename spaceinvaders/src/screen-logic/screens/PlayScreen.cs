@@ -152,6 +152,7 @@ public class PlayScreen(
             {
                 bullet.OnCollision(null);
                 ship.OnCollision(null);
+                explosion = new(spriteBatch, contentManager, ship.Bounds.Position);
             }
 
             if (bullet != null)
@@ -218,12 +219,10 @@ public class PlayScreen(
     private void DrawHorderText()
     {
         string textHorder = $"HORDE {_numberOfHordes}";
-        
         SpriteFont spriteFont = contentManager.Load<SpriteFont>("fonts/PixeloidMono");
-
         float textWidth = spriteFont.MeasureString(textHorder).X / 2;
-        
-        spriteBatch.DrawString(spriteFont, textHorder, 
+
+        spriteBatch.DrawString(spriteFont, textHorder,
             new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidth , 50), Color.White);
     }
 
