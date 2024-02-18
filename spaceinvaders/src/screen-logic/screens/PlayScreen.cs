@@ -28,6 +28,7 @@ public class PlayScreen(
     private Barricades _barricades = new(game);
     private int _addLifeManage = 1000;
     private int _numberOfHordes = 0;
+    private Explosion explosion = null;
 
     public override void Initialize()
     {
@@ -48,6 +49,7 @@ public class PlayScreen(
         GenerateNewHordeOfEnemies();
         ColisionEnemyWithSpaceShip();
         UpdateBarricades(gameTime);
+        explosion?.Update(gameTime);
         base.Update(gameTime);
     }
 
@@ -116,6 +118,7 @@ public class PlayScreen(
                 _score.SetScore(enemy.GetPoint());
                 enemy.OnCollision(null);
                 ship.bullet.OnCollision(null);
+                explosion = new(spriteBatch, contentManager, enemy.Bounds.Position);
             }
         }
 
@@ -179,6 +182,7 @@ public class PlayScreen(
         _redEnemy?.Draw();
         DrawHorderText();
         base.Draw(gameTime);
+        explosion?.Draw();
     }
 
     private void DrawEnemies()

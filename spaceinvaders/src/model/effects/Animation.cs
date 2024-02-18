@@ -50,6 +50,9 @@ public class Animation
     public void Update(GameTime gameTime)
     {
         if (!_active) return;
+        Console.WriteLine(_sourceRectangles.Count);
+        Console.WriteLine(_frame);
+        if (_sourceRectangles.Count <= _frame + 1) Stop();
 
         _frameTimeLeft -= 3;
 
@@ -62,6 +65,7 @@ public class Animation
 
     public void Draw(Vector2 pos)
     {
+        if (!_active) return;
         _spriteBatch.Draw(_texture, pos, _sourceRectangles[_frame], Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 1);
     }
 }

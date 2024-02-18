@@ -3,13 +3,14 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 public class Explosion {
-    private SpriteBatch _spriteBatch;
     private Animation _animation;
+    private Vector2 _pos;
 
-    public Explosion(SpriteBatch spriteBatch, ContentManager content)
+    public Explosion(SpriteBatch spriteBatch, ContentManager content, Vector2 pos)
     {
         Texture2D a = content.Load<Texture2D>("effects/explosion");
-        _animation = new(_spriteBatch, a, 6, 6, 50f, 6);
+        _animation = new(spriteBatch, a, 6, 6, 10f, 6);
+        _pos = pos;
     }
 
     public void Update(GameTime gameTime)
@@ -17,8 +18,8 @@ public class Explosion {
         _animation.Update(gameTime);
     }
 
-    public void Draw(Vector2 pos)
+    public void Draw()
     {
-        _animation.Draw(pos);
+        _animation.Draw(_pos);
     }
 }

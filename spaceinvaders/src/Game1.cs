@@ -44,7 +44,7 @@ public class Game1 : Game
         PlayScreen playScreen = new(this, spaceShip, _graphics, Content, _spriteBatch);
 
         GameOverScreen gameOverScreen = new(_graphics, Content, _spriteBatch, 1000);
-        ScreenManager.ChangeScreen(gameOverScreen);
+        ScreenManager.ChangeScreen(playScreen);
     }
 
     protected override void Update(GameTime gameTime)
