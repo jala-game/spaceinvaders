@@ -148,6 +148,7 @@ public class PlayScreen(
         {
             _score.SetScore(_redEnemy.GetPoint());
             _redEnemy.OnCollision(null);
+            explosion = new(spriteBatch, contentManager, _redEnemy.Bounds.Position);
         }
     }
 
