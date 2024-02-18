@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
+using MonoGame.Extended.Screens;
 using spaceinvaders.model;
 using spaceinvaders.model.barricades;
 
@@ -37,7 +38,10 @@ public class PlayScreen(
 
     public override void Update(GameTime gameTime)
     {
-        if (ship.GetIsDead()) return;
+        if (ship.GetIsDead()) {
+            LoadGameOverScreen();
+            return;
+        }
         SpawnRedShip(gameTime);
         RemoveRedShip();
         EnemiesUpdate();
@@ -51,6 +55,12 @@ public class PlayScreen(
         UpdateBarricades(gameTime);
         explosion?.Update(gameTime);
         base.Update(gameTime);
+    }
+
+    private void LoadGameOverScreen() {
+        GameOverScreen gameOverScreen = new(graphics, contentManager, spriteBatch, _score.GetScore());
+        ScreenManager.ChangeScreen(gameOverScreen);
+        return;
     }
 
     private void CollisionBulletAndBarricades(Bullet bullet)

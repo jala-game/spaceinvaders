@@ -50,8 +50,6 @@ public class Animation
     public void Update(GameTime gameTime)
     {
         if (!_active) return;
-        Console.WriteLine(_sourceRectangles.Count);
-        Console.WriteLine(_frame);
         if (_sourceRectangles.Count <= _frame + 1) Stop();
 
         _frameTimeLeft -= 3;
