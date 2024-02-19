@@ -21,8 +21,8 @@ public class SpaceShip : Entity {
 
     public SpaceShip(GraphicsDeviceManager _graphics, SpriteBatch spriteBatch, ContentManager contentManager) {
         Random random = new();
-        int randomShip = random.Next(1, 5);
-        texture = contentManager.Load<Texture2D>($"ship2");
+        // int randomShip = random.Next(1, 3);
+        texture = contentManager.Load<Texture2D>($"ship1");
 
 
         int heightTop = _graphics.PreferredBackBufferHeight;
@@ -99,7 +99,7 @@ public class SpaceShip : Entity {
     {
         RemoveLifeForShip();
     }
-    
+
     public void RemoveBulletIfIsDead()
     {
         if (bullet != null && bullet.GetIsDead()) bullet = null;
@@ -109,7 +109,7 @@ public class SpaceShip : Entity {
     {
         if (_numberOfLives < 6) _numberOfLives += 1;
     }
-    
+
     private void RemoveLifeForShip()
     {
         if (_numberOfLives > 1)
@@ -117,7 +117,7 @@ public class SpaceShip : Entity {
             _numberOfLives -= 1;
             return;
         }
-        
+
         _isDead = true;
     }
 

@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
+using MonoGame.Extended.Screens;
 using spaceinvaders.model;
 using spaceinvaders.model.barricades;
 
@@ -28,6 +29,7 @@ public class PlayScreen(
     private Barricades _barricades = new(game);
     private int _addLifeManage = 1000;
     private int _numberOfHordes = 0;
+    private Explosion explosion = null;
 
     public override void Initialize()
     {
@@ -36,7 +38,10 @@ public class PlayScreen(
 
     public override void Update(GameTime gameTime)
     {
-        if (ship.GetIsDead()) return;
+        if (ship.GetIsDead()) {
+            LoadGameOverScreen();
+            return;
+        }
         SpawnRedShip(gameTime);
         RemoveRedShip();
         EnemiesUpdate();
@@ -48,7 +53,14 @@ public class PlayScreen(
         GenerateNewHordeOfEnemies();
         ColisionEnemyWithSpaceShip();
         UpdateBarricades(gameTime);
+        explosion?.Update(gameTime);
         base.Update(gameTime);
+    }
+
+    private void LoadGameOverScreen() {
+        GameOverScreen gameOverScreen = new(graphics, contentManager, spriteBatch, _score.GetScore());
+        ScreenManager.ChangeScreen(gameOverScreen);
+        return;
     }
 
     private void CollisionBulletAndBarricades(Bullet bullet)
@@ -116,6 +128,7 @@ public class PlayScreen(
                 _score.SetScore(enemy.GetPoint());
                 enemy.OnCollision(null);
                 ship.bullet.OnCollision(null);
+                explosion = new(spriteBatch, contentManager, enemy.Bounds.Position);
             }
         }
 
@@ -135,6 +148,7 @@ public class PlayScreen(
         {
             _score.SetScore(_redEnemy.GetPoint());
             _redEnemy.OnCollision(null);
+            explosion = new(spriteBatch, contentManager, _redEnemy.Bounds.Position);
         }
     }
 
@@ -149,6 +163,7 @@ public class PlayScreen(
             {
                 bullet.OnCollision(null);
                 ship.OnCollision(null);
+                explosion = new(spriteBatch, contentManager, ship.Bounds.Position);
             }
 
             if (bullet != null)
@@ -171,7 +186,6 @@ public class PlayScreen(
 
     public override void Draw(GameTime gameTime)
     {
-        
         ship.bullet?.Draw();
         ship.Draw();
         _score.Draw();
@@ -180,6 +194,7 @@ public class PlayScreen(
         _redEnemy?.Draw();
         DrawHorderText();
         base.Draw(gameTime);
+        explosion?.Draw();
     }
 
     private void DrawEnemies()
@@ -215,12 +230,10 @@ public class PlayScreen(
     private void DrawHorderText()
     {
         string textHorder = $"HORDE {_numberOfHordes}";
-        
         SpriteFont spriteFont = contentManager.Load<SpriteFont>("fonts/PixeloidMono");
-
         float textWidth = spriteFont.MeasureString(textHorder).X / 2;
-        
-        spriteBatch.DrawString(spriteFont, textHorder, 
+
+        spriteBatch.DrawString(spriteFont, textHorder,
             new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidth , 50), Color.White);
     }
 
