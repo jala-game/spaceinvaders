@@ -55,11 +55,12 @@ public class PlayScreen(
     private void LoadGameOverScreen() {
         GameOverScreen gameOverScreen = new(graphics, contentManager, spriteBatch, _score.GetScore());
         ScreenManager.ChangeScreen(gameOverScreen);
-        return;
+        _barricades.Dispose();
     }
 
-    private void CollisionBulletAndBarricades(Bullet bullet)
+    private void CollisionBulletAndBarricades(ICollisionActor bullet)
     {
+        ArgumentNullException.ThrowIfNull(bullet);
         foreach (var blockPart in _barricades.BarricadeBlocks.SelectMany(barricadeBlock =>
                      barricadeBlock.BarricadeBlockParts))
         {

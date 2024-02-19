@@ -9,18 +9,18 @@ public class BarricadeBlock : GameComponent, IObserver
     private const int BlockPartRows = 3;
     private const int BlockPartColumns = 4;
     public List<BarricadeBlockPart> BarricadeBlockParts { get; }
-    private readonly Point _point;
+    private Point BlockInitialPoint { get; }
 
-    public BarricadeBlock(Game game, Point point) : base(game)
+    public BarricadeBlock(Game game, Point blockInitialPoint) : base(game)
     {
-        _point = point;
+        BlockInitialPoint = blockInitialPoint;
         BarricadeBlockParts = [];
         Initialize();
     }
 
     public override void Initialize()
     {
-        var pseudoPoint = _point;
+        var pseudoPoint = BlockInitialPoint;
         var blockGap = BarricadeFormatList.GetFormat(BarricadeGeometry.Square).BlockSize;
         const int lastColumnIndex = BlockPartColumns - 1;
         const int lastRowIndex = BlockPartRows - 1;
@@ -66,7 +66,7 @@ public class BarricadeBlock : GameComponent, IObserver
                 pseudoPoint.X += blockGap;
             }
 
-            pseudoPoint.X = _point.X;
+            pseudoPoint.X = BlockInitialPoint.X;
             pseudoPoint.Y += blockGap;
         }
     }
@@ -88,6 +88,7 @@ public class BarricadeBlock : GameComponent, IObserver
         {
             barricadeBlockPart.Dispose();
         }
+
         base.Dispose(disposing);
     }
 }

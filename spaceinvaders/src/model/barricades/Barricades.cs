@@ -39,11 +39,13 @@ public class Barricades : GameComponent
         base.Update(gameTime);
     }
 
-    public void ClearBarricades()
+    protected override void Dispose(bool disposing)
     {
         foreach (var barricadeBlock in BarricadeBlocks)
         {
             barricadeBlock.Dispose();
         }
+
+        base.Dispose(disposing);
     }
 }
