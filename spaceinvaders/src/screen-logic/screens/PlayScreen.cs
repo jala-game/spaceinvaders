@@ -29,11 +29,6 @@ public class PlayScreen(
     private int _addLifeManage = 1000;
     private int _numberOfHordes = 0;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-    }
-
     public override void Update(GameTime gameTime)
     {
         if (ship.GetIsDead()) return;

@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using MonoGame.Extended.Collections;
 using MonoGame.Extended.Collisions;
 using Color = Microsoft.Xna.Framework.Color;
 using Point = Microsoft.Xna.Framework.Point;
@@ -17,14 +19,15 @@ public class BarricadeBlockPart : DrawableGameComponent, Entity
     private Point _point;
     private BarricadeGeometry _barricadeGeometry;
     private BarricadePositions _newDesgin;
-    public short Life { get; set; } = 0;
-    public bool IsBroked { get; set; }
+    private short Life { get; set; }
+
 
     public BarricadeBlockPart(Game game, BarricadeGeometry barricadeGeometry, Point point) : base(game)
     {
         _point = point;
         _barricadeGeometry = barricadeGeometry;
         game.Components.Add(this);
+
         Initialize();
     }
 
@@ -48,7 +51,7 @@ public class BarricadeBlockPart : DrawableGameComponent, Entity
 
     public override void Draw(GameTime gameTime)
     {
-        SpriteBatch spriteBatch = Game.Services.GetService<SpriteBatch>();
+        var spriteBatch = Game.Services.GetService<SpriteBatch>();
         spriteBatch.Begin();
         spriteBatch.Draw(_texture2D, Rectangle, Color.White);
         spriteBatch.End();
@@ -65,7 +68,6 @@ public class BarricadeBlockPart : DrawableGameComponent, Entity
         _texture2D = CropTexture(_newDesgin);
         if (Life < 3) return;
         Game.Components.Remove(this);
-        IsBroked = true;
     }
 
     public void OnCollision(CollisionEventArgs collisionInfo)
