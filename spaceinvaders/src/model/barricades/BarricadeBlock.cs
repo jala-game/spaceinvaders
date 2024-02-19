@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using spaceinvaders.services;
 
 namespace spaceinvaders.model.barricades;
 
-public class BarricadeBlock : GameComponent
+public class BarricadeBlock : GameComponent, IObserver
 {
     private const int BlockPartRows = 3;
     private const int BlockPartColumns = 4;
@@ -58,7 +59,9 @@ public class BarricadeBlock : GameComponent
                     }
                 }
 
-                BarricadeBlockParts.Add(new BarricadeBlockPart(Game, geometry, pseudoPoint));
+                var newBarricadeBlockPart = new BarricadeBlockPart(Game, geometry, pseudoPoint);
+                newBarricadeBlockPart.Attach(this);
+                BarricadeBlockParts.Add(newBarricadeBlockPart);
                 if (geometry == BarricadeGeometry.LittleRightTriangle) pseudoPoint.X -= 13;
                 pseudoPoint.X += blockGap;
             }
@@ -71,7 +74,20 @@ public class BarricadeBlock : GameComponent
     public override void Update(GameTime gameTime)
     {
         BarricadeBlockParts.ForEach(e => e.Update(gameTime));
-        BarricadeBlockParts.RemoveAll(a => a.IsBroked);
         base.Update(gameTime);
+    }
+
+    public void Notify(BarricadeBlockPart part)
+    {
+        BarricadeBlockParts.Remove(part);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        foreach (var barricadeBlockPart in BarricadeBlockParts)
+        {
+            barricadeBlockPart.Dispose();
+        }
+        base.Dispose(disposing);
     }
 }

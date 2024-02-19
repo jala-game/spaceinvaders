@@ -38,4 +38,12 @@ public class Barricades : GameComponent
         BarricadeBlocks.ForEach(e => e.Update(gameTime));
         base.Update(gameTime);
     }
+
+    public void ClearBarricades()
+    {
+        foreach (var barricadeBlock in BarricadeBlocks)
+        {
+            barricadeBlock.Dispose();
+        }
+    }
 }

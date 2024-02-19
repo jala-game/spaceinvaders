@@ -51,11 +51,10 @@ public class PlayScreen(
         foreach (var blockPart in _barricades.BarricadeBlocks.SelectMany(barricadeBlock =>
                      barricadeBlock.BarricadeBlockParts))
         {
-            if (blockPart.Bounds.Intersects(bullet.Bounds))
-            {
-                blockPart.OnCollision(null);
-                bullet.OnCollision(null);
-            }
+            if (!blockPart.Bounds.Intersects(bullet.Bounds)) continue;
+            blockPart.OnCollision(null);
+            bullet.OnCollision(null);
+            break;
         }
     }
 
