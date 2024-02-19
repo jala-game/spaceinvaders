@@ -84,8 +84,8 @@ namespace spaceinvaders.model.barricades
             _newDesign = new BarricadePositions(newX, newY, newSize);
             _texture2D = CropTexture(_newDesign);
             if (Life < 3) return;
-            Dispose();
             NotifyObservers();
+            Dispose();
         }
 
         protected override void Dispose(bool disposing)
