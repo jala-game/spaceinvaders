@@ -240,6 +240,9 @@ public class PlayScreen(
             {
                 ship.SetIsDead();
             }
+            
+            if (e.Bounds.Position.Y < ship.Bounds.Position.Y) return;
+            ship.SetIsDead();
         });
     }
 }
