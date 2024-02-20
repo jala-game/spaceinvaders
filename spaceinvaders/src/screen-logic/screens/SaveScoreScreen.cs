@@ -63,16 +63,17 @@ public class SaveScoreScreen(
     }
 
     private void DrawLettersTable() {
-        int spacement = 0;
+        int gap = 0;
         lettersPanel.ForEach(a => {
             for (int i = 0; i < a.Count; i++) {
-                spriteBatch.DrawString(bigFont, a[i].ToString(), new Vector2(
-                    120 * i,
-                    200 + spacement),
+                int INITIAL_Y = 200;
+                int INITIAL_X = 120;
+                Vector2 position = new(INITIAL_X * i, INITIAL_Y + gap);
+                spriteBatch.DrawString(bigFont, a[i].GetLetter().ToString(), position,
                     Color.White);
             }
 
-            spacement += 80;
+            gap += 80;
         });
     }
 }
