@@ -4,8 +4,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using spaceinvaders.screen_logic.screens;
 
 public class MainScreen(
+    Game game,
     GraphicsDeviceManager graphics,
     ContentManager contentManager,
     SpriteBatch spriteBatch
@@ -33,8 +35,8 @@ public class MainScreen(
         if (delayToPress > 0) return;
         
         ModifyMenuSelection(kstate);
-        
-        
+        SendMenuOption(kstate);
+
     }
 
     public override void Draw(GameTime gameTime)
@@ -60,6 +62,28 @@ public class MainScreen(
             _selectedOption++;
             delayToPress = resetDelay;
         }
+    }
+
+    private void SendMenuOption(KeyboardState kstate)
+    {
+        if (!kstate.IsKeyDown(Keys.Enter)) return;
+        switch (_selectedOption)
+        {
+            case 1:
+                StartGame();
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+        }
+    }
+
+    private void StartGame()
+    {
+        SpaceShip spaceShip = new(graphics, spriteBatch, contentManager);
+        PlayScreen playScreen = new(game,spaceShip, graphics, contentManager, spriteBatch);
+        ScreenManager.ChangeScreen(playScreen);
     }
     
     private void DrawTitle()
