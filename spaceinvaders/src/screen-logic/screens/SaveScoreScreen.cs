@@ -19,18 +19,27 @@ public class SaveScoreScreen(
         'V', 'W', 'X', 'Y', 'Z'
     ];
 
-    private readonly List<List<char>> lettersPanel = [];
+    private readonly List<List<LetterActivation>> lettersPanel = [];
 
     public override void Initialize() {
+        CreateMatrixWithLetters();
+    }
+
+    private void CreateMatrixWithLetters() {
         for (int lines = 0; lines < 4; lines++) {
-            List<char> line = [];
-            for (int collumns = 0; collumns < 7; collumns++) {
-                int index = lines * 7 + collumns;
-                line.Add(letters[index]);
-                if (letters[index].Equals('Z')) break;
-            }
-            lettersPanel.Add(line);
+            CreateMatrixWithLines(lines);
         }
+    }
+
+    private void CreateMatrixWithLines(int lines) {
+        List<LetterActivation> line = [];
+        for (int columns = 0; columns < 7; columns++) {
+            int index = lines * 7 + columns;
+            line.Add(new LetterActivation(letters[index]));
+
+            if (letters[index].Equals('Z')) break;
+        }
+        lettersPanel.Add(line);
     }
 
     public override void LoadContent() {
