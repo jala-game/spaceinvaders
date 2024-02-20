@@ -9,4 +9,8 @@ public class LetterActivation(char letter)
     public char GetLetter() {
         return letter;
     }
+
+    public bool GetIsActivated() {
+        return IsActivated;
+    }
 }
