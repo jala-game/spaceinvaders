@@ -53,7 +53,7 @@ public class AlienQueue : IEnemyEntity
                     e.InvertDirection();
                     e.Fall();
                 });
-                SPEED+= 0.3f;
+                SPEED+= 0.2f;
             }
         }
     }
