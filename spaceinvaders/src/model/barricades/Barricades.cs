@@ -17,16 +17,16 @@ public class Barricades : GameComponent
     public override void Initialize()
     {
         base.Initialize();
-        GraphicsDeviceManager gdm = Game.Services.GetService<GraphicsDeviceManager>();
-        int totalGapWidth = 100 * (BarricadeQuantity - 1);
-        int availableWidth = gdm.PreferredBackBufferWidth - totalGapWidth;
-        int barricadeWidth = availableWidth / BarricadeQuantity;
+        var gdm = Game.Services.GetService<GraphicsDeviceManager>();
+        const int totalGapWidth = 100 * (BarricadeQuantity - 1);
+        var availableWidth = gdm.PreferredBackBufferWidth - totalGapWidth;
+        var barricadeWidth = availableWidth / BarricadeQuantity;
 
-        int startPointX = (gdm.PreferredBackBufferWidth - availableWidth) / 2;
-        int startPointY = gdm.PreferredBackBufferHeight - 300;
+        var startPointX = (gdm.PreferredBackBufferWidth - availableWidth) / 2;
+        var startPointY = gdm.PreferredBackBufferHeight - 300;
         var barricadeBlockPoint = new Point(startPointX, startPointY);
 
-        for (int i = 0; i < BarricadeQuantity; i++)
+        for (var i = 0; i < BarricadeQuantity; i++)
         {
             BarricadeBlocks.Add(new BarricadeBlock(Game, barricadeBlockPoint));
             barricadeBlockPoint.X += barricadeWidth + 100;
@@ -37,5 +37,15 @@ public class Barricades : GameComponent
     {
         BarricadeBlocks.ForEach(e => e.Update(gameTime));
         base.Update(gameTime);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        foreach (var barricadeBlock in BarricadeBlocks)
+        {
+            barricadeBlock.Dispose();
+        }
+
+        base.Dispose(disposing);
     }
 }

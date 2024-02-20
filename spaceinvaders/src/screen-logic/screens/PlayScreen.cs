@@ -31,11 +31,6 @@ public class PlayScreen(
     private int _numberOfHordes = 0;
     private Explosion explosion = null;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-    }
-
     public override void Update(GameTime gameTime)
     {
         if (ship.GetIsDead()) {
@@ -60,19 +55,19 @@ public class PlayScreen(
     private void LoadGameOverScreen() {
         GameOverScreen gameOverScreen = new(graphics, contentManager, spriteBatch, _score.GetScore());
         ScreenManager.ChangeScreen(gameOverScreen);
-        return;
+        _barricades.Dispose();
     }
 
-    private void CollisionBulletAndBarricades(Bullet bullet)
+    private void CollisionBulletAndBarricades(ICollisionActor bullet)
     {
+        ArgumentNullException.ThrowIfNull(bullet);
         foreach (var blockPart in _barricades.BarricadeBlocks.SelectMany(barricadeBlock =>
                      barricadeBlock.BarricadeBlockParts))
         {
-            if (blockPart.Bounds.Intersects(bullet.Bounds))
-            {
-                blockPart.OnCollision(null);
-                bullet.OnCollision(null);
-            }
+            if (!blockPart.Bounds.Intersects(bullet.Bounds)) continue;
+            blockPart.OnCollision(null);
+            bullet.OnCollision(null);
+            break;
         }
     }
 

@@ -1,8 +1,9 @@
-using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
+using spaceinvaders.services;
 using Color = Microsoft.Xna.Framework.Color;
 using Point = Microsoft.Xna.Framework.Point;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
@@ -12,33 +13,34 @@ namespace spaceinvaders.model.barricades;
 
 public class BarricadeBlockPart : DrawableGameComponent, Entity
 {
-    private Texture2D _texture2D;
-    private Rectangle Rectangle { get; set; }
-    private Point _point;
-    private BarricadeGeometry _barricadeGeometry;
-    private BarricadePositions _newDesgin;
-    public short Life { get; set; } = 0;
-    public bool IsBroked { get; set; }
+    private Texture2D ContentBarricadeTexture2D { get; set; }
+    private Rectangle PartRectangle { get; set; }
+    private BarricadePositions PositionOfTheBarricadeIntoTheContentDraw { get; set; }
+    private BarricadeGeometry KindOfBarricadeGeometry { get; }
+    private Point NewPoint { get; }
+    private short Life { get; set; }
+    private List<IObserver> Observers { get; } = [];
+    public IShapeF Bounds { get; private set; }
 
-    public BarricadeBlockPart(Game game, BarricadeGeometry barricadeGeometry, Point point) : base(game)
+    public BarricadeBlockPart(Game game, BarricadeGeometry kindOfBarricadeGeometry, Point newPoint) : base(game)
     {
-        _point = point;
-        _barricadeGeometry = barricadeGeometry;
+        NewPoint = newPoint;
+        KindOfBarricadeGeometry = kindOfBarricadeGeometry;
         game.Components.Add(this);
         Initialize();
     }
 
     public override void Initialize()
     {
-        _texture2D = CropTexture(BarricadeFormatList.GetFormat(_barricadeGeometry));
-        Bounds = new RectangleF(Rectangle.X, Rectangle.Y, Rectangle.Width, Rectangle.Height);
+        ContentBarricadeTexture2D = CropTexture(BarricadeFormatList.GetFormat(KindOfBarricadeGeometry));
+        Bounds = new RectangleF(PartRectangle.X, PartRectangle.Y, PartRectangle.Width, PartRectangle.Height);
         base.Initialize();
     }
 
     private Texture2D CropTexture(BarricadePositions b)
     {
         var croppedTexture = new Texture2D(GraphicsDevice, b.BlockSize, b.BlockSize);
-        Rectangle = new Rectangle(_point, new Point(b.BlockSize));
+        PartRectangle = new Rectangle(NewPoint, new Point(b.BlockSize));
         var data = new Color[b.BlockSize * b.BlockSize];
         var rectangle = new Rectangle(b.X, b.Y, b.BlockSize, b.BlockSize);
         Game.Content.Load<Texture2D>("barricades/barricade").GetData(0, rectangle, data, 0, b.BlockSize * b.BlockSize);
@@ -48,24 +50,44 @@ public class BarricadeBlockPart : DrawableGameComponent, Entity
 
     public override void Draw(GameTime gameTime)
     {
-        SpriteBatch spriteBatch = Game.Services.GetService<SpriteBatch>();
+        var spriteBatch = Game.Services.GetService<SpriteBatch>();
         spriteBatch.Begin();
-        spriteBatch.Draw(_texture2D, Rectangle, Color.White);
+        spriteBatch.Draw(ContentBarricadeTexture2D, PartRectangle, Color.White);
         spriteBatch.End();
         base.Draw(gameTime);
+    }
+
+    public void Attach(IObserver observer)
+    {
+        Observers.Add(observer);
+    }
+
+    private void NotifyObservers()
+    {
+        foreach (var observer in Observers)
+        {
+            observer.Notify(this);
+        }
     }
 
     private void TakeDamage()
     {
         Life += 1;
-        var newSize = BarricadeFormatList.GetFormat(_barricadeGeometry).BlockSize;
-        var newY = BarricadeFormatList.GetFormat(_barricadeGeometry).Y;
-        var newX = BarricadeFormatList.GetFormat(_barricadeGeometry).X + newSize * Life;
-        _newDesgin = new BarricadePositions(newX, newY, newSize);
-        _texture2D = CropTexture(_newDesgin);
+        var newSize = BarricadeFormatList.GetFormat(KindOfBarricadeGeometry).BlockSize;
+        var newY = BarricadeFormatList.GetFormat(KindOfBarricadeGeometry).Y;
+        var newX = BarricadeFormatList.GetFormat(KindOfBarricadeGeometry).X + newSize * Life;
+        PositionOfTheBarricadeIntoTheContentDraw = new BarricadePositions(newX, newY, newSize);
+        ContentBarricadeTexture2D = CropTexture(PositionOfTheBarricadeIntoTheContentDraw);
         if (Life < 3) return;
+        NotifyObservers();
+        Dispose();
+    }
+
+    protected override void Dispose(bool disposing)
+    {
         Game.Components.Remove(this);
-        IsBroked = true;
+        Observers.Clear();
+        base.Dispose(disposing);
     }
 
     public void OnCollision(CollisionEventArgs collisionInfo)
@@ -73,7 +95,6 @@ public class BarricadeBlockPart : DrawableGameComponent, Entity
         TakeDamage();
     }
 
-    public IShapeF Bounds { get; private set; }
 
     public void Update()
     {
