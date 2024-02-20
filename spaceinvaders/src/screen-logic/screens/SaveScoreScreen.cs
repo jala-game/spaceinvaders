@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 public class SaveScoreScreen(
     GraphicsDeviceManager graphics,
@@ -48,7 +49,26 @@ public class SaveScoreScreen(
         littleFont = contentManager.Load<SpriteFont>("fonts/PixeloidMono");
         bigFont = contentManager.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
     }
-    public override void Update(GameTime gameTime) { }
+    public override void Update(GameTime gameTime) {
+        SetActiveOptionIfNotExists();
+        var kstate = Keyboard.GetState();
+
+        if (kstate.IsKeyDown(Keys.Down)) {
+
+        }
+    }
+
+    private void SetActiveOptionIfNotExists() {
+        foreach (List<LetterActivation> letterList in lettersPanel) {
+            foreach (LetterActivation letter in letterList) {
+                if (letter.GetIsActivated()) return;
+            }
+        }
+
+        lettersPanel[0][0].SetActivated();
+    }
+
+
     public override void Draw(GameTime gameTime) {
         DrawTitle();
         DrawLettersTable();
