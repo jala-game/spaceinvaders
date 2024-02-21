@@ -43,9 +43,8 @@ public class Game1 : Game
     }
 
     private void LoadScreenManager() {
-        MainScreen mainScreen = new(this,_graphics, Content, _spriteBatch);
-        ScreenManager.ChangeScreen(mainScreen);
-        
+        SaveScoreScreen saveScoreScreen = new(this, _graphics, Content, _spriteBatch, 100);
+        ScreenManager.ChangeScreen(saveScoreScreen);
     }
 
     protected override void Update(GameTime gameTime)

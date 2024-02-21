@@ -11,7 +11,6 @@ public class AlienQueue : IEnemyEntity
     private readonly List<IEnemyGroup> enemies = new();
     private readonly GraphicsDeviceManager _graphics;
     private readonly SpriteBatch _spriteBatch;
-    private readonly Texture2D _texture;
     private readonly bool isDead = false;
     private float SPEED = 1f;
 
