@@ -20,6 +20,8 @@ public class SaveScoreScreen(
         'V', 'W', 'X', 'Y', 'Z'
     ];
 
+    private int _delayToPress = 10;
+
     private readonly List<List<LetterActivation>> lettersPanel = [];
 
     public override void Initialize() {
@@ -65,23 +67,46 @@ public class SaveScoreScreen(
     }
 
     private void PanelMovement() {
+        _delayToPress--;
+        if (_delayToPress > 0) return;
+
         var kstate = Keyboard.GetState();
 
-        if (kstate.GetPressedKeyCount() > 0) RemoveActualLetterActive();
-
-        if (kstate.IsKeyDown(Keys.Down)) {
-            SetNewPositionByMovement(ScorePanelMovement.DOWN);
+        if (kstate.IsKeyDown(Keys.Down) || kstate.IsKeyDown(Keys.Up) ||
+            kstate.IsKeyDown(Keys.Left) || kstate.IsKeyDown(Keys.Right))
+        {
+            SetNewLetterActivePosition(kstate.GetPressedKeys()[0]);
+            _delayToPress = 10;
         }
     }
 
-    private void RemoveActualLetterActive() {
-        int activePositionY = GetLetterActivePositionY();
-        int activePositionX = GetLetterActivePositionX();
+    private void SetNewLetterActivePosition(Keys movement) {
+        int activePositionLine = GetLetterActivePositionLine();
+        int activePositionColumn = GetLetterActivePositionColumn();
 
-        lettersPanel[activePositionY][activePositionX].SetActivated();
+        lettersPanel[activePositionColumn][activePositionLine].SetActivated();
+
+        try {
+            switch (movement) {
+                case Keys.Down:
+                    lettersPanel[activePositionColumn + 1][activePositionLine].SetActivated();
+                    break;
+                case Keys.Up:
+                    lettersPanel[activePositionColumn - 1][activePositionLine].SetActivated();
+                    break;
+                case Keys.Left:
+                    lettersPanel[activePositionColumn][activePositionLine - 1].SetActivated();
+                    break;
+                case Keys.Right:
+                    lettersPanel[activePositionColumn][activePositionLine + 1].SetActivated();
+                    break;
+            }
+        } catch (ArgumentOutOfRangeException) {
+            lettersPanel[activePositionColumn][activePositionLine].SetActivated();
+        }
     }
 
-    private int GetLetterActivePositionY() {
+    private int GetLetterActivePositionLine() {
         foreach (List<LetterActivation> letterList in lettersPanel ) {
             for (int i = 0; i < letterList.Count; i++) {
                 if (letterList[i].GetIsActivated()) return i;
@@ -91,7 +116,7 @@ public class SaveScoreScreen(
         return -1;
     }
 
-    private int GetLetterActivePositionX() {
+    private int GetLetterActivePositionColumn() {
         for (int i = 0; i < lettersPanel.Count; i++) {
             foreach (LetterActivation letter in lettersPanel[i]) {
                 if (letter.GetIsActivated()) return i;
@@ -101,15 +126,10 @@ public class SaveScoreScreen(
         return -1;
     }
 
-    private void SetNewPositionByMovement(ScorePanelMovement movement) {
-
-    }
-
     public override void Draw(GameTime gameTime) {
         DrawTitle();
         DrawLettersTable();
     }
-
 
     private void DrawTitle() {
         string text = "Put Your Name";
