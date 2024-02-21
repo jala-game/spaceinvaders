@@ -51,11 +51,7 @@ public class SaveScoreScreen(
     }
     public override void Update(GameTime gameTime) {
         SetActiveOptionIfNotExists();
-        var kstate = Keyboard.GetState();
-
-        if (kstate.IsKeyDown(Keys.Down)) {
-
-        }
+        PanelMovement();
     }
 
     private void SetActiveOptionIfNotExists() {
@@ -68,6 +64,46 @@ public class SaveScoreScreen(
         lettersPanel[0][0].SetActivated();
     }
 
+    private void PanelMovement() {
+        var kstate = Keyboard.GetState();
+
+        if (kstate.GetPressedKeyCount() > 0) RemoveActualLetterActive();
+
+        if (kstate.IsKeyDown(Keys.Down)) {
+            SetNewPositionByMovement(ScorePanelMovement.DOWN);
+        }
+    }
+
+    private void RemoveActualLetterActive() {
+        int activePositionY = GetLetterActivePositionY();
+        int activePositionX = GetLetterActivePositionX();
+
+        lettersPanel[activePositionY][activePositionX].SetActivated();
+    }
+
+    private int GetLetterActivePositionY() {
+        foreach (List<LetterActivation> letterList in lettersPanel ) {
+            for (int i = 0; i < letterList.Count; i++) {
+                if (letterList[i].GetIsActivated()) return i;
+            }
+        }
+
+        return -1;
+    }
+
+    private int GetLetterActivePositionX() {
+        for (int i = 0; i < lettersPanel.Count; i++) {
+            foreach (LetterActivation letter in lettersPanel[i]) {
+                if (letter.GetIsActivated()) return i;
+            }
+        }
+
+        return -1;
+    }
+
+    private void SetNewPositionByMovement(ScorePanelMovement movement) {
+
+    }
 
     public override void Draw(GameTime gameTime) {
         DrawTitle();
