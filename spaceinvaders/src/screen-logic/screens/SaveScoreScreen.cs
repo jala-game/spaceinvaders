@@ -100,6 +100,17 @@ public class SaveScoreScreen(
         try {
             switch (movement) {
                 case Keys.Down:
+                    int ColumnToGoToButton = 2;
+                    int LineToGoToButton = 6;
+
+                    bool lineComparison = activePositionLine == LineToGoToButton;
+                    bool columComparison = activePositionColumn ==  ColumnToGoToButton;
+                    if (lineComparison && columComparison) {
+                        IInteraction buttonPosition = lettersPanel[^1][^1];
+                        buttonPosition.SetActivated();
+                        return;
+                    }
+
                     lettersPanel[activePositionColumn + 1][activePositionLine].SetActivated();
                     break;
                 case Keys.Up:
