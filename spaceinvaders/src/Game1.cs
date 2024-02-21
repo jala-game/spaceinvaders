@@ -37,6 +37,9 @@ public class Game1 : Game
     {
         _background = Content.Load<Texture2D>("background");
         Content.Load<Texture2D>("barricades/barricade");
+        Content.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
+        Content.Load<SpriteFont>("fonts/PixeloidMono");
+        Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
     }
 
     private void LoadScreenManager() {
