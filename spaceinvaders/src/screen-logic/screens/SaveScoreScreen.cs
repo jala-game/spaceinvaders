@@ -62,9 +62,16 @@ public class SaveScoreScreen(
         bigFont = contentManager.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
         doneButtonFont = contentManager.Load<SpriteFont>("fonts/PixeloidMonoDoneButton");
     }
+
     public override void Update(GameTime gameTime) {
         SetActiveOptionIfNotExists();
-        PanelMovement();
+
+        _delayToPress--;
+        if (_delayToPress > 0) return;
+        var kstate = Keyboard.GetState();
+        PanelMovement(kstate);
+        EnterActions(kstate);
+        BackspaceAction(kstate);
     }
 
     private void SetActiveOptionIfNotExists() {
@@ -77,12 +84,7 @@ public class SaveScoreScreen(
         lettersPanel[0][0].SetActivated();
     }
 
-    private void PanelMovement() {
-        _delayToPress--;
-        if (_delayToPress > 0) return;
-
-        var kstate = Keyboard.GetState();
-
+    private void PanelMovement(KeyboardState kstate) {
         if (kstate.IsKeyDown(Keys.Down) || kstate.IsKeyDown(Keys.Up) ||
             kstate.IsKeyDown(Keys.Left) || kstate.IsKeyDown(Keys.Right))
         {
@@ -148,6 +150,28 @@ public class SaveScoreScreen(
         return -1;
     }
 
+    private void EnterActions(KeyboardState kstate) {
+        if (!kstate.IsKeyDown(Keys.Enter)) return;
+
+        _delayToPress = 10;
+
+        IInteraction letter = lettersPanel[GetLetterActivePositionColumn()][GetLetterActivePositionLine()];
+        switch (letter.GetType()) {
+            case InteractionEnum.TEXT:
+                if (userName.Length > 10) return;
+
+                userName += letter.GetLetter();
+                break;
+        };
+    }
+
+    private void BackspaceAction(KeyboardState kstate) {
+        if (!kstate.IsKeyDown(Keys.Back) || string.IsNullOrEmpty(userName)) return;
+
+        _delayToPress = 10;
+        userName = userName.Remove(userName.Length - 1, 1);;
+    }
+
     public override void Draw(GameTime gameTime) {
         DrawTitle();
         DrawLettersTable();
@@ -165,13 +189,12 @@ public class SaveScoreScreen(
     }
 
     private void DrawUserName() {
-        string text = "WILLIAN";
-        float textWidth = littleFont.MeasureString(text).X / 2;
+        float textWidth = littleFont.MeasureString(userName).X / 2;
         Vector2 position = new(
             graphics.PreferredBackBufferWidth / 2 - textWidth,
             250);
-        spriteBatch.DrawString(littleFont, text, position,
-            Color.White);
+        spriteBatch.DrawString(littleFont, userName, position,
+            Color.Green);
     }
 
     private void DrawLettersTable() {
@@ -198,6 +221,6 @@ public class SaveScoreScreen(
     }
 
     private static Color ColorIfSelected(IInteraction letter) {
-        return letter.GetIsActivated() ? Color.Red : Color.White;
+        return letter.GetIsActivated() ? Color.Green : Color.White;
     }
 }
