@@ -1,7 +1,7 @@
-public class LetterActivation(string letter) : IInteraction
+public class DoneButton(string letter) : IInteraction
 {
     private bool IsActivated = false;
-    private readonly InteractionEnum type = InteractionEnum.TEXT;
+    private readonly InteractionEnum type = InteractionEnum.BUTTON;
 
     public void SetActivated() {
         IsActivated = !IsActivated;

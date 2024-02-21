@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,19 +14,22 @@ public class SaveScoreScreen(
 
     private SpriteFont bigFont;
     private SpriteFont littleFont;
-    private readonly List<char> letters= [
-        'A', 'B', 'C', 'D', 'E', 'F', 'G',
-        'H', 'I', 'J', 'K', 'L', 'M', 'N',
-        'O', 'P', 'Q', 'R', 'S', 'T', 'U',
-        'V', 'W', 'X', 'Y', 'Z'
+    private SpriteFont doneButtonFont;
+
+    private readonly List<string> letters= [
+        "A", "B", "C", "D", "E", "F", "G",
+        "H", "I", "J", "K", "L", "M", "N",
+        "O", "P", "Q", "R", "S", "T", "U",
+        "V", "W", "X", "Y", "Z"
     ];
 
     private int _delayToPress = 10;
 
-    private readonly List<List<LetterActivation>> lettersPanel = [];
+    private readonly List<List<IInteraction>> lettersPanel = [];
 
     public override void Initialize() {
         CreateMatrixWithLetters();
+        CreateDoneButton();
     }
 
     private void CreateMatrixWithLetters() {
@@ -35,16 +39,20 @@ public class SaveScoreScreen(
     }
 
     private void CreateMatrixWithLines(int lines) {
-        List<LetterActivation> line = [];
+        List<IInteraction> line = [];
 
         for (int columns = 0; columns < 7; columns++) {
             int index = lines * 7 + columns;
             line.Add(new LetterActivation(letters[index]));
 
-            if (letters[index].Equals('Z')) break;
+            if (letters[index].Equals("Z")) break;
         }
 
         lettersPanel.Add(line);
+    }
+
+    private void CreateDoneButton() {
+        lettersPanel[^1].Add(new DoneButton("DONE"));
     }
 
     private string userName = "";
@@ -52,6 +60,7 @@ public class SaveScoreScreen(
     public override void LoadContent() {
         littleFont = contentManager.Load<SpriteFont>("fonts/PixeloidMonoSaveScore");
         bigFont = contentManager.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
+        doneButtonFont = contentManager.Load<SpriteFont>("fonts/PixeloidMonoDoneButton");
     }
     public override void Update(GameTime gameTime) {
         SetActiveOptionIfNotExists();
@@ -59,8 +68,8 @@ public class SaveScoreScreen(
     }
 
     private void SetActiveOptionIfNotExists() {
-        foreach (List<LetterActivation> letterList in lettersPanel) {
-            foreach (LetterActivation letter in letterList) {
+        foreach (List<IInteraction> letterList in lettersPanel) {
+            foreach (IInteraction letter in letterList) {
                 if (letter.GetIsActivated()) return;
             }
         }
@@ -109,7 +118,7 @@ public class SaveScoreScreen(
     }
 
     private int GetLetterActivePositionLine() {
-        foreach (List<LetterActivation> letterList in lettersPanel ) {
+        foreach (List<IInteraction> letterList in lettersPanel ) {
             for (int i = 0; i < letterList.Count; i++) {
                 if (letterList[i].GetIsActivated()) return i;
             }
@@ -120,7 +129,7 @@ public class SaveScoreScreen(
 
     private int GetLetterActivePositionColumn() {
         for (int i = 0; i < lettersPanel.Count; i++) {
-            foreach (LetterActivation letter in lettersPanel[i]) {
+            foreach (IInteraction letter in lettersPanel[i]) {
                 if (letter.GetIsActivated()) return i;
             }
         }
@@ -160,9 +169,16 @@ public class SaveScoreScreen(
             for (int i = 0; i < a.Count; i++) {
                 int MARGIN = 120;
                 int INITIAL_Y = 400;
-                float INITIAL_X = graphics.PreferredBackBufferWidth / 2 - (MARGIN + bigFont.MeasureString(a[i].GetLetter().ToString()).X * 6);
+
+                if (a[i].GetType() == InteractionEnum.BUTTON) {
+                    MARGIN += 5;
+                };
+
+                SpriteFont font = a[i].GetType() == InteractionEnum.BUTTON ? doneButtonFont : bigFont;
+
+                float INITIAL_X = Math.Abs(graphics.PreferredBackBufferWidth / 2 - (MARGIN + font.MeasureString(a[i].GetLetter()).X * 6));
                 Vector2 position = new(INITIAL_X + MARGIN * i, INITIAL_Y + GAP);
-                spriteBatch.DrawString(bigFont, a[i].GetLetter().ToString(), position,
+                spriteBatch.DrawString(font, a[i].GetLetter(), position,
                     ColorIfSelected(a[i]));
             }
 
@@ -170,7 +186,7 @@ public class SaveScoreScreen(
         });
     }
 
-    private static Color ColorIfSelected(LetterActivation letter) {
+    private static Color ColorIfSelected(IInteraction letter) {
         return letter.GetIsActivated() ? Color.Red : Color.White;
     }
 }

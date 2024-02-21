@@ -116,6 +116,13 @@
 /processorParam:TextureFormat=Compressed
 /build:fonts/PixeloidMono.spritefont
 
+#begin fonts/PixeloidMonoDoneButton.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/PixeloidMonoDoneButton.spritefont
+
 #begin fonts/PixeloidMonoGameOver.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
