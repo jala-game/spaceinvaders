@@ -53,7 +53,7 @@ public class PlayScreen(
     }
 
     private void LoadGameOverScreen() {
-        GameOverScreen gameOverScreen = new(graphics, contentManager, spriteBatch, _score.GetScore());
+        GameOverScreen gameOverScreen = new(game,graphics, contentManager, spriteBatch, _score.GetScore());
         ScreenManager.ChangeScreen(gameOverScreen);
         _barricades.Dispose();
     }

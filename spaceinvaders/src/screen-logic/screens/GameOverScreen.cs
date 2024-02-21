@@ -1,8 +1,12 @@
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using spaceinvaders.services;
 
 public class GameOverScreen(
+    Game game,
     GraphicsDeviceManager graphics,
     ContentManager contentManager,
     SpriteBatch spriteBatch,
@@ -11,18 +15,72 @@ public class GameOverScreen(
 
     private SpriteFont _gameOverFont;
     private SpriteFont _gameScoreFont;
+    private SpriteFont _gameMenuFont;
+    private int _selectedOption = 4;
+    private float delayToPress = 10f;
     public override void Initialize() { }
     public override void LoadContent() { 
         _gameOverFont = contentManager.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
         _gameScoreFont = contentManager.Load<SpriteFont>("fonts/PixeloidMono");
+        _gameMenuFont = contentManager.Load<SpriteFont>("fonts/PixeloidMonoMenu");
     }
-    public override void Update(GameTime gameTime) { }
+
+    public override void Update(GameTime gameTime)
+    {
+        var kstate = Keyboard.GetState();
+        
+        delayToPress--;
+        if (delayToPress > 0) return;
+        
+        ModifyMenuSelection(kstate);
+        SendMenuOption(kstate);
+        
+    }
+    
+    private void ModifyMenuSelection(KeyboardState kstate)
+    {
+        float resetDelay = 10;
+        if (kstate.IsKeyDown(Keys.Up) && _selectedOption > 4)
+        {
+            _selectedOption--;
+            delayToPress = resetDelay;
+        }
+        
+        if (kstate.IsKeyDown(Keys.Down) && _selectedOption < 5)
+        {
+            _selectedOption++;
+            delayToPress = resetDelay;
+        }
+    }
+
+    private void SendMenuOption(KeyboardState kstate)
+    {
+        if (!kstate.IsKeyDown(Keys.Enter)) return;
+        switch (_selectedOption)
+        {
+            case (int) EScreenMenuOptionsGameOver.SaveGame:
+                break;
+            case (int) EScreenMenuOptionsGameOver.LeaveGame:
+                LeaveTheGame();
+                break;
+
+        }
+    }
+
+    private void LeaveTheGame()
+    {
+        MainScreen mainScreen = new MainScreen(game,graphics,contentManager,spriteBatch );
+        ScreenManager.ChangeScreen(mainScreen);
+    }
+    
     public override void Draw(GameTime gameTime) {
         DrawGameOver();
         DrawScore();
+        DrawMenu();
+        DrawItemMenuActive();
     }
 
-    public void DrawGameOver() {
+    private void DrawGameOver() {
         string text = "GAME OVER";
         float textWidth = _gameOverFont.MeasureString(text).X / 2;
         float textHeight = _gameOverFont.MeasureString(text).Y / 2;
@@ -32,12 +90,44 @@ public class GameOverScreen(
             Color.White);
     }
 
-    public void DrawScore() {
+    private void DrawScore() {
         string text = $"TOTAL SCORE: {score}";
         float textWidth = _gameScoreFont.MeasureString(text).X / 2;
         spriteBatch.DrawString(_gameScoreFont, text, new Vector2(
             graphics.PreferredBackBufferWidth / 2 - textWidth,
             graphics.PreferredBackBufferHeight / 2 + 50),
             Color.Green);
+    }
+
+    private void DrawMenu()
+    {
+        List<string> stringsMenu = new List<string>() {"  Save Game","  Leave the game",};
+        int baseY = graphics.PreferredBackBufferHeight / 2 + 150;
+        
+        stringsMenu.ForEach(e =>
+        {
+            DrawMenuItem(e, baseY, null);
+            baseY += 100;
+        });
+    }
+
+    private void DrawMenuItem(string text, int y, Color? color)
+    {
+        string textBase = "  Save Game";
+        float textWidthItem = _gameMenuFont.MeasureString(textBase).X / 2 + 45;
+        spriteBatch.DrawString(_gameMenuFont, text, new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidthItem ,y), color ?? Color.White);
+    }
+    
+    private void DrawItemMenuActive()
+    {
+        switch (_selectedOption)
+        {
+            case (int) EScreenMenuOptionsGameOver.SaveGame:
+                DrawMenuItem("> Save Game", graphics.PreferredBackBufferHeight / 2 + 150, Color.Green);
+                break;
+            case (int)EScreenMenuOptionsGameOver.LeaveGame:
+                DrawMenuItem("> Leave the game", graphics.PreferredBackBufferHeight / 2 + 250,Color.Green);
+                break;
+        }
     }
 }
