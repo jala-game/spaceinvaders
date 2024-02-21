@@ -132,7 +132,7 @@ public class SaveScoreScreen(
     }
 
     private void DrawTitle() {
-        string text = "Put Your Name";
+        string text = "YOUR NAME";
         float textWidth = bigFont.MeasureString(text).X / 2;
         Vector2 position = new(
             graphics.PreferredBackBufferWidth / 2 - textWidth,
@@ -158,6 +158,6 @@ public class SaveScoreScreen(
     }
 
     private static Color ColorIfSelected(LetterActivation letter) {
-        return letter.GetIsActivated() ? Color.Yellow : Color.White;
+        return letter.GetIsActivated() ? Color.Red : Color.White;
     }
 }
