@@ -23,13 +23,15 @@ public class SaveScoreScreen(
         "V", "W", "X", "Y", "Z"
     ];
 
-    private int _delayToPress = 10;
+    private int _delayToPress;
+    private readonly int _defaultDelayToPress = 10;
 
     private readonly List<List<IInteraction>> lettersPanel = [];
 
     public override void Initialize() {
         CreateMatrixWithLetters();
         CreateDoneButton();
+        _delayToPress = _defaultDelayToPress;
     }
 
     private void CreateMatrixWithLetters() {
@@ -89,7 +91,7 @@ public class SaveScoreScreen(
             kstate.IsKeyDown(Keys.Left) || kstate.IsKeyDown(Keys.Right))
         {
             SetNewLetterActivePosition(kstate.GetPressedKeys()[0]);
-            _delayToPress = 10;
+            ResetDelayToPress();
         }
     }
 
@@ -153,7 +155,7 @@ public class SaveScoreScreen(
     private void EnterActions(KeyboardState kstate) {
         if (!kstate.IsKeyDown(Keys.Enter)) return;
 
-        _delayToPress = 10;
+        ResetDelayToPress();
 
         IInteraction letter = lettersPanel[GetLetterActivePositionColumn()][GetLetterActivePositionLine()];
         switch (letter.GetType()) {
@@ -168,8 +170,12 @@ public class SaveScoreScreen(
     private void BackspaceAction(KeyboardState kstate) {
         if (!kstate.IsKeyDown(Keys.Back) || string.IsNullOrEmpty(userName)) return;
 
-        _delayToPress = 10;
+        ResetDelayToPress();
         userName = userName.Remove(userName.Length - 1, 1);;
+    }
+
+    private void ResetDelayToPress() {
+        _delayToPress = _defaultDelayToPress;
     }
 
     public override void Draw(GameTime gameTime) {
