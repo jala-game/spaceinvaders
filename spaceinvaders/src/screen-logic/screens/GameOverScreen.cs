@@ -25,15 +25,14 @@ public class GameOverScreen(
     public override void Update(GameTime gameTime)
     {
         var kstate = Keyboard.GetState();
-        
+
         delayToPress--;
         if (delayToPress > 0) return;
-        
+
         ModifyMenuSelection(kstate);
         SendMenuOption(kstate);
-        
     }
-    
+
     private void ModifyMenuSelection(KeyboardState kstate)
     {
         float resetDelay = 10;
@@ -42,7 +41,7 @@ public class GameOverScreen(
             _selectedOption--;
             delayToPress = resetDelay;
         }
-        
+
         if (kstate.IsKeyDown(Keys.Down) && _selectedOption < 5)
         {
             _selectedOption++;
@@ -56,6 +55,7 @@ public class GameOverScreen(
         switch (_selectedOption)
         {
             case (int) EScreenMenuOptionsGameOver.SaveGame:
+                SwitchToSaveScoreScreen();
                 break;
             case (int) EScreenMenuOptionsGameOver.LeaveGame:
                 LeaveTheGame();
@@ -64,12 +64,17 @@ public class GameOverScreen(
         }
     }
 
+    private void SwitchToSaveScoreScreen() {
+        SaveScoreScreen saveScoreScreen = new(game, graphics, contentManager, spriteBatch, score);
+        ScreenManager.ChangeScreen(saveScoreScreen);
+    }
+
     private void LeaveTheGame()
     {
         MainScreen mainScreen = new MainScreen(game,graphics,contentManager,spriteBatch );
         ScreenManager.ChangeScreen(mainScreen);
     }
-    
+
     public override void Draw(GameTime gameTime) {
         DrawGameOver();
         DrawScore();
@@ -100,7 +105,7 @@ public class GameOverScreen(
     {
         List<string> stringsMenu = new List<string>() {"  Save Game","  Leave the game",};
         int baseY = graphics.PreferredBackBufferHeight / 2 + 150;
-        
+
         stringsMenu.ForEach(e =>
         {
             DrawMenuItem(e, baseY, null);
@@ -114,7 +119,7 @@ public class GameOverScreen(
         float textWidthItem = _gameMenuFont.MeasureString(textBase).X / 2 + 45;
         spriteBatch.DrawString(_gameMenuFont, text, new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidthItem ,y), color ?? Color.White);
     }
-    
+
     private void DrawItemMenuActive()
     {
         switch (_selectedOption)

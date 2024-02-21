@@ -5,13 +5,13 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-public class SaveScoreScreen(
-    Game game,
-    GraphicsDeviceManager graphics,
-    ContentManager contentManager,
-    SpriteBatch spriteBatch,
-    int score
-    ) : GameScreenModel {
+public class SaveScoreScreen : GameScreenModel {
+
+    private Game game;
+    private GraphicsDeviceManager graphics;
+    private ContentManager contentManager;
+    private SpriteBatch spriteBatch;
+    private int score;
 
     private SpriteFont bigFont;
     private SpriteFont littleFont;
@@ -29,11 +29,25 @@ public class SaveScoreScreen(
 
     private readonly List<List<IInteraction>> lettersPanel = [];
 
-    public override void Initialize() {
+    public SaveScoreScreen(
+        Game game,
+        GraphicsDeviceManager graphics,
+        ContentManager contentManager,
+        SpriteBatch spriteBatch,
+        int score
+    ) {
+        this.game = game;
+        this.graphics = graphics;
+        this.contentManager = contentManager;
+        this.spriteBatch = spriteBatch;
+        this.score = score;
+
         CreateMatrixWithLetters();
         CreateDoneButton();
         _delayToPress = _defaultDelayToPress;
     }
+
+    public override void Initialize() {}
 
     private void CreateMatrixWithLetters() {
         for (int lines = 0; lines < 4; lines++) {
