@@ -100,16 +100,16 @@ public class MainScreen(
         
         stringsMenu.ForEach(e =>
         {
-            DrawMenuItem(e, baseY);
+            DrawMenuItem(e, baseY, null);
             baseY += 100;
         });
     }
 
-    private void DrawMenuItem(string text, int y)
+    private void DrawMenuItem(string text, int y, Color? color)
     {
         string textBase = "  Play Game";
         float textWidthItem1 = _gameFontSmall.MeasureString(textBase).X / 2 + 45;
-        spriteBatch.DrawString(_gameFontSmall, text, new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidthItem1 ,y), Color.White);
+        spriteBatch.DrawString(_gameFontSmall, text, new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidthItem1 ,y),color ?? Color.White);
     }
 
     private void DrawItemMenuActive()
@@ -117,13 +117,13 @@ public class MainScreen(
         switch (_selectedOption)
         {
             case 1:
-                DrawMenuItem("> Play Game", 400);
+                DrawMenuItem("> Play Game", 400, Color.Green);
                 break;
             case 2:
-                DrawMenuItem("> View Leaderboards", 500);
+                DrawMenuItem("> View Leaderboards", 500,Color.Green);
                 break;
             case 3:
-                DrawMenuItem("> Game Control", 600);
+                DrawMenuItem("> Game Control", 600,Color.Green);
                 break;
         }
     }
