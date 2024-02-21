@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,7 +9,7 @@ public class LocalStorage {
     private static readonly string jsonString = File.ReadAllText("localstorage/data.json");
 
     public static void AddUser(User user) {
-        JObject data = JsonConvert.DeserializeObject<JObject>(jsonString);
+        JArray data = JsonConvert.DeserializeObject<JArray>(jsonString);
 
         JObject newUser = new()
         {
@@ -23,13 +24,22 @@ public class LocalStorage {
     }
 
     public static List<User> GetUsersPaginator(int quantity, int page=0) {
-        JObject data = JsonConvert.DeserializeObject<JObject>(jsonString);
+        JArray data = JsonConvert.DeserializeObject<JArray>(jsonString);
+
+        int totalUsers = data.Count;
+        int maxPage = (int)Math.Ceiling((double)totalUsers / quantity);
+
+        if (page > maxPage)
+        {
+            return [];
+        }
+
+        int startIndex = page * quantity;
+        startIndex = Math.Min(startIndex, totalUsers);
+        int endIndex = Math.Min(startIndex + quantity, totalUsers);
 
         List<User> usersList = [];
-
-        int INITIAL_VALUE = page * quantity;
-
-        for (int i = INITIAL_VALUE; i < INITIAL_VALUE * 2; i++)
+        for (int i = startIndex; i < endIndex; i++)
         {
             User user = data[i].ToObject<User>();
             usersList.Add(user);

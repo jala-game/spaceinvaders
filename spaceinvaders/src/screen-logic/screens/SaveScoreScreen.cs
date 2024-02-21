@@ -161,6 +161,10 @@ public class SaveScoreScreen(
         IInteraction letter = lettersPanel[GetLetterActivePositionColumn()][GetLetterActivePositionLine()];
         switch (letter.GetType()) {
             case InteractionEnum.TEXT:
+                LocalStorage.GetUsersPaginator(10, 1).ForEach(a => {
+                    Console.WriteLine(a);
+                });
+
                 if (userName.Length > 10) return;
 
                 userName += letter.GetLetter();
