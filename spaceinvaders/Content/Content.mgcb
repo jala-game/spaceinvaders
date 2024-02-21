@@ -130,6 +130,13 @@
 /processorParam:TextureFormat=Compressed
 /build:fonts/PixeloidMonoMenu.spritefont
 
+#begin fonts/PixeloidMonoSaveScore.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/PixeloidMonoSaveScore.spritefont
+
 #begin red-bullet.png
 /importer:TextureImporter
 /processor:TextureProcessor

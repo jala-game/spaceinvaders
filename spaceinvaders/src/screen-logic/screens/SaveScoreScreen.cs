@@ -47,8 +47,10 @@ public class SaveScoreScreen(
         lettersPanel.Add(line);
     }
 
+    private string userName = "";
+
     public override void LoadContent() {
-        littleFont = contentManager.Load<SpriteFont>("fonts/PixeloidMono");
+        littleFont = contentManager.Load<SpriteFont>("fonts/PixeloidMonoSaveScore");
         bigFont = contentManager.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
     }
     public override void Update(GameTime gameTime) {
@@ -129,6 +131,7 @@ public class SaveScoreScreen(
     public override void Draw(GameTime gameTime) {
         DrawTitle();
         DrawLettersTable();
+        DrawUserName();
     }
 
     private void DrawTitle() {
@@ -138,6 +141,16 @@ public class SaveScoreScreen(
             graphics.PreferredBackBufferWidth / 2 - textWidth,
             100);
         spriteBatch.DrawString(bigFont, text, position,
+            Color.White);
+    }
+
+    private void DrawUserName() {
+        string text = "WILLIAN";
+        float textWidth = littleFont.MeasureString(text).X / 2;
+        Vector2 position = new(
+            graphics.PreferredBackBufferWidth / 2 - textWidth,
+            250);
+        spriteBatch.DrawString(littleFont, text, position,
             Color.White);
     }
 
