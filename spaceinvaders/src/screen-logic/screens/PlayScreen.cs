@@ -161,6 +161,12 @@ public class PlayScreen(
                 explosion = new(spriteBatch, contentManager, ship.Bounds.Position);
             }
 
+            if (bullet != null && bullet.Bounds.Intersects(ship.bullet?.Bounds))
+            {
+                bullet.OnCollision(null);
+                ship.bullet.OnCollision(null);
+            }
+
             if (bullet != null)
             {
                 CollisionBulletAndBarricades(bullet);
