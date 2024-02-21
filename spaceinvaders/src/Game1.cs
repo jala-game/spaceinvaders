@@ -40,7 +40,7 @@ public class Game1 : Game
     }
 
     private void LoadScreenManager() {
-        SaveScoreScreen saveScoreScreen = new(_graphics, Content, _spriteBatch);
+        SaveScoreScreen saveScoreScreen = new(this, _graphics, Content, _spriteBatch, 100);
         ScreenManager.ChangeScreen(saveScoreScreen);
     }
 

@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 public class SaveScoreScreen(
+    Game game,
     GraphicsDeviceManager graphics,
     ContentManager contentManager,
-    SpriteBatch spriteBatch
+    SpriteBatch spriteBatch,
+    int score
     ) : GameScreenModel {
 
     private SpriteFont bigFont;
@@ -164,7 +165,23 @@ public class SaveScoreScreen(
 
                 userName += letter.GetLetter();
                 break;
+            case InteractionEnum.BUTTON:
+                if (string.IsNullOrEmpty(userName)) return;
+                User user = new()
+                {
+                    Name = userName,
+                    Score = score
+                };
+
+                LocalStorage.AddUser(user);
+                SwitchToMainScreen();
+                break;
         };
+    }
+
+    private void SwitchToMainScreen() {
+        MainScreen mainScreen = new(game, graphics, contentManager, spriteBatch);
+        ScreenManager.ChangeScreen(mainScreen);
     }
 
     private void BackspaceAction(KeyboardState kstate) {
