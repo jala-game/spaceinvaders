@@ -11,19 +11,16 @@ public class GameOverScreen(
     ContentManager contentManager,
     SpriteBatch spriteBatch,
     int score
-    ) : GameScreenModel {
+    ) : GameScreenModel
+{
 
-    private SpriteFont _gameOverFont;
-    private SpriteFont _gameScoreFont;
-    private SpriteFont _gameMenuFont;
+    private SpriteFont _gameOverFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
+    private SpriteFont _gameScoreFont = game.Content.Load<SpriteFont>("fonts/PixeloidMono");
+    private SpriteFont _gameMenuFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
     private int _selectedOption = 4;
     private float delayToPress = 10f;
     public override void Initialize() { }
-    public override void LoadContent() { 
-        _gameOverFont = contentManager.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
-        _gameScoreFont = contentManager.Load<SpriteFont>("fonts/PixeloidMono");
-        _gameMenuFont = contentManager.Load<SpriteFont>("fonts/PixeloidMonoMenu");
-    }
+    public override void LoadContent() { }
 
     public override void Update(GameTime gameTime)
     {

@@ -13,18 +13,15 @@ public class MainScreen(
     SpriteBatch spriteBatch
 ) : GameScreenModel
 {
-    private SpriteFont _gameFont;
-    private SpriteFont _gameFontSmall;
-    private SpriteFont _gameDescription;
+    private SpriteFont _gameFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
+    private SpriteFont _gameFontSmall = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
+    private SpriteFont _gameDescription = game.Content.Load<SpriteFont>("fonts/PixeloidMono");
     private int _selectedOption = 1;
     private float delayToPress = 10f;
     public override void Initialize() { }
 
     public override void LoadContent()
     {
-        _gameFont = contentManager.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
-        _gameFontSmall = contentManager.Load<SpriteFont>("fonts/PixeloidMonoMenu");
-        _gameDescription = contentManager.Load<SpriteFont>("fonts/PixeloidMono");
     }
 
     public override void Update(GameTime gameTime)
