@@ -41,7 +41,7 @@ public class LeaderBoardsScreen(
     {
         string text = "HIGH SCORES";
         float textWidth = _title.MeasureString(text).X / 2;
-        spriteBatch.DrawString(_title,text,new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidth,100),Color.Green);
+        spriteBatch.DrawString(_title,text,new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidth,50),Color.Green);
     }
 
     private void DrawHeaders()
@@ -57,7 +57,7 @@ public class LeaderBoardsScreen(
         
         headers.ForEach(header =>
         {
-            spriteBatch.DrawString(_genericFont,header,new Vector2(positionX[controllerI],260),Color.Yellow);
+            spriteBatch.DrawString(_genericFont,header,new Vector2(positionX[controllerI],160),Color.Yellow);
             controllerI++;
 
         });
@@ -66,7 +66,7 @@ public class LeaderBoardsScreen(
     private void DrawLeaderBoards()
     {
         List<User> usersForDataBase = LocalStorage.GetUsersPaginator(10, _page).OrderByDescending(user => user.Score).ToList();
-        int positionY = 320;
+        int positionY = 220;
         
         usersForDataBase.ForEach(user =>
         {
