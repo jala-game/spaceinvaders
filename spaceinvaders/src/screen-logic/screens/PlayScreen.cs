@@ -46,7 +46,8 @@ public class PlayScreen(
             spriteBatch=spriteBatch,
             barricades=_barricades,
             score=_score,
-            alienRound=alienRound
+            alienRound=alienRound,
+            addLifeManage=_addLifeManage
         };
         SpawnRedShip(gameTime);
         RemoveRedShip();
@@ -54,13 +55,19 @@ public class PlayScreen(
         playScreenUpdate.alienRound.Update();
         playScreenUpdate.EnemyBulletUpdate();
         playScreenUpdate.ship.Update();
-        UpdateLife();
+        playScreenUpdate.IncreaseLife();
+
+        int addLifeFromUpdate = playScreenUpdate.addLifeManage;
+        if (addLifeFromUpdate != _addLifeManage) _addLifeManage = addLifeFromUpdate;
+
         playScreenUpdate.SpaceShipBulletUpdate();
         GenerateNewHordeOfEnemies();
         ColisionEnemyWithSpaceShip();
         UpdateBarricades(gameTime);
+
         Explosion newExplosion = playScreenUpdate.GetExplosion();
         if (newExplosion != null) explosion = newExplosion;
+
         explosion?.Update(gameTime);
         base.Update(gameTime);
     }
@@ -74,15 +81,6 @@ public class PlayScreen(
     private void UpdateBarricades(GameTime gameTime)
     {
         _barricades.Update(gameTime);
-    }
-
-    private void UpdateLife()
-    {
-        if (_score.GetScore() >= _addLifeManage)
-        {
-            _addLifeManage += 1000;
-            ship.AddLifeForShip();
-        }
     }
 
     private void SpawnRedShip(GameTime gameTime)
@@ -104,7 +102,6 @@ public class PlayScreen(
             _redEnemy = null;
         }
     }
-
 
     public override void Draw(GameTime gameTime)
     {
@@ -136,9 +133,6 @@ public class PlayScreen(
         spriteBatch.DrawString(spriteFont, $"LIFE {ship.GetLifes()}", new Vector2(50, 50), Color.White);
     }
 
-
-
-
     private void GenerateNewHordeOfEnemies()
     {
         if (_enemies.Count > 0) return;
@@ -168,7 +162,7 @@ public class PlayScreen(
             {
                 ship.SetIsDead();
             }
-            
+
             if (e.Bounds.Position.Y < ship.Bounds.Position.Y) return;
             ship.SetIsDead();
         });

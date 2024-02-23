@@ -19,6 +19,7 @@ public class PlayScreenUpdate() {
     public Barricades barricades;
     public Score score;
     public AlienRound alienRound;
+    public int addLifeManage;
     private Explosion explosion = null;
 
     public void EnemiesUpdate() {
@@ -112,6 +113,16 @@ public class PlayScreenUpdate() {
             blockPart.OnCollision(null);
             bullet.OnCollision(null);
             break;
+        }
+    }
+
+    public void IncreaseLife()
+    {
+        if (score.GetScore() >= addLifeManage)
+        {
+            Console.WriteLine("Entrou aq");
+            addLifeManage += 1000;
+            ship.AddLifeForShip();
         }
     }
 }
