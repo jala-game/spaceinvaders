@@ -143,6 +143,8 @@ public class LeaderBoardsScreen(
     
     private void SendMenuOption(KeyboardState kstate)
     {
+        delayToPress--;
+        if (delayToPress > 0) return;
         if (!kstate.IsKeyDown(Keys.Enter)) return;
         switch (_chooseMenu)
         {
@@ -151,9 +153,11 @@ public class LeaderBoardsScreen(
                 break;
             case (int) EScreenMenuOptionsGameOver.LeftArrow:
                 ReturnPages();
+                delayToPress = 10;
                 break;
             case (int) EScreenMenuOptionsGameOver.RightArrow:
                 NextPages();
+                delayToPress = 10;
                 break;
         }
     }
@@ -181,7 +185,6 @@ public class LeaderBoardsScreen(
         if (usersForDataBase.Count == 0) return;
         _page++;
         _placingManage += 10;
-        
     }
     
     private void ModifyMenuSelection(KeyboardState kstate)

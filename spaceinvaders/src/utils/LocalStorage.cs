@@ -4,12 +4,12 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 
 public class LocalStorage {
-    private static readonly string jsonString = File.ReadAllText("localstorage/data.json");
 
     public static void AddUser(User user) {
-        JArray data = JsonConvert.DeserializeObject<JArray>(jsonString);
+        JArray data = JsonConvert.DeserializeObject<JArray>(JsonString());
 
         JObject newUser = new()
         {
@@ -24,7 +24,8 @@ public class LocalStorage {
     }
 
     public static List<User> GetUsersPaginator(int quantity, int page=0) {
-        JArray data = JsonConvert.DeserializeObject<JArray>(jsonString);
+        
+        JArray data = JsonConvert.DeserializeObject<JArray>(JsonString());
         
         List<User> users = ConvertJsonToUserList(data).OrderByDescending(user => user.Score).ToList();
 
@@ -60,5 +61,10 @@ public class LocalStorage {
         }
 
         return users;
+    }
+
+    private static string JsonString()
+    {
+        return File.ReadAllText("localstorage/data.json");
     }
 }
