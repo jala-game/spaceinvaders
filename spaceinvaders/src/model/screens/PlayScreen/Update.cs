@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
+using spaceinvaders.model;
 using spaceinvaders.model.barricades;
 
 public class PlayScreenUpdate() {
@@ -16,6 +17,7 @@ public class PlayScreenUpdate() {
     public ContentManager contentManager;
     public SpriteBatch spriteBatch;
     public Barricades barricades;
+    public Score score;
     private Explosion explosion = null;
 
     public void EnemiesUpdate() {
@@ -25,6 +27,10 @@ public class PlayScreenUpdate() {
         }
 
         redEnemy?.Update();
+    }
+
+    public Explosion GetExplosion() {
+        return explosion;
     }
 
     public void ExplosionUpdate(GameTime gameTime) {
@@ -55,6 +61,43 @@ public class PlayScreenUpdate() {
             {
                 CollisionBulletAndBarricades(bullet);
             }
+        }
+    }
+
+    public void SpaceShipBulletUpdate()
+    {
+        if (ship.bullet == null) return;
+
+        ship.bullet.Update();
+
+        foreach (IEnemyGroup enemy in enemies)
+        {
+            if (ship.bullet != null && ship.bullet.Bounds.Intersects(enemy.Bounds))
+            {
+                score.SetScore(enemy.GetPoint());
+                enemy.OnCollision(null);
+                ship.bullet.OnCollision(null);
+                explosion = new(spriteBatch, contentManager, enemy.Bounds.Position);
+            }
+        }
+
+        enemies.RemoveAll(e => e.IsDead());
+
+        if (ship.bullet != null)
+        {
+            CollisionBulletAndBarricades(ship.bullet);
+        }
+
+        if (redEnemy == null) return;
+
+        bool intersectBetweenRedEnemyAndBullet = ship.bullet.Bounds.Intersects(redEnemy.Bounds);
+        bool spaceShipBulletExists = ship.bullet != null;
+
+        if (spaceShipBulletExists && intersectBetweenRedEnemyAndBullet)
+        {
+            score.SetScore(redEnemy.GetPoint());
+            redEnemy.OnCollision(null);
+            explosion = new(spriteBatch, contentManager, redEnemy.Bounds.Position);
         }
     }
 

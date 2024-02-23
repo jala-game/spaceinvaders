@@ -44,7 +44,8 @@ public class PlayScreen(
             contentManager=contentManager,
             graphics=graphics,
             spriteBatch=spriteBatch,
-            barricades=_barricades
+            barricades=_barricades,
+            score=_score
         };
         SpawnRedShip(gameTime);
         RemoveRedShip();
@@ -53,10 +54,12 @@ public class PlayScreen(
         playScreenUpdate.EnemyBulletUpdate();
         ship.Update();
         UpdateLife();
-        SpaceShipBulletUpdate();
+        playScreenUpdate.SpaceShipBulletUpdate();
         GenerateNewHordeOfEnemies();
         ColisionEnemyWithSpaceShip();
         UpdateBarricades(gameTime);
+        Explosion newExplosion = playScreenUpdate.GetExplosion();
+        if (newExplosion != null) explosion = newExplosion;
         explosion?.Update(gameTime);
         base.Update(gameTime);
     }
@@ -65,19 +68,6 @@ public class PlayScreen(
         GameOverScreen gameOverScreen = new(game,graphics, contentManager, spriteBatch, _score.GetScore());
         ScreenManager.ChangeScreen(gameOverScreen);
         _barricades.Dispose();
-    }
-
-    private void CollisionBulletAndBarricades(ICollisionActor bullet)
-    {
-        ArgumentNullException.ThrowIfNull(bullet);
-        foreach (var blockPart in _barricades.BarricadeBlocks.SelectMany(barricadeBlock =>
-                     barricadeBlock.BarricadeBlockParts))
-        {
-            if (!blockPart.Bounds.Intersects(bullet.Bounds)) continue;
-            blockPart.OnCollision(null);
-            bullet.OnCollision(null);
-            break;
-        }
     }
 
     private void UpdateBarricades(GameTime gameTime)
@@ -114,42 +104,6 @@ public class PlayScreen(
         }
     }
 
-    private void SpaceShipBulletUpdate()
-    {
-        if (ship.bullet == null) return;
-
-        ship.bullet.Update();
-
-        foreach (IEnemyGroup enemy in _enemies)
-        {
-            if (ship.bullet != null && ship.bullet.Bounds.Intersects(enemy.Bounds))
-            {
-                _score.SetScore(enemy.GetPoint());
-                enemy.OnCollision(null);
-                ship.bullet.OnCollision(null);
-                explosion = new(spriteBatch, contentManager, enemy.Bounds.Position);
-            }
-        }
-
-        _enemies.RemoveAll(e => e.IsDead());
-
-        if (ship.bullet != null)
-        {
-            CollisionBulletAndBarricades(ship.bullet);
-        }
-
-        if (_redEnemy == null) return;
-
-        bool intersectBetweenRedEnemyAndBullet = ship.bullet.Bounds.Intersects(_redEnemy.Bounds);
-        bool spaceShipBulletExists = ship.bullet != null;
-
-        if (spaceShipBulletExists && intersectBetweenRedEnemyAndBullet)
-        {
-            _score.SetScore(_redEnemy.GetPoint());
-            _redEnemy.OnCollision(null);
-            explosion = new(spriteBatch, contentManager, _redEnemy.Bounds.Position);
-        }
-    }
 
     public override void Draw(GameTime gameTime)
     {
