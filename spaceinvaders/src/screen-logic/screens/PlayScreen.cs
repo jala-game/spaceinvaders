@@ -37,6 +37,7 @@ public class PlayScreen(
             LoadGameOverScreen();
             return;
         }
+
         PlayScreenUpdate playScreenUpdate = new() {
             enemies=_enemies,
             redEnemy=_redEnemy,
@@ -63,12 +64,12 @@ public class PlayScreen(
         playScreenUpdate.SpaceShipBulletUpdate();
         GenerateNewHordeOfEnemies();
         ColisionEnemyWithSpaceShip();
-        UpdateBarricades(gameTime);
+        playScreenUpdate.barricades.Update(gameTime);
 
         Explosion newExplosion = playScreenUpdate.GetExplosion();
         if (newExplosion != null) explosion = newExplosion;
-
         explosion?.Update(gameTime);
+
         base.Update(gameTime);
     }
 
@@ -76,11 +77,6 @@ public class PlayScreen(
         GameOverScreen gameOverScreen = new(game,graphics, contentManager, spriteBatch, _score.GetScore());
         ScreenManager.ChangeScreen(gameOverScreen);
         _barricades.Dispose();
-    }
-
-    private void UpdateBarricades(GameTime gameTime)
-    {
-        _barricades.Update(gameTime);
     }
 
     private void SpawnRedShip(GameTime gameTime)

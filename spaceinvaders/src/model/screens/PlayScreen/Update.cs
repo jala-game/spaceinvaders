@@ -120,7 +120,6 @@ public class PlayScreenUpdate() {
     {
         if (score.GetScore() >= addLifeManage)
         {
-            Console.WriteLine("Entrou aq");
             addLifeManage += 1000;
             ship.AddLifeForShip();
         }
