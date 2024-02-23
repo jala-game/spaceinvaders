@@ -145,13 +145,34 @@ public class LeaderBoardsScreen(
         if (!kstate.IsKeyDown(Keys.Enter)) return;
         switch (_chooseMenu)
         {
-            case 1:
+            case (int) EScreenMenuOptionsGameOver.LeaveGame:
+                LeaveTheGame();
                 break;
-            case 2:
+            case (int) EScreenMenuOptionsGameOver.LeftArrow:
+                ReturnPages();
                 break;
-            case 3:
+            case (int) EScreenMenuOptionsGameOver.RightArrow:
+                NextPages();
                 break;
         }
+    }
+    
+    private void LeaveTheGame()
+    {
+        MainScreen mainScreen = new MainScreen(game,graphics,contentManager,spriteBatch );
+        ScreenManager.ChangeScreen(mainScreen);
+    }
+
+    private void ReturnPages()
+    {
+        if (_page > 0) _page--;
+    }
+    
+    private void NextPages()
+    {
+        List<User> usersForDataBase = LocalStorage.GetUsersPaginator(10, _page + 1);
+        if (usersForDataBase.Count == 0) return;
+        _page++;
     }
     
     private void ModifyMenuSelection(KeyboardState kstate)
