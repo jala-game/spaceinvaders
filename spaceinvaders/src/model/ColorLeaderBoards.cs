@@ -12,7 +12,7 @@ public class ColorLeaderBoards
     
     public Color RandomColor(int numberOfColor)
     {
-        
+        if (numberOfColor > colors.Length || numberOfColor == -1) return Color.White;
         return colors[numberOfColor];
     }
 
