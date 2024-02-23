@@ -1,43 +1,46 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using spaceinvaders.model.barricades;
 
 namespace spaceinvaders.screen_logic.screens;
 
-public class GameControlScreen : GameScreenModel, IGameComponent
+public class GameControlScreen : GameScreenModel
 {
-    private readonly Game Game;
     private readonly SpriteFont _gameFont;
-    private readonly SpriteFont _gameFontSmall;
-    private readonly SpriteFont _gameDescription;
     private readonly SpriteBatch _spriteBatch;
     private readonly GraphicsDeviceManager _deviceManager;
+    private EControlOptions _selectedOption = EControlOptions.Left;
+    private readonly List<string> _listStrings = ["Left", "Right", "Shoot", "Exit"];
 
     public GameControlScreen(Game game)
     {
-        Game = game;
         _spriteBatch = game.Services.GetService<SpriteBatch>();
-        _deviceManager = Game.Services.GetService<GraphicsDeviceManager>();
-        _gameFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
-        _gameFontSmall = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
-        _gameDescription = game.Content.Load<SpriteFont>("fonts/PixeloidMono");
+        _deviceManager = game.Services.GetService<GraphicsDeviceManager>();
+        _gameFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
     }
 
-    public override void Initialize()
+    private void ModifyMenuSelection(KeyboardState kstate)
     {
-        var _listStrings
-        DrawNormalText();
-        base.Initialize();
+        float resetDelay = 10;
+        if (kstate.IsKeyDown(Keys.Up) && _selectedOption > 0)
+        {
+            _selectedOption--;
+        }
+        else if (kstate.IsKeyDown(Keys.Down) && (int)_selectedOption < 2)
+        {
+            _selectedOption++;
+        }
     }
 
     public override void Draw(GameTime gameTime)
     {
+        var height = _deviceManager.PreferredBackBufferHeight / 2;
+        var width = _deviceManager.PreferredBackBufferWidth / 2;
+        var middleOfScreen = new Rectangle(width, height, 0, 0);
+        DrawNormalText(_listStrings, middleOfScreen, 100);
         base.Draw(gameTime);
-    }
-
-    public override void Update(GameTime gameTime)
-    {
-        base.Update(gameTime);
     }
 
     private void DrawNormalText(string text, Rectangle textPosition, Color color)
@@ -51,21 +54,23 @@ public class GameControlScreen : GameScreenModel, IGameComponent
         DrawNormalText(text, textPosition, Color.White);
     }
 
-    private void DrawNormalText(List<string> texts, Rectangle textPosition, int gapX, int gapY, Color color)
+    private void DrawNormalText(List<string> texts, Rectangle textPosition, int gapY, Color color)
     {
-        var x = 0;
-        var y = 0;
+        var totalTextHeight = texts.Count * (_gameFont.LineSpacing + gapY) - gapY;
+        var startY = textPosition.Y + (textPosition.Height - totalTextHeight) / 2;
+
         foreach (var text in texts)
         {
-            _spriteBatch.DrawString(_gameFont, text,
-                new Vector2(textPosition.X + x, textPosition.Y + y), color);
-            x += gapX;
-            y += gapY;
+            var textWidth = _gameFont.MeasureString(text).X;
+            var startX = textPosition.X + (textPosition.Width - textWidth) / 2;
+            var newRectangle = new Rectangle((int)startX, startY, (int)textWidth, totalTextHeight);
+            DrawNormalText(text, newRectangle, color);
+            startY += _gameFont.LineSpacing + gapY;
         }
     }
 
-    private void DrawNormalText(List<string> texts, Rectangle textPosition, int gapX, int gapY)
+    private void DrawNormalText(List<string> texts, Rectangle textPosition, int gapY)
     {
-        DrawNormalText(texts, textPosition, gapX, gapY, Color.White);
+        DrawNormalText(texts, textPosition, gapY, Color.White);
     }
 }
