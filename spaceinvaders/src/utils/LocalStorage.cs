@@ -25,8 +25,10 @@ public class LocalStorage {
 
     public static List<User> GetUsersPaginator(int quantity, int page=0) {
         JArray data = JsonConvert.DeserializeObject<JArray>(jsonString);
+        
+        List<User> users = ConvertJsonToUserList(data).OrderByDescending(user => user.Score).ToList();
 
-        int totalUsers = data.Count;
+        int totalUsers = users.Count;
         int maxPage = (int)Math.Ceiling((double)totalUsers / quantity);
 
         if (page > maxPage)
@@ -41,10 +43,22 @@ public class LocalStorage {
         List<User> usersList = [];
         for (int i = startIndex; i < endIndex; i++)
         {
-            User user = data[i].ToObject<User>();
+            User user = users.ElementAt(i);
             usersList.Add(user);
         }
 
         return usersList;
+    }
+
+    private static List<User> ConvertJsonToUserList(JArray data)
+    {
+        List<User> users = new List<User>();
+
+        foreach (var userData in data)
+        {
+            users.Add(userData.ToObject<User>()); 
+        }
+
+        return users;
     }
 }

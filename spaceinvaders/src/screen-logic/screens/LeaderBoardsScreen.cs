@@ -65,7 +65,7 @@ public class LeaderBoardsScreen(
 
     private void DrawLeaderBoards()
     {
-        List<User> usersForDataBase = LocalStorage.GetUsersPaginator(10, _page).OrderByDescending(user => user.Score).ToList();
+        List<User> usersForDataBase = LocalStorage.GetUsersPaginator(10, _page);
         int positionY = 220;
         
         usersForDataBase.ForEach(user =>
