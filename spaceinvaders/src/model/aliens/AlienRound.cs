@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 
-public class AlienRound : IEnemyEntity
+public class AlienRound
 {
     public IShapeF Bounds { get; }
 
@@ -50,16 +50,6 @@ public class AlienRound : IEnemyEntity
         foreach (IEnemyEntity enemy in enemies) {
             enemy.Draw();
         }
-    }
-
-    public bool IsDead()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnCollision(CollisionEventArgs collisionInfo)
-    {
-        throw new System.NotImplementedException();
     }
 
     public void Update()
