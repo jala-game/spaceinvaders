@@ -23,6 +23,7 @@ public class LeaderBoardsScreen(
     private int _page = 0;
     private int _chooseMenu = 7;
     private float delayToPress = 10f;
+    private int _placingManage = 0;
     private ColorLeaderBoards _colors = new();
 
     public override void Initialize() { }
@@ -94,7 +95,7 @@ public class LeaderBoardsScreen(
             graphics.PreferredBackBufferWidth - 300
         };
 
-        string[] dataForUsers = new[] { $"{positionUserForLeaderBoardsScreen + 1}", $"{user.Score}", $"{user.Name}" };
+        string[] dataForUsers = new[] { $"{positionUserForLeaderBoardsScreen + 1 + _placingManage}", $"{user.Score}", $"{user.Name}" };
         
         for (int i = 0; i < positionX.Length; i++)
         {
@@ -166,6 +167,12 @@ public class LeaderBoardsScreen(
     private void ReturnPages()
     {
         if (_page > 0) _page--;
+        if (_page == 0)
+        {
+            _placingManage = 0;
+            return;
+        }
+        _placingManage -= 10;
     }
     
     private void NextPages()
@@ -173,6 +180,8 @@ public class LeaderBoardsScreen(
         List<User> usersForDataBase = LocalStorage.GetUsersPaginator(10, _page + 1);
         if (usersForDataBase.Count == 0) return;
         _page++;
+        _placingManage += 10;
+        
     }
     
     private void ModifyMenuSelection(KeyboardState kstate)
