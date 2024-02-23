@@ -22,7 +22,6 @@ public class PlayScreen(
     : GameScreenModel
 {
     private readonly List<IEnemyGroup> _enemies = new();
-    private readonly List<IEnemyEntity> _groupLogics = new();
     private RedEnemy _redEnemy;
     private int _initialTime;
     private readonly Score _score = new(graphics, spriteBatch, contentManager);
@@ -30,6 +29,7 @@ public class PlayScreen(
     private int _addLifeManage = 1000;
     private int _numberOfHordes = 0;
     private Explosion explosion = null;
+    private AlienRound alienRound = new(contentManager, spriteBatch, graphics);
 
     public override void Update(GameTime gameTime)
     {
@@ -69,11 +69,6 @@ public class PlayScreen(
             bullet.OnCollision(null);
             break;
         }
-    }
-
-    private void EnemiesLogicUpdate()
-    {
-        _groupLogics.ForEach(e => e.Update());
     }
 
     private void UpdateBarricades(GameTime gameTime)
@@ -185,6 +180,10 @@ public class PlayScreen(
         _redEnemy?.Update();
     }
 
+    private void EnemiesLogicUpdate() {
+        alienRound.Update();
+    }
+
     public override void Draw(GameTime gameTime)
     {
         ship.bullet?.Draw();
@@ -215,16 +214,17 @@ public class PlayScreen(
         spriteBatch.DrawString(spriteFont, $"LIFE {ship.GetLifes()}", new Vector2(50, 50), Color.White);
     }
 
+
+
+
     private void GenerateNewHordeOfEnemies()
     {
         if (_enemies.Count > 0) return;
-        _groupLogics.Clear();
-        AlienRound alienRound = new(contentManager, spriteBatch, graphics);
+        alienRound = new(contentManager, spriteBatch, graphics);
         alienRound.GetEnemies().ForEach(e =>
         {
             _enemies.Add(e);
         });
-        alienRound.GetLogics().ForEach(e => _groupLogics.Add(e));
         _numberOfHordes += 1;
     }
 
