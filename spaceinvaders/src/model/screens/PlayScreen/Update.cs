@@ -18,6 +18,7 @@ public class PlayScreenUpdate() {
     public SpriteBatch spriteBatch;
     public Barricades barricades;
     public Score score;
+    public AlienRound alienRound;
     private Explosion explosion = null;
 
     public void EnemiesUpdate() {

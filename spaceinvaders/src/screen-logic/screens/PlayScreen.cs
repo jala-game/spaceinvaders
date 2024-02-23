@@ -45,14 +45,15 @@ public class PlayScreen(
             graphics=graphics,
             spriteBatch=spriteBatch,
             barricades=_barricades,
-            score=_score
+            score=_score,
+            alienRound=alienRound
         };
         SpawnRedShip(gameTime);
         RemoveRedShip();
         playScreenUpdate.EnemiesUpdate();
-        alienRound.Update();
+        playScreenUpdate.alienRound.Update();
         playScreenUpdate.EnemyBulletUpdate();
-        ship.Update();
+        playScreenUpdate.ship.Update();
         UpdateLife();
         playScreenUpdate.SpaceShipBulletUpdate();
         GenerateNewHordeOfEnemies();
