@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using spaceinvaders.model;
 using spaceinvaders.model.barricades;
 
 namespace spaceinvaders.screen_logic.screens;
@@ -12,7 +15,13 @@ public class GameControlScreen : GameScreenModel
     private readonly SpriteBatch _spriteBatch;
     private readonly GraphicsDeviceManager _deviceManager;
     private EControlOptions _selectedOption = EControlOptions.Left;
-    private readonly List<string> _listStrings = ["Left", "Right", "Shoot", "Exit"];
+    private readonly List<ScreenText> _listStrings =
+    [
+        new ScreenText("Left", Color.White),
+        new ScreenText("Right", Color.White),
+        new ScreenText("Shoot", Color.White),
+        new ScreenText("Exit", Color.White)
+    ];
 
     public GameControlScreen(Game game)
     {
@@ -27,11 +36,30 @@ public class GameControlScreen : GameScreenModel
         if (kstate.IsKeyDown(Keys.Up) && _selectedOption > 0)
         {
             _selectedOption--;
+            Thread.Sleep(500);
         }
-        else if (kstate.IsKeyDown(Keys.Down) && (int)_selectedOption < 2)
+        else if (kstate.IsKeyDown(Keys.Down) && (int)_selectedOption < 3)
         {
             _selectedOption++;
+            Thread.Sleep(500);
         }
+        ModifyScreenText();
+    }
+
+    private void ModifyScreenText()
+    {
+        foreach (var text in _listStrings)
+        {
+            text.TextColor = Color.White;
+        }
+        _listStrings[(int)_selectedOption].TextColor = Color.Green;
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+        var keyboardState = Keyboard.GetState();
+        ModifyMenuSelection(keyboardState);
+        base.Update(gameTime);
     }
 
     public override void Draw(GameTime gameTime)
@@ -43,34 +71,24 @@ public class GameControlScreen : GameScreenModel
         base.Draw(gameTime);
     }
 
-    private void DrawNormalText(string text, Rectangle textPosition, Color color)
+    private void DrawNormalText(ScreenText text, Rectangle textPosition)
     {
-        _spriteBatch.DrawString(_gameFont, text,
-            new Vector2(textPosition.X, textPosition.Y), color);
+        _spriteBatch.DrawString(_gameFont, text.Text,
+            new Vector2(textPosition.X, textPosition.Y), text.TextColor);
     }
 
-    private void DrawNormalText(string text, Rectangle textPosition)
-    {
-        DrawNormalText(text, textPosition, Color.White);
-    }
-
-    private void DrawNormalText(List<string> texts, Rectangle textPosition, int gapY, Color color)
+    private void DrawNormalText(List<ScreenText> texts, Rectangle textPosition, int gapY)
     {
         var totalTextHeight = texts.Count * (_gameFont.LineSpacing + gapY) - gapY;
         var startY = textPosition.Y + (textPosition.Height - totalTextHeight) / 2;
 
         foreach (var text in texts)
         {
-            var textWidth = _gameFont.MeasureString(text).X;
+            var textWidth = _gameFont.MeasureString(text.Text).X;
             var startX = textPosition.X + (textPosition.Width - textWidth) / 2;
             var newRectangle = new Rectangle((int)startX, startY, (int)textWidth, totalTextHeight);
-            DrawNormalText(text, newRectangle, color);
+            DrawNormalText(text, newRectangle);
             startY += _gameFont.LineSpacing + gapY;
         }
-    }
-
-    private void DrawNormalText(List<string> texts, Rectangle textPosition, int gapY)
-    {
-        DrawNormalText(texts, textPosition, gapY, Color.White);
     }
 }
