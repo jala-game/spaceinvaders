@@ -13,8 +13,10 @@ public class AlienRound : IEnemyEntity
 
     private readonly GraphicsDeviceManager _graphics;
     private readonly SpriteBatch _spriteBatch;
-    private readonly List<IEnemyGroup> enemies = new();
-    private readonly List<IEnemyEntity> logics = new();
+    private readonly List<IEnemyGroup> enemies = [];
+    private readonly List<IEnemyEntity> logics = [];
+    private float SPEED = 1f;
+
 
     public AlienRound(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics) {
         _graphics = graphics;
@@ -38,24 +40,9 @@ public class AlienRound : IEnemyEntity
         .Concat(firstFrontQueue.GetEnemies())
         .Concat(secondFrontQueue.GetEnemies());
 
-        List<AlienQueue> allLogic = new()
-        {
-            shooterQueue,
-            firstBirdQueue,
-            secondBirdQueue,
-            firstFrontQueue,
-            secondFrontQueue
-        };
-
-
         foreach (var enemy in allEnemies) {
             enemies.Add(enemy);
         }
-
-        foreach (AlienQueue queue in allLogic) {
-            logics.Add(queue);
-        }
-
     }
 
     public void Draw()
@@ -77,16 +64,28 @@ public class AlienRound : IEnemyEntity
 
     public void Update()
     {
-        foreach (IEnemyGroup enemy in enemies)
-        {
-            enemy.Update();
+        foreach (IEnemyGroup enemy in enemies) {
+            enemy.IncreaseX(SPEED);
+            InvertDirectionAndFallIfEnemyLimitIsFilled(enemy);
+        }
+    }
+
+    private void InvertDirectionAndFallIfEnemyLimitIsFilled(IEnemyGroup enemy) {
+        bool rightLimit = enemy.Bounds.Position.X + enemy.GetTexture().Width >= _graphics.PreferredBackBufferWidth;
+        bool leftLimit = enemy.Bounds.Position.X <= 0;
+        if (rightLimit || leftLimit) {
+            enemies.ForEach(e => {
+                e.InvertDirection();
+                e.Fall();
+            });
+            SPEED+= 0.2f;
         }
     }
 
     public List<IEnemyGroup> GetEnemies() {
         return enemies;
     }
-    
+
     public List<IEnemyEntity> GetLogics() {
         return logics;
     }
