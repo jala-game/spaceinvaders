@@ -23,6 +23,13 @@ public class GameControlScreen : GameScreenModel, IGameComponent
         _gameDescription = game.Content.Load<SpriteFont>("fonts/PixeloidMono");
     }
 
+    public override void Initialize()
+    {
+        var _listStrings
+        DrawNormalText();
+        base.Initialize();
+    }
+
     public override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
@@ -44,12 +51,21 @@ public class GameControlScreen : GameScreenModel, IGameComponent
         DrawNormalText(text, textPosition, Color.White);
     }
 
-    private void DrawNormalText(List<string> texts, Rectangle textPosition, int gapX, int gapY)
+    private void DrawNormalText(List<string> texts, Rectangle textPosition, int gapX, int gapY, Color color)
     {
+        var x = 0;
+        var y = 0;
         foreach (var text in texts)
         {
             _spriteBatch.DrawString(_gameFont, text,
-                new Vector2(textPosition.X, textPosition.Y), Color.White);
+                new Vector2(textPosition.X + x, textPosition.Y + y), color);
+            x += gapX;
+            y += gapY;
         }
+    }
+
+    private void DrawNormalText(List<string> texts, Rectangle textPosition, int gapX, int gapY)
+    {
+        DrawNormalText(texts, textPosition, gapX, gapY, Color.White);
     }
 }
