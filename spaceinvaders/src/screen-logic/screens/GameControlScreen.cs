@@ -28,10 +28,20 @@ public class GameControlScreen : GameScreenModel, IGameComponent
         base.Draw(gameTime);
     }
 
-    private void DrawNormalText(string text, Rectangle textPosition)
+    public override void Update(GameTime gameTime)
+    {
+        base.Update(gameTime);
+    }
+
+    private void DrawNormalText(string text, Rectangle textPosition, Color color)
     {
         _spriteBatch.DrawString(_gameFont, text,
-            new Vector2(textPosition.X, textPosition.Y), Color.White);
+            new Vector2(textPosition.X, textPosition.Y), color);
+    }
+
+    private void DrawNormalText(string text, Rectangle textPosition)
+    {
+        DrawNormalText(text, textPosition, Color.White);
     }
 
     private void DrawNormalText(List<string> texts, Rectangle textPosition, int gapX, int gapY)
@@ -41,10 +51,5 @@ public class GameControlScreen : GameScreenModel, IGameComponent
             _spriteBatch.DrawString(_gameFont, text,
                 new Vector2(textPosition.X, textPosition.Y), Color.White);
         }
-    }
-
-    public override void Update(GameTime gameTime)
-    {
-        base.Update(gameTime);
     }
 }

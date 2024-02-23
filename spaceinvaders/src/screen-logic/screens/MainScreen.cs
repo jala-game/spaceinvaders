@@ -27,10 +27,10 @@ public class MainScreen(
     public override void Update(GameTime gameTime)
     {
         var kstate = Keyboard.GetState();
-        
+
         delayToPress--;
         if (delayToPress > 0) return;
-        
+
         ModifyMenuSelection(kstate);
         SendMenuOption(kstate);
 
@@ -42,7 +42,7 @@ public class MainScreen(
         DrawMenu();
         DrawDescription();
         DrawItemMenuActive();
-        
+
     }
 
     private void ModifyMenuSelection(KeyboardState kstate)
@@ -53,7 +53,7 @@ public class MainScreen(
             _selectedOption--;
             delayToPress = resetDelay;
         }
-        
+
         if (kstate.IsKeyDown(Keys.Down) && _selectedOption < 3)
         {
             _selectedOption++;
@@ -72,17 +72,11 @@ public class MainScreen(
             case 2:
                 break;
             case 3:
+                ControlScreen();
                 break;
         }
     }
 
-    private void StartGame()
-    {
-        SpaceShip spaceShip = new(graphics, spriteBatch, contentManager);
-        PlayScreen playScreen = new(game,spaceShip, graphics, contentManager, spriteBatch);
-        ScreenManager.ChangeScreen(playScreen);
-    }
-    
     private void DrawTitle()
     {
         string text = "Space Invaders";
@@ -94,12 +88,25 @@ public class MainScreen(
     {
         List<string> stringsMenu = new List<string>() {"  Play Game","  View Leaderboards","  Game Control" };
         int baseY = 400;
-        
+
         stringsMenu.ForEach(e =>
         {
             DrawMenuItem(e, baseY, null);
             baseY += 100;
         });
+    }
+
+    private void StartGame()
+    {
+        SpaceShip spaceShip = new(graphics, spriteBatch, contentManager);
+        PlayScreen playScreen = new(game,spaceShip, graphics, contentManager, spriteBatch);
+        ScreenManager.ChangeScreen(playScreen);
+    }
+
+    private void ControlScreen()
+    {
+        GameControlScreen gameControlScreen = new(game);
+        ScreenManager.ChangeScreen(gameControlScreen);
     }
 
     private void DrawMenuItem(string text, int y, Color? color)
@@ -131,7 +138,7 @@ public class MainScreen(
         float textWidth = _gameDescription.MeasureString(text).X / 2;
         spriteBatch.DrawString(_gameDescription, text, new Vector2(100,graphics.PreferredBackBufferHeight - 100), Color.White);
     }
-    
+
 }
 
 
