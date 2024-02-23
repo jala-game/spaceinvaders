@@ -71,9 +71,9 @@ public class AlienRound : IEnemyEntity
     }
 
     private void InvertDirectionAndFallIfEnemyLimitIsFilled(IEnemyGroup enemy) {
-        bool rightLimit = enemy.Bounds.Position.X + enemy.GetTexture().Width >= _graphics.PreferredBackBufferWidth;
-        bool leftLimit = enemy.Bounds.Position.X <= 0;
-        if ((rightLimit || leftLimit) && !enemy.IsDead()) {
+        bool isRightLimited = enemy.Bounds.Position.X + enemy.GetTexture().Width >= _graphics.PreferredBackBufferWidth;
+        bool isLeftLimited = enemy.Bounds.Position.X <= 0;
+        if ((isRightLimited || isLeftLimited) && !enemy.IsDead()) {
             enemies.ForEach(e => {
                 e.InvertDirection();
                 e.Fall();
