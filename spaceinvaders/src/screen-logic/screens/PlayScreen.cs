@@ -21,7 +21,7 @@ public class PlayScreen(
     SpriteBatch spriteBatch)
     : GameScreenModel
 {
-    private readonly List<IEnemyGroup> _enemies = new();
+    private readonly List<IEnemyGroup> _enemies = [];
     private RedEnemy _redEnemy;
     private int _initialTime;
     private readonly Score _score = new(graphics, spriteBatch, contentManager);
@@ -33,16 +33,24 @@ public class PlayScreen(
 
     public override void Update(GameTime gameTime)
     {
-        PlayScreenUpdate playScreenUpdate = new(_enemies, _redEnemy);
         if (ship.GetIsDead()) {
             LoadGameOverScreen();
             return;
         }
+        PlayScreenUpdate playScreenUpdate = new() {
+            enemies=_enemies,
+            redEnemy=_redEnemy,
+            ship=ship,
+            contentManager=contentManager,
+            graphics=graphics,
+            spriteBatch=spriteBatch,
+            barricades=_barricades
+        };
         SpawnRedShip(gameTime);
         RemoveRedShip();
         playScreenUpdate.EnemiesUpdate();
-        EnemiesLogicUpdate();
-        EnemyBulletUpdate();
+        alienRound.Update();
+        playScreenUpdate.EnemyBulletUpdate();
         ship.Update();
         UpdateLife();
         SpaceShipBulletUpdate();
@@ -141,37 +149,6 @@ public class PlayScreen(
             _redEnemy.OnCollision(null);
             explosion = new(spriteBatch, contentManager, _redEnemy.Bounds.Position);
         }
-    }
-
-    private void EnemyBulletUpdate()
-    {
-        foreach (IEnemyGroup enemy in _enemies)
-        {
-            Bullet bullet = enemy.GetBullet();
-            bullet?.Update();
-
-            if (bullet != null && bullet.Bounds.Intersects(ship.Bounds))
-            {
-                bullet.OnCollision(null);
-                ship.OnCollision(null);
-                explosion = new(spriteBatch, contentManager, ship.Bounds.Position);
-            }
-
-            if (bullet != null && bullet.Bounds.Intersects(ship.bullet?.Bounds))
-            {
-                bullet.OnCollision(null);
-                ship.bullet.OnCollision(null);
-            }
-
-            if (bullet != null)
-            {
-                CollisionBulletAndBarricades(bullet);
-            }
-        }
-    }
-
-    private void EnemiesLogicUpdate() {
-        alienRound.Update();
     }
 
     public override void Draw(GameTime gameTime)
