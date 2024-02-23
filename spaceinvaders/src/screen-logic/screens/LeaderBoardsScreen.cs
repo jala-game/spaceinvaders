@@ -4,6 +4,8 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Collections;
+using spaceinvaders.model;
 
 namespace spaceinvaders.screen_logic.screens;
 
@@ -17,9 +19,10 @@ public class LeaderBoardsScreen(
     private SpriteFont _title = game.Content.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
     private SpriteFont _genericFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
     private int _page = 0;
-    
+    private ColorLeaderBoards _colors = new();
+
     public override void Initialize() { }
-    
+
     public override void LoadContent() { }
 
     public override void Update(GameTime gameTime)
@@ -67,7 +70,7 @@ public class LeaderBoardsScreen(
         
         usersForDataBase.ForEach(user =>
         {
-            DrawUsers(user, Color.White, positionY, usersForDataBase.IndexOf(user));
+            DrawUsers(user,_colors.RandomColor(usersForDataBase.IndexOf(user)) , positionY, usersForDataBase.IndexOf(user));
             positionY += 50;
         });
     }
@@ -86,15 +89,5 @@ public class LeaderBoardsScreen(
             spriteBatch.DrawString(_genericFont,dataForUsers[i],new Vector2(positionX[i],y),color);
         }
         
-    }
-    
-    
-
-    private Color RandomColor()
-    {
-        Color[] colors = new[] { Color.White, Color.Red, Color.Yellow, Color.Orange, Color.Green, Color.Cyan, Color.Blue};
-        Random random = new Random();
-
-        return colors[random.Next(0, colors.Length)];
     }
 }
