@@ -88,18 +88,21 @@ public class LeaderBoardsScreen(
         });
     }
 
-    private void DrawUsers(User user, Color color, int y,int positionUserForLeaderBoardsScreen)
+    private void DrawUsers(User user, Color color, int y,int positionUser)
     {
         float[] positionX = new[] { graphics.PreferredBackBufferWidth / 2 - 600, 
             graphics.PreferredBackBufferWidth / 2 - (_genericFont.MeasureString("SCORE").X / 2),
             graphics.PreferredBackBufferWidth - 300
         };
 
-        string[] dataForUsers = new[] { $"{positionUserForLeaderBoardsScreen + 1 + _placingManage}", $"{user.Score}", $"{user.Name}" };
+        string[] placingOptions = new[] { "ST","ND","RD","TH"};
+        string placingPosition = positionUser > 3 ? placingOptions[3] : placingOptions[positionUser];
+
+        string[] dataForUser = new[] { $"{positionUser + 1 + _placingManage}{placingPosition}", $"{user.Score}", $"{user.Name}" };
         
         for (int i = 0; i < positionX.Length; i++)
         {
-            spriteBatch.DrawString(_genericFont,dataForUsers[i],new Vector2(positionX[i],y),color);
+            spriteBatch.DrawString(_genericFont,dataForUser[i],new Vector2(positionX[i],y),color);
         }
         
     }
