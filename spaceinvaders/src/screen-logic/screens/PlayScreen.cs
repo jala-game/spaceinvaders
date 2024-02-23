@@ -33,13 +33,14 @@ public class PlayScreen(
 
     public override void Update(GameTime gameTime)
     {
+        PlayScreenUpdate playScreenUpdate = new(_enemies, _redEnemy);
         if (ship.GetIsDead()) {
             LoadGameOverScreen();
             return;
         }
         SpawnRedShip(gameTime);
         RemoveRedShip();
-        EnemiesUpdate();
+        playScreenUpdate.EnemiesUpdate();
         EnemiesLogicUpdate();
         EnemyBulletUpdate();
         ship.Update();
@@ -167,17 +168,6 @@ public class PlayScreen(
                 CollisionBulletAndBarricades(bullet);
             }
         }
-    }
-
-
-    private void EnemiesUpdate()
-    {
-        foreach (IEnemyGroup enemy in _enemies)
-        {
-            enemy.Update();
-        }
-
-        _redEnemy?.Update();
     }
 
     private void EnemiesLogicUpdate() {
