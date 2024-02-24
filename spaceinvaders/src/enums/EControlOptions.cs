@@ -6,5 +6,7 @@ public enum EControlOptions
     Right = 1,
     Shoot = 2,
     Exit = 3,
+    KeyD = 4,
+    KeyA = 5,
     None
 }
