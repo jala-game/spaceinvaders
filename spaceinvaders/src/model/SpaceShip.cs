@@ -5,12 +5,16 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
+using spaceinvaders.model;
 
 public class SpaceShip : Entity {
     public readonly Texture2D texture;
     private readonly GraphicsDeviceManager graphics;
     private readonly SpriteBatch _spriteBatch;
     private readonly ContentManager _contentManager;
+    private readonly Keys _keysLeft;
+    private readonly Keys _keysRight;
+    private readonly Keys _keysShoot;
 
     public IShapeF Bounds { get; }
     public Bullet bullet;
@@ -59,7 +63,7 @@ public class SpaceShip : Entity {
 
     private void MoveToRight(KeyboardState kstate) {
         bool rightLimit = graphics.PreferredBackBufferWidth > Bounds.Position.X + texture.Width;
-        if ((kstate.IsKeyDown(Keys.D) || kstate.IsKeyDown(Keys.Right)) && rightLimit) {
+        if (kstate.IsKeyDown(SpaceShipMovementKeys.Right) && rightLimit) {
             Vector2 newPosition = new(PLAYER_SPEED + Bounds.Position.X, Bounds.Position.Y);
             Bounds.Position = newPosition;
         }
@@ -67,14 +71,14 @@ public class SpaceShip : Entity {
 
     private void MoveToLeft(KeyboardState kstate) {
         bool leftLimit = 0 < Bounds.Position.X;
-        if ((kstate.IsKeyDown(Keys.A) || kstate.IsKeyDown(Keys.Left)) && leftLimit) {
+        if (kstate.IsKeyDown(SpaceShipMovementKeys.Left) && leftLimit) {
             Vector2 newPosition = new(Bounds.Position.X - PLAYER_SPEED, Bounds.Position.Y);
             Bounds.Position = newPosition;
         };
     }
 
     private void Shoot(KeyboardState kstate) {
-        if (kstate.IsKeyDown(Keys.Space) && bullet == null) {
+        if (kstate.IsKeyDown(SpaceShipMovementKeys.Shoot) && bullet == null) {
             Texture2D bulletTexture = _contentManager.Load<Texture2D>("red-bullet");
             bullet = new Bullet(Bounds.Position, bulletTexture, _spriteBatch, graphics, texture.Width, TypeBulletEnum.PLAYER);
         }

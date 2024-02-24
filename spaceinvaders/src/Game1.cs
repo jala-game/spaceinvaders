@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using spaceinvaders.screen_logic.screens;
@@ -36,7 +37,6 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         _background = Content.Load<Texture2D>("background");
-        Content.Load<Texture2D>("barricades/barricade");
         Content.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
         Content.Load<SpriteFont>("fonts/PixeloidMono");
         Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");

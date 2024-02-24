@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using spaceinvaders.model;
+using spaceinvaders.model.barricades;
 using spaceinvaders.screen_logic.screens;
 
 public class MainScreen(
@@ -16,7 +18,7 @@ public class MainScreen(
     private SpriteFont _gameFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
     private SpriteFont _gameFontSmall = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
     private SpriteFont _gameDescription = game.Content.Load<SpriteFont>("fonts/PixeloidMono");
-    private int _selectedOption = 1;
+    private EMenuScreenOptions _selectedOption = EMenuScreenOptions.Play;
     private float delayToPress = 10f;
     public override void Initialize() { }
 
@@ -27,10 +29,10 @@ public class MainScreen(
     public override void Update(GameTime gameTime)
     {
         var kstate = Keyboard.GetState();
-        
+
         delayToPress--;
         if (delayToPress > 0) return;
-        
+
         ModifyMenuSelection(kstate);
         SendMenuOption(kstate);
 
@@ -42,19 +44,17 @@ public class MainScreen(
         DrawMenu();
         DrawDescription();
         DrawItemMenuActive();
-        
     }
 
     private void ModifyMenuSelection(KeyboardState kstate)
     {
         float resetDelay = 10;
-        if (kstate.IsKeyDown(Keys.Up) && _selectedOption > 1)
+        if (kstate.IsKeyDown(Keys.Up) && _selectedOption > 0)
         {
             _selectedOption--;
             delayToPress = resetDelay;
         }
-        
-        if (kstate.IsKeyDown(Keys.Down) && _selectedOption < 3)
+        else if (kstate.IsKeyDown(Keys.Down) && (int)_selectedOption < 2)
         {
             _selectedOption++;
             delayToPress = resetDelay;
@@ -66,13 +66,14 @@ public class MainScreen(
         if (!kstate.IsKeyDown(Keys.Enter)) return;
         switch (_selectedOption)
         {
-            case 1:
+            case EMenuScreenOptions.Play:
                 StartGame();
                 break;
-            case 2:
+            case EMenuScreenOptions.Leaderboard:
                 LeaderBoardsStart();
                 break;
-            case 3:
+            case EMenuScreenOptions.Controls:
+                ControlScreen();
                 break;
         }
     }
@@ -89,7 +90,13 @@ public class MainScreen(
         LeaderBoardsScreen leaderBoardsScreen = new LeaderBoardsScreen(game, graphics, contentManager, spriteBatch);
         ScreenManager.ChangeScreen(leaderBoardsScreen);
     }
-    
+
+    private void ControlScreen()
+    {
+        GameControlScreen gameControlScreen = new(game);
+        ScreenManager.ChangeScreen(gameControlScreen);
+    }
+
     private void DrawTitle()
     {
         string text = "Space Invaders";
@@ -101,7 +108,7 @@ public class MainScreen(
     {
         List<string> stringsMenu = new List<string>() {"  Play Game","  View Leaderboards","  Game Control" };
         int baseY = 400;
-        
+
         stringsMenu.ForEach(e =>
         {
             DrawMenuItem(e, baseY, null);
@@ -120,13 +127,13 @@ public class MainScreen(
     {
         switch (_selectedOption)
         {
-            case 1:
+            case EMenuScreenOptions.Play:
                 DrawMenuItem("> Play Game", 400, Color.Green);
                 break;
-            case 2:
+            case EMenuScreenOptions.Leaderboard:
                 DrawMenuItem("> View Leaderboards", 500,Color.Green);
                 break;
-            case 3:
+            case EMenuScreenOptions.Controls:
                 DrawMenuItem("> Game Control", 600,Color.Green);
                 break;
         }
@@ -138,7 +145,7 @@ public class MainScreen(
         float textWidth = _gameDescription.MeasureString(text).X / 2;
         spriteBatch.DrawString(_gameDescription, text, new Vector2(100,graphics.PreferredBackBufferHeight - 100), Color.White);
     }
-    
+
 }
 
 
