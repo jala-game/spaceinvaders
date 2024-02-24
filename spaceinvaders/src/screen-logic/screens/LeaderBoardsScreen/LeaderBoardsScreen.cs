@@ -21,7 +21,7 @@ public class LeaderBoardsScreen(
     private SpriteFont _title = game.Content.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
     private SpriteFont _genericFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
     private int _page = 0;
-    private int _chooseMenu = 7;
+    private EScreenMenuOptionsGameOver _chooseMenu = EScreenMenuOptionsGameOver.RightArrow;
     private float delayToPress = 10f;
     private int _placingManage = 0;
     private ColorLeaderBoards _colors = new();
@@ -132,13 +132,13 @@ public class LeaderBoardsScreen(
     {
         switch (_chooseMenu)
         {
-            case (int) EScreenMenuOptionsGameOver.LeaveGame:
+            case  EScreenMenuOptionsGameOver.LeaveGame:
                 DrawMenuItem(100, "> Back", Color.Green);
                 break;
-            case (int) EScreenMenuOptionsGameOver.RightArrow:
+            case EScreenMenuOptionsGameOver.RightArrow:
                 DrawMenuItem(graphics.PreferredBackBufferWidth/2 - (_genericFont.MeasureString($">").X / 2) + 70, ">", Color.Green);
                 break;
-            case (int) EScreenMenuOptionsGameOver.LeftArrow:
+            case EScreenMenuOptionsGameOver.LeftArrow:
                 DrawMenuItem(graphics.PreferredBackBufferWidth/2 - (_genericFont.MeasureString($"<").X / 2) - 70, "<", Color.Green);
                 break;
         }
@@ -151,14 +151,14 @@ public class LeaderBoardsScreen(
         if (!kstate.IsKeyDown(Keys.Enter)) return;
         switch (_chooseMenu)
         {
-            case (int) EScreenMenuOptionsGameOver.LeaveGame:
+            case EScreenMenuOptionsGameOver.LeaveGame:
                 LeaveTheGame();
                 break;
-            case (int) EScreenMenuOptionsGameOver.LeftArrow:
+            case EScreenMenuOptionsGameOver.LeftArrow:
                 ReturnPages();
                 delayToPress = 10;
                 break;
-            case (int) EScreenMenuOptionsGameOver.RightArrow:
+            case EScreenMenuOptionsGameOver.RightArrow:
                 NextPages();
                 delayToPress = 10;
                 break;
@@ -193,13 +193,13 @@ public class LeaderBoardsScreen(
     private void ModifyMenuSelection(KeyboardState kstate)
     {
         float resetDelay = 10;
-        if (kstate.IsKeyDown(Keys.Left) && _chooseMenu > 5)
+        if (kstate.IsKeyDown(Keys.Left) && _chooseMenu > EScreenMenuOptionsGameOver.LeaveGame)
         {
             _chooseMenu--;
             delayToPress = resetDelay;
         }
         
-        if (kstate.IsKeyDown(Keys.Right) && _chooseMenu < 7)
+        if (kstate.IsKeyDown(Keys.Right) && _chooseMenu < EScreenMenuOptionsGameOver.RightArrow)
         {
             _chooseMenu++;
             delayToPress = resetDelay;
