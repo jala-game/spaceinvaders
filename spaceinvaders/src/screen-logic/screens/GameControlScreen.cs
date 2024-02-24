@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -19,7 +18,7 @@ public class GameControlScreen : GameScreenModel
 
     private EControlOptions _selectedOption = EControlOptions.Left;
 
-    private const float MenuMoveDelay = 0.2f;
+    private const float MenuMoveDelay = 0.15f;
 
     private float _menuMoveTimer;
 
@@ -44,21 +43,64 @@ public class GameControlScreen : GameScreenModel
 
         if (!(_menuMoveTimer >= MenuMoveDelay)) return;
 
-        // Verifica se as teclas de seta para cima ou para baixo foram pressionadas e se o timer já foi reiniciado
-        if (kstate.IsKeyDown(Keys.Down) && (int)_selectedOption <  3 && _menuMoveTimer >= MenuMoveDelay)
+        if (kstate.IsKeyDown(Keys.Enter))
+        {
+            HandleEnterKeyPress();
+        }
+        else if (kstate.IsKeyDown(Keys.Down) && (int)_selectedOption < 3 && _menuMoveTimer >= MenuMoveDelay)
         {
             _selectedOption++;
-            _menuMoveTimer =  0f; // Reinicia o timer após a mudança de seleção
+            _menuMoveTimer = 0f;
         }
-        else if (kstate.IsKeyDown(Keys.Up) && _selectedOption >  0 && _menuMoveTimer >= MenuMoveDelay)
+        else if (kstate.IsKeyDown(Keys.Up) && _selectedOption > 0 && _menuMoveTimer >= MenuMoveDelay)
         {
             _selectedOption--;
-            _menuMoveTimer =  0f; // Reinicia o timer após a mudança de seleção
+            _menuMoveTimer = 0f;
         }
 
         ModifyScreenText();
     }
 
+    private void HandleEnterKeyPress()
+    {
+        // Determine the currently selected option
+        var selectedOption = _selectedOption;
+
+        // Depending on the selected option, prompt for the new key and save it
+        switch (selectedOption)
+        {
+            case EControlOptions.Left:
+                SpaceShipMovementKeys.Left = AwaitNextKeyPress();
+                break;
+            case EControlOptions.Right:
+                SpaceShipMovementKeys.Right = AwaitNextKeyPress();
+                break;
+            case EControlOptions.Shoot:
+                SpaceShipMovementKeys.Shoot = AwaitNextKeyPress();
+                break;
+            case EControlOptions.Exit:
+
+                break;
+            default:
+                // Handle invalid selection
+                break;
+        }
+    }
+
+    private Keys AwaitNextKeyPress()
+    {
+        while (true)
+        {
+            var kstate = Keyboard.GetState();
+            foreach (Keys key in Enum.GetValues(typeof(Keys)))
+            {
+                if (kstate.IsKeyDown(key))
+                {
+                    return key;
+                }
+            }
+        }
+    }
 
     private void ModifyScreenText()
     {
@@ -68,6 +110,7 @@ public class GameControlScreen : GameScreenModel
             {
                 text.Text = text.Text.Substring(2);
             }
+
             text.TextColor = Color.White;
         }
 
@@ -75,7 +118,6 @@ public class GameControlScreen : GameScreenModel
         screenTextToBeModified.Text = "> " + screenTextToBeModified.Text;
         screenTextToBeModified.TextColor = Color.Green;
     }
-
 
     public override void Update(GameTime gameTime)
     {
