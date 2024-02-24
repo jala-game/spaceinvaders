@@ -23,17 +23,11 @@ public class SoundEffects
             case ESoundsEffects.SpaceShipDead:
                 soundEffect = game.Content.Load<Song>("songs/explosion");
                 break;
-            case ESoundsEffects.EnemyMoving:
-                soundEffect = game.Content.Load<Song>("songs/fastinvader1");
-                break;
             case ESoundsEffects.EnemyDead:
-                soundEffect = game.Content.Load<Song>("songs/invaderkilled");
+                soundEffect = game.Content.Load<Song>("songs/enemyExplosion");
                 break;
             case ESoundsEffects.ShootSpaceShip:
                 soundEffect = game.Content.Load<Song>("songs/shoot");
-                break;
-            case ESoundsEffects.ShootEnemy:
-                soundEffect = game.Content.Load<Song>("songs/shootEnemy");
                 break;
         }
 
