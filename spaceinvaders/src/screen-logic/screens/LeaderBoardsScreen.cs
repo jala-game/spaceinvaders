@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Collections;
 using spaceinvaders.model;
+using spaceinvaders.model.barricades;
 using spaceinvaders.services;
 
 namespace spaceinvaders.screen_logic.screens;
@@ -21,7 +22,7 @@ public class LeaderBoardsScreen(
     private SpriteFont _title = game.Content.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
     private SpriteFont _genericFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
     private int _page = 0;
-    private EScreenMenuOptionsGameOver _chooseMenu = EScreenMenuOptionsGameOver.RightArrow;
+    private EMenuOptionsLeaderBoards _chooseMenu = EMenuOptionsLeaderBoards.RightArrow;
     private float delayToPress = 10f;
     private int _placingManage = 0;
     private ColorLeaderBoards _colors = new();
@@ -132,13 +133,13 @@ public class LeaderBoardsScreen(
     {
         switch (_chooseMenu)
         {
-            case  EScreenMenuOptionsGameOver.LeaveGame:
+            case  EMenuOptionsLeaderBoards.LeaveGame:
                 DrawMenuItem(100, "> Back", Color.Green);
                 break;
-            case EScreenMenuOptionsGameOver.RightArrow:
+            case EMenuOptionsLeaderBoards.RightArrow:
                 DrawMenuItem(graphics.PreferredBackBufferWidth/2 - (_genericFont.MeasureString($">").X / 2) + 70, ">", Color.Green);
                 break;
-            case EScreenMenuOptionsGameOver.LeftArrow:
+            case EMenuOptionsLeaderBoards.LeftArrow:
                 DrawMenuItem(graphics.PreferredBackBufferWidth/2 - (_genericFont.MeasureString($"<").X / 2) - 70, "<", Color.Green);
                 break;
         }
@@ -151,14 +152,14 @@ public class LeaderBoardsScreen(
         if (!kstate.IsKeyDown(Keys.Enter)) return;
         switch (_chooseMenu)
         {
-            case EScreenMenuOptionsGameOver.LeaveGame:
+            case EMenuOptionsLeaderBoards.LeaveGame:
                 LeaveTheGame();
                 break;
-            case EScreenMenuOptionsGameOver.LeftArrow:
+            case EMenuOptionsLeaderBoards.LeftArrow:
                 ReturnPages();
                 delayToPress = 10;
                 break;
-            case EScreenMenuOptionsGameOver.RightArrow:
+            case EMenuOptionsLeaderBoards.RightArrow:
                 NextPages();
                 delayToPress = 10;
                 break;
@@ -193,13 +194,13 @@ public class LeaderBoardsScreen(
     private void ModifyMenuSelection(KeyboardState kstate)
     {
         float resetDelay = 10;
-        if (kstate.IsKeyDown(Keys.Left) && _chooseMenu > EScreenMenuOptionsGameOver.LeaveGame)
+        if (kstate.IsKeyDown(Keys.Left) && _chooseMenu > EMenuOptionsLeaderBoards.LeaveGame)
         {
             _chooseMenu--;
             delayToPress = resetDelay;
         }
         
-        if (kstate.IsKeyDown(Keys.Right) && _chooseMenu < EScreenMenuOptionsGameOver.RightArrow)
+        if (kstate.IsKeyDown(Keys.Right) && _chooseMenu < EMenuOptionsLeaderBoards.RightArrow)
         {
             _chooseMenu++;
             delayToPress = resetDelay;
