@@ -40,13 +40,13 @@ public class Game1 : Game
         Content.Load<SpriteFont>("fonts/PixeloidMono");
         Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
         
-        Content.Load<Song>("songs/backgroundSong");
-        Content.Load<Song>("songs/backgroundSongForMenus");
-        /*Content.Load<Song>("songs/explosion");
-        Content.Load<Song>("songs/fastinvader1");
-        Content.Load<Song>("songs/invaderkilled");
-        Content.Load<Song>("songs/shoot");
-        Content.Load<Song>("songs/shootEnemy");*/
+        // Content.Load<Song>("songs/backgroundSong");
+        // Content.Load<Song>("songs/backgroundSongForMenus");
+        // // /*Content.Load<Song>("songs/explosion");
+        // // Content.Load<Song>("songs/fastinvader1");
+        // // Content.Load<Song>("songs/invaderkilled");
+        // // Content.Load<Song>("songs/shoot");
+        // // Content.Load<Song>("songs/shootEnemy");*/
     }
 
     private void LoadScreenManager() {

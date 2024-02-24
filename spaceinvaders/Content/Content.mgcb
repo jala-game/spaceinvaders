@@ -37,18 +37,6 @@
 /processorParam:TextureFormat=Color
 /build:aliens/front-alien-ship.png
 
-#begin aliens/red-alien-ship.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:aliens/red-alien-ship.png
-
 #begin aliens/shooter-alien-ship.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -186,18 +174,6 @@
 /processorParam:Quality=Best
 /build:songs/backgroundSong.mp3
 
-#begin songs/backgroundSong.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:songs/backgroundSong.mp3
-
-#begin songs/backgroundSongForMenus.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:songs/backgroundSongForMenus.mp3
-
 #begin songs/backgroundSongForMenus.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
@@ -210,27 +186,9 @@
 /processorParam:Quality=Best
 /build:songs/explosion.mp3
 
-#begin songs/fastinvader1.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:songs/fastinvader1.mp3
-
-#begin songs/invaderkilled.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:songs/invaderkilled.mp3
-
 #begin songs/shoot.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:songs/shoot.mp3
-
-#begin songs/shootEnemy.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:songs/shootEnemy.mp3
 

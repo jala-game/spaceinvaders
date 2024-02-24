@@ -8,9 +8,9 @@ namespace spaceinvaders.model.sounds;
 
 public class SoundEffects
 {
-    private static Song? LoadSounds(Game game, ESoundsEffects effec)
+    private static Song LoadSounds(Game game, ESoundsEffects effec)
     {
-        Song? soundEffect = null;
+        Song soundEffect = null;
 
         switch (effec)
         {
