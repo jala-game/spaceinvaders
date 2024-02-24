@@ -74,7 +74,7 @@ public static class SpaceShipMovementKeys
             Keys.Left => EControlOptions.Left,
             Keys.Right => EControlOptions.Right,
             Keys.A => EControlOptions.KeyA,
-            Keys.V => EControlOptions.KeyD,
+            Keys.D => EControlOptions.KeyD,
             Keys.Space => EControlOptions.Shoot,
             _ => EControlOptions.None
         };
