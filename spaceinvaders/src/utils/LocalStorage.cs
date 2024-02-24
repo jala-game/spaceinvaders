@@ -53,14 +53,21 @@ public class LocalStorage {
 
     private static List<User> ConvertJsonToUserList(JArray data)
     {
-        List<User> users = new List<User>();
-
-        foreach (var userData in data)
+        try
         {
-            users.Add(userData.ToObject<User>()); 
-        }
+            List<User> users = new List<User>();
+            
+            foreach (var userData in data)
+            {
+                users.Add(userData.ToObject<User>());
+            }
 
-        return users;
+            return users;
+        }
+        catch (Exception e)
+        {
+            throw new Exception("Error reading json file");
+        }
     }
 
     private static string JsonString()
