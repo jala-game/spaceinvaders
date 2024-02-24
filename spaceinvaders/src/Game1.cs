@@ -1,8 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using spaceinvaders.screen_logic.screens;
+using Microsoft.Xna.Framework.Media;
 
 namespace spaceinvaders;
 
@@ -40,6 +39,14 @@ public class Game1 : Game
         Content.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
         Content.Load<SpriteFont>("fonts/PixeloidMono");
         Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
+        
+        Content.Load<Song>("songs/backgroundSong");
+        Content.Load<Song>("songs/backgroundSongForMenus");
+        /*Content.Load<Song>("songs/explosion");
+        Content.Load<Song>("songs/fastinvader1");
+        Content.Load<Song>("songs/invaderkilled");
+        Content.Load<Song>("songs/shoot");
+        Content.Load<Song>("songs/shootEnemy");*/
     }
 
     private void LoadScreenManager() {

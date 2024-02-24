@@ -80,7 +80,7 @@ public class MainScreen(
 
     private void StartGame()
     {
-        SpaceShip spaceShip = new(graphics, spriteBatch, contentManager);
+        SpaceShip spaceShip = new(graphics, spriteBatch, contentManager, game);
         PlayScreen playScreen = new(game,spaceShip, graphics, contentManager, spriteBatch);
         ScreenManager.ChangeScreen(playScreen);
     }

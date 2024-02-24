@@ -6,8 +6,12 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using spaceinvaders.model;
+using spaceinvaders.model.barricades;
+using spaceinvaders.model.sounds;
 
-public class SpaceShip : Entity {
+public class SpaceShip : Entity
+{
+    public readonly Game game;
     public readonly Texture2D texture;
     private readonly GraphicsDeviceManager graphics;
     private readonly SpriteBatch _spriteBatch;
@@ -20,7 +24,7 @@ public class SpaceShip : Entity {
 
     private readonly int PLAYER_SPEED = 10;
 
-    public SpaceShip(GraphicsDeviceManager _graphics, SpriteBatch spriteBatch, ContentManager contentManager) {
+    public SpaceShip(GraphicsDeviceManager _graphics, SpriteBatch spriteBatch, ContentManager contentManager, Game _game) {
         Random random = new();
         // int randomShip = random.Next(1, 3);
         texture = contentManager.Load<Texture2D>($"ship1");
@@ -44,6 +48,8 @@ public class SpaceShip : Entity {
         _spriteBatch = spriteBatch;
         _isDead = false;
         _numberOfLives = 3;
+
+        game = _game;
     }
 
     public void Update()
