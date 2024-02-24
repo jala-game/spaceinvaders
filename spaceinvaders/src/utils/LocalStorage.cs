@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 
 public class LocalStorage {
 
@@ -20,7 +19,7 @@ public class LocalStorage {
         data.Add(newUser);
 
         string newJsonString = JsonConvert.SerializeObject(data, Formatting.Indented);
-        File.WriteAllText("localstorage/data.json", newJsonString);
+        File.WriteAllText("Content/localstorage/data.json", newJsonString);
     }
 
     public static List<User> GetUsersPaginator(int quantity, int page=0) {
@@ -72,6 +71,6 @@ public class LocalStorage {
 
     private static string JsonString()
     {
-        return File.ReadAllText("localstorage/data.json");
+        return File.ReadAllText("Content/localstorage/data.json");
     }
 }

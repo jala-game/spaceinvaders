@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using spaceinvaders.model;
@@ -8,18 +11,13 @@ using spaceinvaders.model.barricades;
 
 namespace spaceinvaders.screen_logic.screens;
 
-public class GameControlScreen : GameScreenModel
+public class GameControlScreen(Game game) : GameScreenModel
 {
-    private readonly SpriteFont _gameFont;
-
-    private readonly SpriteBatch _spriteBatch;
-
-    private readonly GraphicsDeviceManager _deviceManager;
-
+    private readonly SpriteFont _gameFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
+    private readonly SpriteBatch _spriteBatch = game.Services.GetService<SpriteBatch>();
+    private readonly GraphicsDeviceManager _deviceManager = game.Services.GetService<GraphicsDeviceManager>();
     private EControlOptions _selectedOption = EControlOptions.Left;
-
     private const float MenuMoveDelay = 0.15f;
-
     private float _menuMoveTimer;
 
     private readonly List<ScreenText> _listStrings =
@@ -29,13 +27,6 @@ public class GameControlScreen : GameScreenModel
         new ScreenText("Shoot: " + SpaceShipMovementKeys.Shoot, Color.White),
         new ScreenText("Exit", Color.White)
     ];
-
-    public GameControlScreen(Game game)
-    {
-        _spriteBatch = game.Services.GetService<SpriteBatch>();
-        _deviceManager = game.Services.GetService<GraphicsDeviceManager>();
-        _gameFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
-    }
 
     private void ModifyMenuSelection(KeyboardState kstate, GameTime gameTime)
     {
@@ -63,43 +54,43 @@ public class GameControlScreen : GameScreenModel
 
     private void HandleEnterKeyPress()
     {
-        // Determine the currently selected option
         var selectedOption = _selectedOption;
 
-        // Depending on the selected option, prompt for the new key and save it
         switch (selectedOption)
         {
             case EControlOptions.Left:
-                SpaceShipMovementKeys.Left = AwaitNextKeyPress();
+                _waitingForKeyPress = true;
+                _keyToAssign = Keys.Left;
                 break;
             case EControlOptions.Right:
-                SpaceShipMovementKeys.Right = AwaitNextKeyPress();
+                _waitingForKeyPress = true;
+                _keyToAssign = Keys.Right;
                 break;
             case EControlOptions.Shoot:
-                SpaceShipMovementKeys.Shoot = AwaitNextKeyPress();
+                _waitingForKeyPress = true;
+                _keyToAssign = Keys.Space; // Assuming space for shooting
                 break;
             case EControlOptions.Exit:
-
-                break;
-            default:
-                // Handle invalid selection
+                var mainScreen = new MainScreen(game, _deviceManager, game.Content, _spriteBatch);
+                ScreenManager.ChangeScreen(mainScreen);
                 break;
         }
     }
 
-    private Keys AwaitNextKeyPress()
+    private bool _waitingForKeyPress = false;
+    private Keys _keyToAssign;
+
+    private async Task<Keys> AwaitNextKeyPress()
     {
-        while (true)
+        await Task.Delay(10); // Pequeno atraso para evitar que a tecla Enter pressionada seja capturada imediatamente
+        var kstate = Keyboard.GetState();
+        if (!kstate.IsKeyDown(Keys.Enter))
         {
-            var kstate = Keyboard.GetState();
-            foreach (Keys key in Enum.GetValues(typeof(Keys)))
-            {
-                if (kstate.IsKeyDown(key))
-                {
-                    return key;
-                }
-            }
+            Console.WriteLine(kstate.GetPressedKeys()[0]);
+            return kstate.GetPressedKeys()[0];
         }
+
+        return Keys.None;
     }
 
     private void ModifyScreenText()
@@ -122,9 +113,42 @@ public class GameControlScreen : GameScreenModel
     public override void Update(GameTime gameTime)
     {
         var keyboardState = Keyboard.GetState();
-        ModifyMenuSelection(keyboardState, gameTime);
+
+        if (_waitingForKeyPress)
+        {
+            var pressedKeys = keyboardState.GetPressedKeys();
+            if (pressedKeys.Length >  0)
+            {
+                AssignKey(_keyToAssign, pressedKeys[0]);
+                _waitingForKeyPress = false;
+            }
+        }
+        else
+        {
+            ModifyMenuSelection(keyboardState, gameTime);
+        }
+
         base.Update(gameTime);
     }
+
+    private void AssignKey(Keys currentKey, Keys newKey)
+    {
+        // Example logic to assign a new key to a control option
+        // This should be adapted based on how you're managing control options
+        switch (currentKey)
+        {
+            case Keys.Left:
+                SpaceShipMovementKeys.Left = newKey;
+                break;
+            case Keys.Right:
+                SpaceShipMovementKeys.Right = newKey;
+                break;
+            case Keys.Space:
+                SpaceShipMovementKeys.Shoot = newKey;
+                break;
+        }
+    }
+
 
     public override void Draw(GameTime gameTime)
     {
