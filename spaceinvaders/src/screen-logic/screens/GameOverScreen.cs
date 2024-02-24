@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using spaceinvaders.model.barricades;
 using spaceinvaders.services;
 
 public class GameOverScreen(
@@ -17,7 +18,7 @@ public class GameOverScreen(
     private SpriteFont _gameOverFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
     private SpriteFont _gameScoreFont = game.Content.Load<SpriteFont>("fonts/PixeloidMono");
     private SpriteFont _gameMenuFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
-    private int _selectedOption = 4;
+    private EMenuOptionsGameOver _selectedOption = EMenuOptionsGameOver.SaveGame;
     private float delayToPress = 10f;
     public override void Initialize() { }
     public override void LoadContent() { }
@@ -36,13 +37,13 @@ public class GameOverScreen(
     private void ModifyMenuSelection(KeyboardState kstate)
     {
         float resetDelay = 10;
-        if (kstate.IsKeyDown(Keys.Up) && _selectedOption > 4)
+        if (kstate.IsKeyDown(Keys.Up) && _selectedOption > EMenuOptionsGameOver.SaveGame)
         {
             _selectedOption--;
             delayToPress = resetDelay;
         }
 
-        if (kstate.IsKeyDown(Keys.Down) && _selectedOption < 5)
+        if (kstate.IsKeyDown(Keys.Down) && _selectedOption < EMenuOptionsGameOver.LeaveGame)
         {
             _selectedOption++;
             delayToPress = resetDelay;
@@ -54,10 +55,10 @@ public class GameOverScreen(
         if (!kstate.IsKeyDown(Keys.Enter)) return;
         switch (_selectedOption)
         {
-            case (int) EScreenMenuOptionsGameOver.SaveGame:
+            case EMenuOptionsGameOver.SaveGame:
                 SwitchToSaveScoreScreen();
                 break;
-            case (int) EScreenMenuOptionsGameOver.LeaveGame:
+            case EMenuOptionsGameOver.LeaveGame:
                 LeaveTheGame();
                 break;
 
@@ -124,10 +125,10 @@ public class GameOverScreen(
     {
         switch (_selectedOption)
         {
-            case (int) EScreenMenuOptionsGameOver.SaveGame:
+            case EMenuOptionsGameOver.SaveGame:
                 DrawMenuItem("> Save Game", graphics.PreferredBackBufferHeight / 2 + 150, Color.Green);
                 break;
-            case (int)EScreenMenuOptionsGameOver.LeaveGame:
+            case EMenuOptionsGameOver.LeaveGame:
                 DrawMenuItem("> Leave the game", graphics.PreferredBackBufferHeight / 2 + 250,Color.Green);
                 break;
         }
