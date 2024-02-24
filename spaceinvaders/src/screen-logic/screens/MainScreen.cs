@@ -70,6 +70,7 @@ public class MainScreen(
                 StartGame();
                 break;
             case 2:
+                LeaderBoardsStart();
                 break;
             case 3:
                 break;
@@ -81,6 +82,12 @@ public class MainScreen(
         SpaceShip spaceShip = new(graphics, spriteBatch, contentManager);
         PlayScreen playScreen = new(game,spaceShip, graphics, contentManager, spriteBatch);
         ScreenManager.ChangeScreen(playScreen);
+    }
+
+    private void LeaderBoardsStart()
+    {
+        LeaderBoardsScreen leaderBoardsScreen = new LeaderBoardsScreen(game, graphics, contentManager, spriteBatch);
+        ScreenManager.ChangeScreen(leaderBoardsScreen);
     }
     
     private void DrawTitle()

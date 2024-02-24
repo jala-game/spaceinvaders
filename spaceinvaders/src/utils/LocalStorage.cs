@@ -4,12 +4,12 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 
 public class LocalStorage {
-    private static readonly string jsonString = File.ReadAllText("localstorage/data.json");
 
     public static void AddUser(User user) {
-        JArray data = JsonConvert.DeserializeObject<JArray>(jsonString);
+        JArray data = JsonConvert.DeserializeObject<JArray>(JsonString());
 
         JObject newUser = new()
         {
@@ -24,9 +24,12 @@ public class LocalStorage {
     }
 
     public static List<User> GetUsersPaginator(int quantity, int page=0) {
-        JArray data = JsonConvert.DeserializeObject<JArray>(jsonString);
+        
+        JArray data = JsonConvert.DeserializeObject<JArray>(JsonString());
+        
+        List<User> users = ConvertJsonToUserList(data).OrderByDescending(user => user.Score).ToList();
 
-        int totalUsers = data.Count;
+        int totalUsers = users.Count;
         int maxPage = (int)Math.Ceiling((double)totalUsers / quantity);
 
         if (page > maxPage)
@@ -41,10 +44,34 @@ public class LocalStorage {
         List<User> usersList = [];
         for (int i = startIndex; i < endIndex; i++)
         {
-            User user = data[i].ToObject<User>();
+            User user = users.ElementAt(i);
             usersList.Add(user);
         }
 
         return usersList;
+    }
+
+    private static List<User> ConvertJsonToUserList(JArray data)
+    {
+        try
+        {
+            List<User> users = new List<User>();
+            
+            foreach (var userData in data)
+            {
+                users.Add(userData.ToObject<User>());
+            }
+
+            return users;
+        }
+        catch (Exception e)
+        {
+            throw new Exception("Error reading json file");
+        }
+    }
+
+    private static string JsonString()
+    {
+        return File.ReadAllText("localstorage/data.json");
     }
 }

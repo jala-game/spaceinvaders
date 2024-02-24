@@ -16,6 +16,7 @@ public class SaveScoreScreen : GameScreenModel {
     private SpriteFont bigFont;
     private SpriteFont littleFont;
     private SpriteFont doneButtonFont;
+    private readonly int _lengthLimit = 8;
 
     private readonly List<string> letters= [
         "A", "B", "C", "D", "E", "F", "G",
@@ -175,11 +176,7 @@ public class SaveScoreScreen : GameScreenModel {
         IInteraction letter = lettersPanel[GetLetterActivePositionColumn()][GetLetterActivePositionLine()];
         switch (letter.GetType()) {
             case InteractionEnum.TEXT:
-                LocalStorage.GetUsersPaginator(10, 1).ForEach(a => {
-                    Console.WriteLine(a);
-                });
-
-                if (userName.Length > 10) return;
+                if (userName.Length > _lengthLimit) return;
 
                 userName += letter.GetLetter();
                 break;
