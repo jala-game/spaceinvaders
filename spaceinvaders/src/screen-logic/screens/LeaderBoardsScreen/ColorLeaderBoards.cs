@@ -18,11 +18,14 @@ public class ColorLeaderBoards
 
     public void ModifyColors()
     {
-        if (colors == null)
+        if (colors != null)
         {
-            colors = new[] { Color.White, Color.Red, Color.Yellow, Color.Orange, Color.Green, Color.Cyan, 
-                Color.Blue,Color.Azure,Color.Gold, Color.Magenta};
+            colors.Shuffle(new Random());
+            return;
         }
-        colors.Shuffle(new Random());
+        
+        colors = new[] { Color.White, Color.Red, Color.Yellow, Color.Orange, Color.Green, Color.Cyan, 
+            Color.Blue,Color.Azure,Color.Gold, Color.Magenta};
+        
     }
 }
