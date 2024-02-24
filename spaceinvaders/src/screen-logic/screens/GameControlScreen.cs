@@ -1,9 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using spaceinvaders.model;
@@ -17,16 +13,38 @@ public class GameControlScreen(Game game) : GameScreenModel
     private readonly SpriteBatch _spriteBatch = game.Services.GetService<SpriteBatch>();
     private readonly GraphicsDeviceManager _deviceManager = game.Services.GetService<GraphicsDeviceManager>();
     private EControlOptions _selectedOption = EControlOptions.Left;
-    private const float MenuMoveDelay = 0.15f;
+    private const float MenuMoveDelay =  0.15f;
     private float _menuMoveTimer;
 
     private readonly List<ScreenText> _listStrings =
     [
-        new ScreenText("Left: " + SpaceShipMovementKeys.Left, Color.White),
-        new ScreenText("Right: " + SpaceShipMovementKeys.Right, Color.White),
-        new ScreenText("Shoot: " + SpaceShipMovementKeys.Shoot, Color.White),
+        new ScreenText("Left: ", Color.White),
+        new ScreenText("Right: ", Color.White),
+        new ScreenText("Shoot: ", Color.White),
         new ScreenText("Exit", Color.White)
     ];
+
+    public override void Update(GameTime gameTime)
+    {
+        var keyboardState = Keyboard.GetState();
+
+        if (SpaceShipMovementKeys.IsWaitingForKeyPress)
+        {
+            HandleKeyAssignment(keyboardState);
+        }
+        else
+        {
+            ModifyMenuSelection(keyboardState, gameTime);
+        }
+
+        base.Update(gameTime);
+    }
+
+    public void UpdateKeyText(EControlOptions option, Keys newKey)
+    {
+        var textToUpdate = _listStrings[(int)option];
+        textToUpdate.Text = $"{option}: {newKey}";
+    }
 
     private void ModifyMenuSelection(KeyboardState kstate, GameTime gameTime)
     {
@@ -38,15 +56,15 @@ public class GameControlScreen(Game game) : GameScreenModel
         {
             HandleEnterKeyPress();
         }
-        else if (kstate.IsKeyDown(Keys.Down) && (int)_selectedOption < 3 && _menuMoveTimer >= MenuMoveDelay)
+        else if (kstate.IsKeyDown(Keys.Down) && (int)_selectedOption <  3 && _menuMoveTimer >= MenuMoveDelay)
         {
             _selectedOption++;
-            _menuMoveTimer = 0f;
+            _menuMoveTimer =  0f;
         }
-        else if (kstate.IsKeyDown(Keys.Up) && _selectedOption > 0 && _menuMoveTimer >= MenuMoveDelay)
+        else if (kstate.IsKeyDown(Keys.Up) && _selectedOption >  0 && _menuMoveTimer >= MenuMoveDelay)
         {
             _selectedOption--;
-            _menuMoveTimer = 0f;
+            _menuMoveTimer =  0f;
         }
 
         ModifyScreenText();
@@ -54,52 +72,24 @@ public class GameControlScreen(Game game) : GameScreenModel
 
     private void HandleEnterKeyPress()
     {
-        var selectedOption = _selectedOption;
-
-        switch (selectedOption)
-        {
-            case EControlOptions.Left:
-                _waitingForKeyPress = true;
-                _keyToAssign = Keys.Left;
-                break;
-            case EControlOptions.Right:
-                _waitingForKeyPress = true;
-                _keyToAssign = Keys.Right;
-                break;
-            case EControlOptions.Shoot:
-                _waitingForKeyPress = true;
-                _keyToAssign = Keys.Space; // Assuming space for shooting
-                break;
-            case EControlOptions.Exit:
-                var mainScreen = new MainScreen(game, _deviceManager, game.Content, _spriteBatch);
-                ScreenManager.ChangeScreen(mainScreen);
-                break;
-        }
-    }
-
-    private bool _waitingForKeyPress = false;
-    private Keys _keyToAssign;
-
-    private async Task<Keys> AwaitNextKeyPress()
-    {
-        await Task.Delay(10); // Pequeno atraso para evitar que a tecla Enter pressionada seja capturada imediatamente
-        var kstate = Keyboard.GetState();
-        if (!kstate.IsKeyDown(Keys.Enter))
-        {
-            Console.WriteLine(kstate.GetPressedKeys()[0]);
-            return kstate.GetPressedKeys()[0];
-        }
-
-        return Keys.None;
+        SpaceShipMovementKeys.HandleEnterKeyPress(_selectedOption, game);
     }
 
     private void ModifyScreenText()
     {
         foreach (var text in _listStrings)
         {
+            // Remover a indicação de tecla atribuída se já existir
             if (text.Text.StartsWith("> "))
             {
                 text.Text = text.Text.Substring(2);
+            }
+
+            // Verificar se o texto já contém a indicação de tecla atribuída
+            if (!text.Text.Contains(" - "))
+            {
+                // Adicionar a indicação de tecla atribuída apenas se não existir
+                text.Text += " - " + GetKeyNameForOption((EControlOptions)(_listStrings.IndexOf(text)));
             }
 
             text.TextColor = Color.White;
@@ -110,73 +100,58 @@ public class GameControlScreen(Game game) : GameScreenModel
         screenTextToBeModified.TextColor = Color.Green;
     }
 
-    public override void Update(GameTime gameTime)
+
+    private string GetKeyNameForOption(EControlOptions option)
     {
-        var keyboardState = Keyboard.GetState();
-
-        if (_waitingForKeyPress)
+        switch (option)
         {
-            var pressedKeys = keyboardState.GetPressedKeys();
-            if (pressedKeys.Length >  0)
-            {
-                AssignKey(_keyToAssign, pressedKeys[0]);
-                _waitingForKeyPress = false;
-            }
+            case EControlOptions.Left:
+                return SpaceShipMovementKeys.Left.ToString();
+            case EControlOptions.Right:
+                return SpaceShipMovementKeys.Right.ToString();
+            case EControlOptions.Shoot:
+                return SpaceShipMovementKeys.Shoot.ToString();
+            default:
+                return string.Empty;
         }
-        else
-        {
-            ModifyMenuSelection(keyboardState, gameTime);
-        }
-
-        base.Update(gameTime);
     }
 
-    private void AssignKey(Keys currentKey, Keys newKey)
+    private void HandleKeyAssignment(KeyboardState keyboardState)
     {
-        // Example logic to assign a new key to a control option
-        // This should be adapted based on how you're managing control options
-        switch (currentKey)
-        {
-            case Keys.Left:
-                SpaceShipMovementKeys.Left = newKey;
-                break;
-            case Keys.Right:
-                SpaceShipMovementKeys.Right = newKey;
-                break;
-            case Keys.Space:
-                SpaceShipMovementKeys.Shoot = newKey;
-                break;
-        }
+        var pressedKeys = keyboardState.GetPressedKeys();
+        if (pressedKeys.Length <=  0) return;
+        SpaceShipMovementKeys.AssignKey(SpaceShipMovementKeys.CurrentKeyToAssign, pressedKeys[0], this);
+        SpaceShipMovementKeys.ResetWaitingForKeyPress();
     }
 
 
     public override void Draw(GameTime gameTime)
     {
-        var height = _deviceManager.PreferredBackBufferHeight / 2;
-        var width = _deviceManager.PreferredBackBufferWidth / 2;
-        var middleOfScreen = new Rectangle(width, height, 0, 0);
-        DrawNormalText(_listStrings, middleOfScreen, 100);
+        var height = _deviceManager.PreferredBackBufferHeight /  2;
+        var width = _deviceManager.PreferredBackBufferWidth /  2;
+        var middleOfScreen = new Rectangle(width, height,  0,  0);
+        DrawNormalText(_listStrings, middleOfScreen,  100);
         base.Draw(gameTime);
+    }
+
+    private void DrawNormalText(List<ScreenText> texts, Rectangle textPosition, int gapY)
+    {
+        var totalTextHeight = texts.Count * (_gameFont.LineSpacing + gapY) - gapY;
+        var startY = textPosition.Y + (textPosition.Height - totalTextHeight) /  2;
+
+        foreach (var text in texts)
+        {
+            var textWidth = _gameFont.MeasureString(text.Text).X;
+            var startX = textPosition.X + (textPosition.Width - textWidth) /  2;
+            var newRectangle = new Rectangle((int)startX, startY, (int)textWidth, totalTextHeight);
+            DrawNormalText(text, newRectangle);
+            startY += _gameFont.LineSpacing + gapY;
+        }
     }
 
     private void DrawNormalText(ScreenText text, Rectangle textPosition)
     {
         _spriteBatch.DrawString(_gameFont, text.Text,
             new Vector2(textPosition.X, textPosition.Y), text.TextColor);
-    }
-
-    private void DrawNormalText(List<ScreenText> texts, Rectangle textPosition, int gapY)
-    {
-        var totalTextHeight = texts.Count * (_gameFont.LineSpacing + gapY) - gapY;
-        var startY = textPosition.Y + (textPosition.Height - totalTextHeight) / 2;
-
-        foreach (var text in texts)
-        {
-            var textWidth = _gameFont.MeasureString(text.Text).X;
-            var startX = textPosition.X + (textPosition.Width - textWidth) / 2;
-            var newRectangle = new Rectangle((int)startX, startY, (int)textWidth, totalTextHeight);
-            DrawNormalText(text, newRectangle);
-            startY += _gameFont.LineSpacing + gapY;
-        }
     }
 }

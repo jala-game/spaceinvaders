@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using spaceinvaders.model;
 using spaceinvaders.model.barricades;
 using spaceinvaders.screen_logic.screens;
 
@@ -90,17 +91,17 @@ public class MainScreen(
         ScreenManager.ChangeScreen(leaderBoardsScreen);
     }
 
+    private void ControlScreen()
+    {
+        GameControlScreen gameControlScreen = new(game);
+        ScreenManager.ChangeScreen(gameControlScreen);
+    }
+
     private void DrawTitle()
     {
         string text = "Space Invaders";
         float textWidth = _gameFont.MeasureString(text).X / 2;
         spriteBatch.DrawString(_gameFont, text, new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidth ,100), Color.White);
-    }
-
-    private void ControlScreen()
-    {
-        GameControlScreen gameControlScreen = new(game);
-        ScreenManager.ChangeScreen(gameControlScreen);
     }
 
     private void DrawMenu()
