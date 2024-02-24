@@ -23,9 +23,8 @@ public class LocalStorage {
     }
 
     public static List<User> GetUsersPaginator(int quantity, int page=0) {
-        
         JArray data = JsonConvert.DeserializeObject<JArray>(JsonString());
-        
+
         List<User> users = ConvertJsonToUserList(data).OrderByDescending(user => user.Score).ToList();
 
         int totalUsers = users.Count;
@@ -55,7 +54,6 @@ public class LocalStorage {
         try
         {
             List<User> users = new List<User>();
-            
             foreach (var userData in data)
             {
                 users.Add(userData.ToObject<User>());
@@ -63,7 +61,7 @@ public class LocalStorage {
 
             return users;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             throw new Exception("Error reading json file");
         }

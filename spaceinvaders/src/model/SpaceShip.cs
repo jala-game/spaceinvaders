@@ -12,9 +12,6 @@ public class SpaceShip : Entity {
     private readonly GraphicsDeviceManager graphics;
     private readonly SpriteBatch _spriteBatch;
     private readonly ContentManager _contentManager;
-    private readonly Keys _keysLeft;
-    private readonly Keys _keysRight;
-    private readonly Keys _keysShoot;
 
     public IShapeF Bounds { get; }
     public Bullet bullet;
