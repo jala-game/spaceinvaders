@@ -180,3 +180,45 @@
 /processorParam:TextureFormat=Color
 /build:ship2.png
 
+#begin songs/backgroundSong.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:songs/backgroundSong.mp3
+
+#begin songs/backgroundSongForMenus.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:songs/backgroundSongForMenus.mp3
+
+#begin songs/explosion.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:songs/explosion.wav
+
+#begin songs/fastinvader1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:songs/fastinvader1.wav
+
+#begin songs/invaderkilled.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:songs/invaderkilled.wav
+
+#begin songs/shoot.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:songs/shoot.wav
+
+#begin songs/shootEnemy.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:songs/shootEnemy.wav
+
