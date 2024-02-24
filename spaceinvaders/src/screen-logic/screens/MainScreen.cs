@@ -43,7 +43,6 @@ public class MainScreen(
         DrawMenu();
         DrawDescription();
         DrawItemMenuActive();
-
     }
 
     private void ModifyMenuSelection(KeyboardState kstate)

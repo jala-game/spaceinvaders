@@ -12,14 +12,22 @@ namespace spaceinvaders.screen_logic.screens;
 public class GameControlScreen : GameScreenModel
 {
     private readonly SpriteFont _gameFont;
+
     private readonly SpriteBatch _spriteBatch;
+
     private readonly GraphicsDeviceManager _deviceManager;
+
     private EControlOptions _selectedOption = EControlOptions.Left;
+
+    private const float MenuMoveDelay = 0.2f;
+
+    private float _menuMoveTimer;
+
     private readonly List<ScreenText> _listStrings =
     [
-        new ScreenText("Left", Color.White),
-        new ScreenText("Right", Color.White),
-        new ScreenText("Shoot", Color.White),
+        new ScreenText("Left: " + SpaceShipMovementKeys.Left, Color.White),
+        new ScreenText("Right: " + SpaceShipMovementKeys.Right, Color.White),
+        new ScreenText("Shoot: " + SpaceShipMovementKeys.Shoot, Color.White),
         new ScreenText("Exit", Color.White)
     ];
 
@@ -30,35 +38,49 @@ public class GameControlScreen : GameScreenModel
         _gameFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
     }
 
-    private void ModifyMenuSelection(KeyboardState kstate)
+    private void ModifyMenuSelection(KeyboardState kstate, GameTime gameTime)
     {
-        float resetDelay = 10;
-        if (kstate.IsKeyDown(Keys.Up) && _selectedOption > 0)
-        {
-            _selectedOption--;
-            Thread.Sleep(500);
-        }
-        else if (kstate.IsKeyDown(Keys.Down) && (int)_selectedOption < 3)
+        _menuMoveTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+        if (!(_menuMoveTimer >= MenuMoveDelay)) return;
+
+        // Verifica se as teclas de seta para cima ou para baixo foram pressionadas e se o timer já foi reiniciado
+        if (kstate.IsKeyDown(Keys.Down) && (int)_selectedOption <  3 && _menuMoveTimer >= MenuMoveDelay)
         {
             _selectedOption++;
-            Thread.Sleep(500);
+            _menuMoveTimer =  0f; // Reinicia o timer após a mudança de seleção
         }
+        else if (kstate.IsKeyDown(Keys.Up) && _selectedOption >  0 && _menuMoveTimer >= MenuMoveDelay)
+        {
+            _selectedOption--;
+            _menuMoveTimer =  0f; // Reinicia o timer após a mudança de seleção
+        }
+
         ModifyScreenText();
     }
+
 
     private void ModifyScreenText()
     {
         foreach (var text in _listStrings)
         {
+            if (text.Text.StartsWith("> "))
+            {
+                text.Text = text.Text.Substring(2);
+            }
             text.TextColor = Color.White;
         }
-        _listStrings[(int)_selectedOption].TextColor = Color.Green;
+
+        var screenTextToBeModified = _listStrings[(int)_selectedOption];
+        screenTextToBeModified.Text = "> " + screenTextToBeModified.Text;
+        screenTextToBeModified.TextColor = Color.Green;
     }
+
 
     public override void Update(GameTime gameTime)
     {
         var keyboardState = Keyboard.GetState();
-        ModifyMenuSelection(keyboardState);
+        ModifyMenuSelection(keyboardState, gameTime);
         base.Update(gameTime);
     }
 
