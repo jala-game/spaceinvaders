@@ -69,6 +69,7 @@ public class MainScreen(
                 StartGame();
                 break;
             case EMenuScreenOptions.Leaderboard:
+                LeaderBoardsStart();
                 break;
             case EMenuScreenOptions.Controls:
                 ControlScreen();
@@ -76,11 +77,30 @@ public class MainScreen(
         }
     }
 
+    private void StartGame()
+    {
+        SpaceShip spaceShip = new(graphics, spriteBatch, contentManager);
+        PlayScreen playScreen = new(game,spaceShip, graphics, contentManager, spriteBatch);
+        ScreenManager.ChangeScreen(playScreen);
+    }
+
+    private void LeaderBoardsStart()
+    {
+        LeaderBoardsScreen leaderBoardsScreen = new LeaderBoardsScreen(game, graphics, contentManager, spriteBatch);
+        ScreenManager.ChangeScreen(leaderBoardsScreen);
+    }
+
     private void DrawTitle()
     {
         string text = "Space Invaders";
         float textWidth = _gameFont.MeasureString(text).X / 2;
         spriteBatch.DrawString(_gameFont, text, new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidth ,100), Color.White);
+    }
+
+    private void ControlScreen()
+    {
+        GameControlScreen gameControlScreen = new(game);
+        ScreenManager.ChangeScreen(gameControlScreen);
     }
 
     private void DrawMenu()
@@ -93,19 +113,6 @@ public class MainScreen(
             DrawMenuItem(e, baseY, null);
             baseY += 100;
         });
-    }
-
-    private void StartGame()
-    {
-        SpaceShip spaceShip = new(graphics, spriteBatch, contentManager);
-        PlayScreen playScreen = new(game,spaceShip, graphics, contentManager, spriteBatch);
-        ScreenManager.ChangeScreen(playScreen);
-    }
-
-    private void ControlScreen()
-    {
-        GameControlScreen gameControlScreen = new(game);
-        ScreenManager.ChangeScreen(gameControlScreen);
     }
 
     private void DrawMenuItem(string text, int y, Color? color)
