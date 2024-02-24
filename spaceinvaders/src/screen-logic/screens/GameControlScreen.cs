@@ -79,16 +79,13 @@ public class GameControlScreen(Game game) : GameScreenModel
     {
         foreach (var text in _listStrings)
         {
-            // Remover a indicação de tecla atribuída se já existir
             if (text.Text.StartsWith("> "))
             {
                 text.Text = text.Text.Substring(2);
             }
 
-            // Verificar se o texto já contém a indicação de tecla atribuída
             if (!text.Text.Contains(" - "))
             {
-                // Adicionar a indicação de tecla atribuída apenas se não existir
                 text.Text += " - " + GetKeyNameForOption((EControlOptions)(_listStrings.IndexOf(text)));
             }
 

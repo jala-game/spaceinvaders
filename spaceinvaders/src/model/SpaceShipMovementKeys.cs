@@ -53,7 +53,6 @@ public static class SpaceShipMovementKeys
                 break;
         }
 
-        // Atualiza o texto na tela com a nova tecla atribuída
         EControlOptions option = currentKey switch
         {
             Keys.Left => EControlOptions.Left,
