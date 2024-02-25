@@ -2,8 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using spaceinvaders.model.barricades;
-using spaceinvaders.model.sounds;
 
 namespace spaceinvaders;
 

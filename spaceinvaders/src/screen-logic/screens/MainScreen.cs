@@ -134,13 +134,13 @@ public class MainScreen(
         switch (_selectedOption)
         {
             case EMenuScreenOptions.Play:
-                DrawMenuItem("> Play Game", 400, Color.Green);
+                DrawMenuItem("> Play Game", 400, Color.Red);
                 break;
             case EMenuScreenOptions.Leaderboard:
-                DrawMenuItem("> View Leaderboards", 500,Color.Green);
+                DrawMenuItem("> View Leaderboards", 500,Color.Red);
                 break;
             case EMenuScreenOptions.Controls:
-                DrawMenuItem("> Game Control", 600,Color.Green);
+                DrawMenuItem("> Game Control", 600,Color.Red);
                 break;
         }
     }
