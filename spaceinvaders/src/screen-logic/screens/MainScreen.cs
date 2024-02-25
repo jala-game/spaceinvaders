@@ -108,8 +108,8 @@ public class MainScreen(
 
     private void ControlScreen()
     {
-        GameControlScreen gameControlScreen = new(game);
-        ScreenManager.ChangeScreen(gameControlScreen);
+        GameControlScreen GameControlScreen = new(game,graphics,contentManager, spriteBatch);
+        ScreenManager.ChangeScreen(GameControlScreen);
     }
 
     private void DrawTitle()
