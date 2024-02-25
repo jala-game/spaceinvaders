@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using spaceinvaders.model.barricades;
+using spaceinvaders.model.sounds;
 
 namespace spaceinvaders.screen_logic.screens;
 
@@ -16,18 +17,10 @@ public class GameControlScreen(
     private SpriteFont _title = game.Content.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
     private SpriteFont _genericFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
     private int _page = 1;
+    private int _limitedPages = 2;
     private EMenuOptionsLeaderBoards _chooseMenu = EMenuOptionsLeaderBoards.RightArrow;
     private float delayToPress = 10f;
     
-    public override void Initialize()
-    {
-        base.Initialize();
-    }
-
-    public override void LoadContent()
-    {
-        base.LoadContent();
-    }
 
     public override void Update(GameTime gameTime)
     {
@@ -43,22 +36,71 @@ public class GameControlScreen(
 
     private void SendMenuOption(KeyboardState kstate)
     {
-       
+        delayToPress--;
+        if (delayToPress > 0) return;
+        if (!kstate.IsKeyDown(Keys.Enter)) return;
+        PlaySoundEffect(ESoundsEffects.MenuEnter);
+        switch (_chooseMenu)
+        {
+            case EMenuOptionsLeaderBoards.LeaveGame:
+                LeaveTheGame();
+                break;
+            case EMenuOptionsLeaderBoards.LeftArrow:
+                ReturnPages();
+                delayToPress = 10;
+                break;
+            case EMenuOptionsLeaderBoards.RightArrow:
+                NextPages();
+                delayToPress = 10;
+                break;
+        }
+    }
+    
+    private void LeaveTheGame()
+    {
+        MainScreen mainScreen = new MainScreen(game,graphics,contentManager,spriteBatch );
+        ScreenManager.ChangeScreen(mainScreen);
+    }
+    
+    private void ReturnPages()
+    {
+        if (_page <= 1) return;
+        _page--;
+
+    }
+    
+    private void NextPages()
+    {
+        if (_page >= _limitedPages) return;
+        _page++;
     }
 
     private void ModifyMenuSelection(KeyboardState kstate)
     {
+        float resetDelay = 10;
+        if (kstate.IsKeyDown(Keys.Left) && _chooseMenu > EMenuOptionsLeaderBoards.LeaveGame)
+        {
+            _chooseMenu--;
+            delayToPress = resetDelay;
+            PlaySoundEffect(ESoundsEffects.MenuSelection);
+        }
         
+        if (kstate.IsKeyDown(Keys.Right) && _chooseMenu < EMenuOptionsLeaderBoards.RightArrow)
+        {
+            _chooseMenu++;
+            delayToPress = resetDelay;
+            PlaySoundEffect(ESoundsEffects.MenuSelection);
+        }
     }
 
     public override void Draw(GameTime gameTime)
     {
         switch (_page)
         {
-            case 0:
+            case 1:
                 DrawControls();
                 break;
-            case 1:
+            case 2:
                 DrawGameScore();
                 break;
         }
@@ -85,7 +127,7 @@ public class GameControlScreen(
 
     private void DrawMenu()
     {
-        string[] texts = new[] { "  Back" , "<",$"{_page + 1}",">"};
+        string[] texts = new[] { "  Back" , "<",$"{_page}",">"};
         float[] positionsX = new[] { 100, 
             graphics.PreferredBackBufferWidth/2 - (_genericFont.MeasureString($"<").X / 2) - 70,
             graphics.PreferredBackBufferWidth/2 - (_genericFont.MeasureString($"{_page + 1}").X / 2),
@@ -161,5 +203,10 @@ public class GameControlScreen(
             color ?? Color.White);
     }
     
+    private void PlaySoundEffect(ESoundsEffects effects)
+    {
+        SoundEffects.LoadEffect(game, effects);
+        SoundEffects.PlaySoundEffect(0.4f);
+    }
     
 }
