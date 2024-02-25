@@ -232,7 +232,7 @@ public class SaveScoreScreen : GameScreenModel {
             graphics.PreferredBackBufferWidth / 2 - textWidth,
             250);
         spriteBatch.DrawString(littleFont, userName, position,
-            Color.Green);
+            Color.Red);
     }
 
     private void DrawLettersTable() {
@@ -259,6 +259,6 @@ public class SaveScoreScreen : GameScreenModel {
     }
 
     private static Color ColorIfSelected(IInteraction letter) {
-        return letter.GetIsActivated() ? Color.Green : Color.White;
+        return letter.GetIsActivated() ? Color.Red : Color.White;
     }
 }
