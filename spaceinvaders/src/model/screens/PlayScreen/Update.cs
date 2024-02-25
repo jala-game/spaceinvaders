@@ -105,6 +105,8 @@ public class PlayScreenUpdate()
             score.SetScore(redEnemy.GetPoint());
             redEnemy.OnCollision(null);
             explosion = new(spriteBatch, contentManager, redEnemy.Bounds.Position);
+            SoundEffects.LoadEffect(game, ESoundsEffects.EnemyDead);
+            SoundEffects.PlaySoundEffect();
         }
     }
 

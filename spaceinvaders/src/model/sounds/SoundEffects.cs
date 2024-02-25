@@ -52,9 +52,11 @@ public class SoundEffects
         if (MediaPlayer.State != MediaState.Stopped) MediaPlayer.Stop();
     }
 
-    public static void PlaySoundEffect()
+    public static void PlaySoundEffect(float volume = 0.1f)
     {
         var soundEffect = _myEffect;
-        soundEffect.Play();
+        SoundEffectInstance soundEffectInstance = soundEffect.CreateInstance();
+        soundEffectInstance.Volume = volume;
+        soundEffectInstance.Play();
     }
 }
