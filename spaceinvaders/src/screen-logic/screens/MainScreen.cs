@@ -27,7 +27,7 @@ public class MainScreen(
     public override void LoadContent()
     {
         SoundEffects.LoadMusic(game, ESoundsEffects.BackgroundSongForMenu);
-        SoundEffects.PlayEffects(true);
+        SoundEffects.PlayEffects(true, 0.2f);
     }
 
     public override void Update(GameTime gameTime)
