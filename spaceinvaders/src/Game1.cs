@@ -46,6 +46,8 @@ public class Game1 : Game
         Content.Load<SoundEffect>("songs/explosion");
         Content.Load<SoundEffect>("songs/invaderkilled");
         Content.Load<SoundEffect>("songs/shoot");
+        Content.Load<SoundEffect>("songs/menuenter");
+        Content.Load<SoundEffect>("songs/menuselection");
     }
 
     private void LoadScreenManager() {

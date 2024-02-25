@@ -57,17 +57,27 @@ public class MainScreen(
         {
             _selectedOption--;
             delayToPress = resetDelay;
+            PlayMenuSound(ESoundsEffects.MenuSelection);
         }
         else if (kstate.IsKeyDown(Keys.Down) && (int)_selectedOption < 2)
         {
             _selectedOption++;
             delayToPress = resetDelay;
+            PlayMenuSound(ESoundsEffects.MenuSelection);
         }
+        
+    }
+
+    private void PlayMenuSound(ESoundsEffects eSoundsEffects)
+    {
+        SoundEffects.LoadEffect(game,eSoundsEffects);
+        SoundEffects.PlaySoundEffect(0.4f);
     }
 
     private void SendMenuOption(KeyboardState kstate)
     {
         if (!kstate.IsKeyDown(Keys.Enter)) return;
+        PlayMenuSound(ESoundsEffects.MenuEnter);
         switch (_selectedOption)
         {
             case EMenuScreenOptions.Play:

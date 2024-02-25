@@ -7,4 +7,6 @@ public enum ESoundsEffects
     SpaceShipDead = 2,
     EnemyDead = 3,
     ShootSpaceShip = 4,
+    MenuSelection = 5,
+    MenuEnter = 6
 }

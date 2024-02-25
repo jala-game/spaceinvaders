@@ -122,7 +122,7 @@ public class SpaceShip : Entity
     private void RemoveLifeForShip()
     {
         SoundEffects.LoadEffect(game, ESoundsEffects.SpaceShipDead);
-        SoundEffects.PlaySoundEffect();
+        SoundEffects.PlaySoundEffect(0.2f);
         if (_numberOfLives > 1)
         {
             _numberOfLives -= 1;

@@ -37,6 +37,12 @@ public class SoundEffects
             case ESoundsEffects.ShootSpaceShip:
                 _myEffect = game.Content.Load<SoundEffect>("songs/shoot");
                 break;
+            case ESoundsEffects.MenuEnter:
+                _myEffect = game.Content.Load<SoundEffect>("songs/menuenter");
+                break;
+            case ESoundsEffects.MenuSelection:
+                _myEffect = game.Content.Load<SoundEffect>("songs/menuselection");
+                break;
         }
     }
 
