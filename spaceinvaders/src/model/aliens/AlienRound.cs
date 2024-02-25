@@ -54,10 +54,14 @@ public class AlienRound
 
     public void Update()
     {
+        IncreaseXAllEnemy();
+        InvertDirectionAndFallIfEnemyLimitIsFilled();
+    }
+
+    private void IncreaseXAllEnemy() {
         foreach (IEnemyGroup enemy in enemies) {
             enemy.IncreaseX(SPEED);
         }
-        InvertDirectionAndFallIfEnemyLimitIsFilled();
     }
 
     private void InvertDirectionAndFallIfEnemyLimitIsFilled() {
