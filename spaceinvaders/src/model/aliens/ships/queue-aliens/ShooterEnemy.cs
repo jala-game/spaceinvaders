@@ -53,11 +53,11 @@ public class ShooterEnemy : IEnemyGroup
 
     private void Shoot(int randomShotValue){
         if (randomShotValue == 5 && bullet == null){
-            Texture2D bulletTexture = _contentManager.Load<Texture2D>("blue-bullet");
+            Texture2D bulletTexture = _contentManager.Load<Texture2D>("red-bullet");
             bullet = new Bullet(Bounds.Position, bulletTexture, _spriteBatch, _graphics, _texture.Width, TypeBulletEnum.ALIEN);
         }
     }
-    
+
     private void RemoveBulletWhenLeaveFromMap() {
         if (bullet!= null && bullet.Bounds.Position.Y > _graphics.PreferredBackBufferHeight) {
             bullet = null;
@@ -88,7 +88,7 @@ public class ShooterEnemy : IEnemyGroup
     }
 
     public void Fall() {
-        Bounds.Position += new Vector2(0, _texture.Height + 10);
+        Bounds.Position += new Vector2(0, 50);
     }
 
     public Bullet GetBullet()

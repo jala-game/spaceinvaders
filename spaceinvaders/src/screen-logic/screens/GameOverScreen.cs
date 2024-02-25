@@ -126,10 +126,10 @@ public class GameOverScreen(
         switch (_selectedOption)
         {
             case EMenuOptionsGameOver.SaveGame:
-                DrawMenuItem("> Save Game", graphics.PreferredBackBufferHeight / 2 + 150, Color.Green);
+                DrawMenuItem("> Save Game", graphics.PreferredBackBufferHeight / 2 + 150, Color.Red);
                 break;
             case EMenuOptionsGameOver.LeaveGame:
-                DrawMenuItem("> Leave the game", graphics.PreferredBackBufferHeight / 2 + 250,Color.Green);
+                DrawMenuItem("> Leave the game", graphics.PreferredBackBufferHeight / 2 + 250,Color.Red);
                 break;
         }
     }
