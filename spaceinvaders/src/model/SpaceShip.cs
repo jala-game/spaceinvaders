@@ -84,7 +84,7 @@ public class SpaceShip : Entity
         if (kstate.IsKeyDown(SpaceShipMovementKeys.Shoot) && bullet == null) {
             Texture2D bulletTexture = _contentManager.Load<Texture2D>("blue-bullet");
             SoundEffects.LoadEffect(game,ESoundsEffects.ShootSpaceShip);
-            SoundEffects.PlaySoundEffect(game);
+            SoundEffects.PlaySoundEffect();
             bullet = new Bullet(Bounds.Position, bulletTexture, _spriteBatch, graphics, texture.Width, TypeBulletEnum.PLAYER);
         }
     }
@@ -121,6 +121,8 @@ public class SpaceShip : Entity
 
     private void RemoveLifeForShip()
     {
+        SoundEffects.LoadEffect(game, ESoundsEffects.SpaceShipDead);
+        SoundEffects.PlaySoundEffect();
         if (_numberOfLives > 1)
         {
             _numberOfLives -= 1;

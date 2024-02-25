@@ -52,7 +52,7 @@ public class SoundEffects
         if (MediaPlayer.State != MediaState.Stopped) MediaPlayer.Stop();
     }
 
-    public static void PlaySoundEffect(Game game)
+    public static void PlaySoundEffect()
     {
         var soundEffect = _myEffect;
         soundEffect.Play();
