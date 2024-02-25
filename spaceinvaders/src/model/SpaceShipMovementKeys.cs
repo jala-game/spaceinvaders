@@ -48,7 +48,7 @@ public static class SpaceShipMovementKeys
         }
     }
 
-    public static void AssignKey(Keys currentKey, Keys newKey, GameControlScreen gameControlScreen)
+    public static void AssignKey(Keys currentKey, Keys newKey, GameControlScreenOld gameControlScreenOld)
     {
         switch (currentKey)
         {
@@ -81,7 +81,7 @@ public static class SpaceShipMovementKeys
 
         if (option != EControlOptions.None)
         {
-            gameControlScreen.UpdateKeyText(option, newKey);
+            gameControlScreenOld.UpdateKeyText(option, newKey);
         }
 
         ResetWaitingForKeyPress();
