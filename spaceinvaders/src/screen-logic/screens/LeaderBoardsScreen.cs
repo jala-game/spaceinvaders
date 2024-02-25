@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using spaceinvaders.model;
 using spaceinvaders.model.barricades;
+using spaceinvaders.model.sounds;
 
 namespace spaceinvaders.screen_logic.screens;
 
@@ -146,6 +147,7 @@ public class LeaderBoardsScreen(
         delayToPress--;
         if (delayToPress > 0) return;
         if (!kstate.IsKeyDown(Keys.Enter)) return;
+        PlaySoundEffect(ESoundsEffects.MenuEnter);
         switch (_chooseMenu)
         {
             case EMenuOptionsLeaderBoards.LeaveGame:
@@ -194,12 +196,20 @@ public class LeaderBoardsScreen(
         {
             _chooseMenu--;
             delayToPress = resetDelay;
+            PlaySoundEffect(ESoundsEffects.MenuSelection);
         }
         
         if (kstate.IsKeyDown(Keys.Right) && _chooseMenu < EMenuOptionsLeaderBoards.RightArrow)
         {
             _chooseMenu++;
             delayToPress = resetDelay;
+            PlaySoundEffect(ESoundsEffects.MenuSelection);
         }
+    }
+
+    private void PlaySoundEffect(ESoundsEffects effects)
+    {
+        SoundEffects.LoadEffect(game, effects);
+        SoundEffects.PlaySoundEffect(0.4f);
     }
 }
