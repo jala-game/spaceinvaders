@@ -72,6 +72,7 @@ public class MainScreen(
         switch (_selectedOption)
         {
             case EMenuScreenOptions.Play:
+                _soundEffects.StopMusic();
                 StartGame();
                 break;
             case EMenuScreenOptions.Leaderboard:
@@ -81,8 +82,6 @@ public class MainScreen(
                 ControlScreen();
                 break;
         }
-        
-        _soundEffects.StopMusic();
     }
 
     private void StartGame()
