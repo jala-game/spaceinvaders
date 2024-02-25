@@ -19,7 +19,7 @@ public class LocalStorage {
         data.Add(newUser);
 
         string newJsonString = JsonConvert.SerializeObject(data, Formatting.Indented);
-        File.WriteAllText("Content/localstorage/data.json", newJsonString);
+        File.WriteAllText("localstorage/data.json", newJsonString);
     }
 
     public static List<User> GetUsersPaginator(int quantity, int page=0) {
@@ -69,6 +69,6 @@ public class LocalStorage {
 
     private static string JsonString()
     {
-        return File.ReadAllText("Content/localstorage/data.json");
+        return File.ReadAllText("localstorage/data.json");
     }
 }
