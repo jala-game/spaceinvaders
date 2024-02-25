@@ -41,6 +41,7 @@ public class PlayScreen(
         }
 
         PlayScreenUpdate playScreenUpdate = new() {
+            game=game,
             enemies=_enemies,
             redEnemy=_redEnemy,
             ship=ship,
