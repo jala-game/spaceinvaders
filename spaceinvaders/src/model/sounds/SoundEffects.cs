@@ -1,5 +1,6 @@
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using spaceinvaders.model.barricades;
 
@@ -50,5 +51,11 @@ public class SoundEffects
     {
         if (MediaPlayer.State != MediaState.Stopped) MediaPlayer.Stop();
         
+    }
+
+    public static void PlaySoundEffect(Game game)
+    {
+        var soundEffect = game.Content.Load<SoundEffect>("songs/enemyExplosion");
+        soundEffect.Play();
     }
 }

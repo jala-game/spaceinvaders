@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
@@ -42,9 +43,9 @@ public class Game1 : Game
         
         Content.Load<Song>("songs/backgroundSong");
         Content.Load<Song>("songs/backgroundSongForMenus");
-        Content.Load<Song>("songs/enemyExplosion");
-        Content.Load<Song>("songs/explosion");
-        Content.Load<Song>("songs/shoot");
+        /*Content.Load<SoundEffect>("songs/enemyExplosion");
+        Content.Load<SoundEffect>("songs/explosion");
+        Content.Load<SoundEffect>("songs/shoot");*/
     }
 
     private void LoadScreenManager() {

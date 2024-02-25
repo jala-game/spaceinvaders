@@ -83,6 +83,7 @@ public class SpaceShip : Entity
     private void Shoot(KeyboardState kstate) {
         if (kstate.IsKeyDown(SpaceShipMovementKeys.Shoot) && bullet == null) {
             Texture2D bulletTexture = _contentManager.Load<Texture2D>("blue-bullet");
+            SoundEffects.PlaySoundEffect(game);
             bullet = new Bullet(Bounds.Position, bulletTexture, _spriteBatch, graphics, texture.Width, TypeBulletEnum.PLAYER);
         }
     }
