@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using spaceinvaders.model;
 using spaceinvaders.model.barricades;
+using spaceinvaders.model.sounds;
 using spaceinvaders.screen_logic.screens;
 
 public class MainScreen(
@@ -20,10 +22,13 @@ public class MainScreen(
     private SpriteFont _gameDescription = game.Content.Load<SpriteFont>("fonts/PixeloidMono");
     private EMenuScreenOptions _selectedOption = EMenuScreenOptions.Play;
     private float delayToPress = 10f;
+    private SoundEffects _soundEffects;
     public override void Initialize() { }
 
     public override void LoadContent()
     {
+        _soundEffects = new SoundEffects(game, ESoundsEffects.BackgroundSong);
+        _soundEffects.PlayEffects(true);
     }
 
     public override void Update(GameTime gameTime)
@@ -76,6 +81,8 @@ public class MainScreen(
                 ControlScreen();
                 break;
         }
+        
+        _soundEffects.StopMusic();
     }
 
     private void StartGame()

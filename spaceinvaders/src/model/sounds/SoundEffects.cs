@@ -1,6 +1,5 @@
-using System;
+
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using spaceinvaders.model.barricades;
 
@@ -8,6 +7,13 @@ namespace spaceinvaders.model.sounds;
 
 public class SoundEffects
 {
+    private Song _mySound;
+
+    public SoundEffects(Game game,ESoundsEffects effect )
+    {
+        _mySound = LoadSounds(game, effect);
+    }
+    
     private static Song LoadSounds(Game game, ESoundsEffects effec)
     {
         Song soundEffect = null;
@@ -30,15 +36,18 @@ public class SoundEffects
                 soundEffect = game.Content.Load<Song>("songs/shoot");
                 break;
         }
-
         return soundEffect;
     }
 
-    public static void PlayEffects(Game game,ESoundsEffects effect )
+    public void PlayEffects(bool loop)
     {
-        Song mySound = LoadSounds(game, effect);
-        
-        MediaPlayer.Play(mySound);
+        MediaPlayer.Play(_mySound);
+        MediaPlayer.IsRepeating = loop;
+    }
 
+    public void StopMusic()
+    {
+        if (MediaState.Playing == MediaState.Stopped) return;
+        MediaPlayer.Stop();
     }
 }
