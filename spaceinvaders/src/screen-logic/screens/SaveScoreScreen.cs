@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using spaceinvaders.model.barricades;
+using spaceinvaders.model.sounds;
 
 public class SaveScoreScreen : GameScreenModel {
 
@@ -143,6 +145,7 @@ public class SaveScoreScreen : GameScreenModel {
                     lettersPanel[activePositionColumn][activePositionLine + 1].SetActivated();
                     break;
             }
+            PlaySoundEffect(ESoundsEffects.MenuSelection);
         } catch (ArgumentOutOfRangeException) {
             lettersPanel[activePositionColumn][activePositionLine].SetActivated();
         }
@@ -170,7 +173,7 @@ public class SaveScoreScreen : GameScreenModel {
 
     private void EnterActions(KeyboardState kstate) {
         if (!kstate.IsKeyDown(Keys.Enter)) return;
-
+        PlaySoundEffect(ESoundsEffects.MenuEnter);
         ResetDelayToPress();
 
         IInteraction letter = lettersPanel[GetLetterActivePositionColumn()][GetLetterActivePositionLine()];
@@ -201,7 +204,7 @@ public class SaveScoreScreen : GameScreenModel {
 
     private void BackspaceAction(KeyboardState kstate) {
         if (!kstate.IsKeyDown(Keys.Back) || string.IsNullOrEmpty(userName)) return;
-
+        PlaySoundEffect(ESoundsEffects.MenuEnter);
         ResetDelayToPress();
         userName = userName.Remove(userName.Length - 1, 1);;
     }
@@ -260,5 +263,11 @@ public class SaveScoreScreen : GameScreenModel {
 
     private static Color ColorIfSelected(IInteraction letter) {
         return letter.GetIsActivated() ? Color.Green : Color.White;
+    }
+    
+    private void PlaySoundEffect(ESoundsEffects effects)
+    {
+        SoundEffects.LoadEffect(game, effects);
+        SoundEffects.PlaySoundEffect(0.4f);
     }
 }
