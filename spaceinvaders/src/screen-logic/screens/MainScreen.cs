@@ -27,7 +27,7 @@ public class MainScreen(
 
     public override void LoadContent()
     {
-        _soundEffects = new SoundEffects(game, ESoundsEffects.BackgroundSong);
+        _soundEffects = new SoundEffects(game, ESoundsEffects.BackgroundSongForMenu);
         _soundEffects.PlayEffects(true);
     }
 

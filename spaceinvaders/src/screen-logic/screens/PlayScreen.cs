@@ -10,6 +10,7 @@ using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Screens;
 using spaceinvaders.model;
 using spaceinvaders.model.barricades;
+using spaceinvaders.model.sounds;
 
 namespace spaceinvaders.screen_logic.screens;
 
@@ -29,7 +30,13 @@ public class PlayScreen(
     private int _addLifeManage = 1000;
     private int _numberOfHordes = 0;
     private Explosion explosion = null;
+    private SoundEffects _soundEffects = new SoundEffects(game, ESoundsEffects.BackgroundSong);
     private AlienRound alienRound = new(contentManager, spriteBatch, graphics);
+
+    public override void LoadContent()
+    {
+        _soundEffects.PlayEffects(true);
+    }
 
     public override void Update(GameTime gameTime)
     {
@@ -74,6 +81,7 @@ public class PlayScreen(
     }
 
     private void LoadGameOverScreen() {
+        _soundEffects.StopMusic();
         GameOverScreen gameOverScreen = new(game,graphics, contentManager, spriteBatch, _score.GetScore());
         ScreenManager.ChangeScreen(gameOverScreen);
         _barricades.Dispose();

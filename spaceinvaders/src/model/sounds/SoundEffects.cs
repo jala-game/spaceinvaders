@@ -47,7 +47,7 @@ public class SoundEffects
 
     public void StopMusic()
     {
-        if (MediaState.Playing == MediaState.Stopped) return;
-        MediaPlayer.Stop();
+        if (MediaPlayer.State != MediaState.Stopped) MediaPlayer.Stop();
+        
     }
 }
