@@ -70,7 +70,7 @@ public class FrontEnemy : IEnemyGroup {
     }
 
     public void Fall() {
-        Bounds.Position += new Vector2(0, _texture.Height + _texture.Height / 2 - 8);
+        Bounds.Position += new Vector2(0, 50);
     }
 
     public Bullet GetBullet()

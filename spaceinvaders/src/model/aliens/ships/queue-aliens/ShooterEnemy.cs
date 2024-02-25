@@ -88,7 +88,7 @@ public class ShooterEnemy : IEnemyGroup
     }
 
     public void Fall() {
-        Bounds.Position += new Vector2(0, _texture.Height + 10);
+        Bounds.Position += new Vector2(0, 50);
     }
 
     public Bullet GetBullet()
