@@ -11,9 +11,9 @@ public class SoundEffects
     private static Song _mySound;
     private static SoundEffect _myEffect;
 
-    public static void LoadMusic(Game game, ESoundsEffects effec)
+    public static void LoadMusic(Game game, ESoundsEffects effect)
     {
-        switch (effec)
+        switch (effect)
         {
             case ESoundsEffects.BackgroundSong:
                 _mySound = game.Content.Load<Song>("songs/backgroundSong");
@@ -24,9 +24,9 @@ public class SoundEffects
         }
     }
 
-    public static void LoadEffect(Game game, ESoundsEffects effec)
+    public static void LoadEffect(Game game, ESoundsEffects effect)
     {
-        switch (effec)
+        switch (effect)
         {
             case ESoundsEffects.SpaceShipDead:
                 _myEffect = game.Content.Load<SoundEffect>("songs/explosion");
