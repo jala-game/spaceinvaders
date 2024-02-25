@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using spaceinvaders.model;
 using spaceinvaders.model.barricades;
+using spaceinvaders.model.sounds;
 
 namespace spaceinvaders.screen_logic.screens;
 
@@ -26,6 +27,12 @@ public class PlayScreen(
     private Explosion explosion = null;
     private AlienRound alienRound = new(contentManager, spriteBatch, graphics);
 
+    public override void LoadContent()
+    {
+        SoundEffects.LoadMusic(game, ESoundsEffects.BackgroundSong);
+        SoundEffects.PlayEffects(true, 0.2f);
+    }
+
     public override void Update(GameTime gameTime)
     {
         if (ship.GetIsDead()) {
@@ -34,6 +41,7 @@ public class PlayScreen(
         }
 
         PlayScreenUpdate playScreenUpdate = new() {
+            game=game,
             enemies=_enemies,
             redEnemy=_redEnemy,
             ship=ship,
@@ -69,6 +77,7 @@ public class PlayScreen(
     }
 
     private void LoadGameOverScreen() {
+        SoundEffects.StopMusic();
         GameOverScreen gameOverScreen = new(game,graphics, contentManager, spriteBatch, _score.GetScore());
         ScreenManager.ChangeScreen(gameOverScreen);
         _barricades.Dispose();

@@ -10,6 +10,8 @@ public static class SpaceShipMovementKeys
 {
     public static Keys Left { get; private set; } = Keys.Left;
     public static Keys Right { get; private set; } = Keys.Right;
+    public static Keys KeyA { get; private set; } = Keys.A;
+    public static Keys KeyD { get; private set; } = Keys.D;
     public static Keys Shoot { get; private set; } = Keys.Space;
     public static Keys CurrentKeyToAssign { get; private set; }
     public static bool IsWaitingForKeyPress { get; private set; }
@@ -25,6 +27,14 @@ public static class SpaceShipMovementKeys
             case EControlOptions.Right:
                 IsWaitingForKeyPress = true;
                 CurrentKeyToAssign = Keys.Right;
+                break;
+            case EControlOptions.KeyA:
+                IsWaitingForKeyPress = true;
+                CurrentKeyToAssign = Keys.A;
+                break;
+            case EControlOptions.KeyD:
+                IsWaitingForKeyPress = true;
+                CurrentKeyToAssign = Keys.D;
                 break;
             case EControlOptions.Shoot:
                 IsWaitingForKeyPress = true;
@@ -48,6 +58,12 @@ public static class SpaceShipMovementKeys
             case Keys.Right:
                 Right = newKey;
                 break;
+            case Keys.A:
+                Left = newKey;
+                break;
+            case Keys.D:
+                Right = newKey;
+                break;
             case Keys.Space:
                 Shoot = newKey;
                 break;
@@ -57,6 +73,8 @@ public static class SpaceShipMovementKeys
         {
             Keys.Left => EControlOptions.Left,
             Keys.Right => EControlOptions.Right,
+            Keys.A => EControlOptions.KeyA,
+            Keys.D => EControlOptions.KeyD,
             Keys.Space => EControlOptions.Shoot,
             _ => EControlOptions.None
         };

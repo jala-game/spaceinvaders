@@ -8,8 +8,11 @@ using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using spaceinvaders.model;
 using spaceinvaders.model.barricades;
+using spaceinvaders.model.sounds;
 
-public class PlayScreenUpdate() {
+public class PlayScreenUpdate()
+{
+    public Game game;
     public List<IEnemyGroup> enemies;
     public RedEnemy redEnemy;
     public SpaceShip ship;
@@ -80,6 +83,8 @@ public class PlayScreenUpdate() {
                 enemy.OnCollision(null);
                 ship.bullet.OnCollision(null);
                 explosion = new(spriteBatch, contentManager, enemy.Bounds.Position);
+                SoundEffects.LoadEffect(game, ESoundsEffects.EnemyDead);
+                SoundEffects.PlaySoundEffect();
             }
         }
 
@@ -100,6 +105,8 @@ public class PlayScreenUpdate() {
             score.SetScore(redEnemy.GetPoint());
             redEnemy.OnCollision(null);
             explosion = new(spriteBatch, contentManager, redEnemy.Bounds.Position);
+            SoundEffects.LoadEffect(game, ESoundsEffects.EnemyDead);
+            SoundEffects.PlaySoundEffect();
         }
     }
 

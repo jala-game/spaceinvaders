@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using spaceinvaders.model.barricades;
+using spaceinvaders.model.sounds;
 using spaceinvaders.services;
 
 public class GameOverScreen(
@@ -20,8 +21,12 @@ public class GameOverScreen(
     private SpriteFont _gameMenuFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
     private EMenuOptionsGameOver _selectedOption = EMenuOptionsGameOver.SaveGame;
     private float delayToPress = 10f;
-    public override void Initialize() { }
-    public override void LoadContent() { }
+
+    public override void LoadContent()
+    {
+        SoundEffects.LoadMusic(game, ESoundsEffects.BackgroundSongForMenu);
+        SoundEffects.PlayEffects(true, 0.2f);
+    }
 
     public override void Update(GameTime gameTime)
     {
@@ -41,18 +46,21 @@ public class GameOverScreen(
         {
             _selectedOption--;
             delayToPress = resetDelay;
+            PlaySoundEffect(ESoundsEffects.MenuSelection);
         }
 
         if (kstate.IsKeyDown(Keys.Down) && _selectedOption < EMenuOptionsGameOver.LeaveGame)
         {
             _selectedOption++;
             delayToPress = resetDelay;
+            PlaySoundEffect(ESoundsEffects.MenuSelection);
         }
     }
 
     private void SendMenuOption(KeyboardState kstate)
     {
         if (!kstate.IsKeyDown(Keys.Enter)) return;
+        PlaySoundEffect(ESoundsEffects.MenuEnter);
         switch (_selectedOption)
         {
             case EMenuOptionsGameOver.SaveGame:
@@ -72,6 +80,7 @@ public class GameOverScreen(
 
     private void LeaveTheGame()
     {
+        SoundEffects.StopMusic();
         MainScreen mainScreen = new MainScreen(game,graphics,contentManager,spriteBatch );
         ScreenManager.ChangeScreen(mainScreen);
     }
@@ -132,5 +141,11 @@ public class GameOverScreen(
                 DrawMenuItem("> Leave the game", graphics.PreferredBackBufferHeight / 2 + 250,Color.Red);
                 break;
         }
+    }
+    
+    private void PlaySoundEffect(ESoundsEffects effects)
+    {
+        SoundEffects.LoadEffect(game, effects);
+        SoundEffects.PlaySoundEffect(0.4f);
     }
 }

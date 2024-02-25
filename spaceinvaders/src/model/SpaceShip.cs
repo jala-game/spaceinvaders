@@ -6,8 +6,12 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using spaceinvaders.model;
+using spaceinvaders.model.barricades;
+using spaceinvaders.model.sounds;
 
-public class SpaceShip : Entity {
+public class SpaceShip : Entity
+{
+    public readonly Game game;
     public readonly Texture2D texture;
     private readonly GraphicsDeviceManager graphics;
     private readonly SpriteBatch _spriteBatch;
@@ -20,7 +24,7 @@ public class SpaceShip : Entity {
 
     private readonly int PLAYER_SPEED = 10;
 
-    public SpaceShip(GraphicsDeviceManager _graphics, SpriteBatch spriteBatch, ContentManager contentManager) {
+    public SpaceShip(GraphicsDeviceManager _graphics, SpriteBatch spriteBatch, ContentManager contentManager, Game _game) {
         Random random = new();
         // int randomShip = random.Next(1, 3);
         texture = contentManager.Load<Texture2D>($"ship1");
@@ -44,6 +48,8 @@ public class SpaceShip : Entity {
         _spriteBatch = spriteBatch;
         _isDead = false;
         _numberOfLives = 3;
+
+        game = _game;
     }
 
     public void Update()
@@ -60,7 +66,7 @@ public class SpaceShip : Entity {
 
     private void MoveToRight(KeyboardState kstate) {
         bool rightLimit = graphics.PreferredBackBufferWidth > Bounds.Position.X + texture.Width;
-        if (kstate.IsKeyDown(SpaceShipMovementKeys.Right) && rightLimit) {
+        if ((kstate.IsKeyDown(SpaceShipMovementKeys.Right) || kstate.IsKeyDown(SpaceShipMovementKeys.KeyD)) && rightLimit) {
             Vector2 newPosition = new(PLAYER_SPEED + Bounds.Position.X, Bounds.Position.Y);
             Bounds.Position = newPosition;
         }
@@ -68,7 +74,7 @@ public class SpaceShip : Entity {
 
     private void MoveToLeft(KeyboardState kstate) {
         bool leftLimit = 0 < Bounds.Position.X;
-        if (kstate.IsKeyDown(SpaceShipMovementKeys.Left) && leftLimit) {
+        if ((kstate.IsKeyDown(SpaceShipMovementKeys.Left) || kstate.IsKeyDown(SpaceShipMovementKeys.KeyA)) && leftLimit) {
             Vector2 newPosition = new(Bounds.Position.X - PLAYER_SPEED, Bounds.Position.Y);
             Bounds.Position = newPosition;
         };
@@ -77,6 +83,8 @@ public class SpaceShip : Entity {
     private void Shoot(KeyboardState kstate) {
         if (kstate.IsKeyDown(SpaceShipMovementKeys.Shoot) && bullet == null) {
             Texture2D bulletTexture = _contentManager.Load<Texture2D>("blue-bullet");
+            SoundEffects.LoadEffect(game,ESoundsEffects.ShootSpaceShip);
+            SoundEffects.PlaySoundEffect();
             bullet = new Bullet(Bounds.Position, bulletTexture, _spriteBatch, graphics, texture.Width, TypeBulletEnum.PLAYER);
         }
     }
@@ -113,6 +121,8 @@ public class SpaceShip : Entity {
 
     private void RemoveLifeForShip()
     {
+        SoundEffects.LoadEffect(game, ESoundsEffects.SpaceShipDead);
+        SoundEffects.PlaySoundEffect(0.2f);
         if (_numberOfLives > 1)
         {
             _numberOfLives -= 1;

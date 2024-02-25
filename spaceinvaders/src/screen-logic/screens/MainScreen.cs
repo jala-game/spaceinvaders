@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using spaceinvaders.model;
 using spaceinvaders.model.barricades;
+using spaceinvaders.model.sounds;
 using spaceinvaders.screen_logic.screens;
 
 public class MainScreen(
@@ -24,6 +26,8 @@ public class MainScreen(
 
     public override void LoadContent()
     {
+        SoundEffects.LoadMusic(game, ESoundsEffects.BackgroundSongForMenu);
+        SoundEffects.PlayEffects(true, 0.2f);
     }
 
     public override void Update(GameTime gameTime)
@@ -53,20 +57,31 @@ public class MainScreen(
         {
             _selectedOption--;
             delayToPress = resetDelay;
+            PlayMenuSound(ESoundsEffects.MenuSelection);
         }
         else if (kstate.IsKeyDown(Keys.Down) && (int)_selectedOption < 2)
         {
             _selectedOption++;
             delayToPress = resetDelay;
+            PlayMenuSound(ESoundsEffects.MenuSelection);
         }
+        
+    }
+
+    private void PlayMenuSound(ESoundsEffects eSoundsEffects)
+    {
+        SoundEffects.LoadEffect(game,eSoundsEffects);
+        SoundEffects.PlaySoundEffect(0.4f);
     }
 
     private void SendMenuOption(KeyboardState kstate)
     {
         if (!kstate.IsKeyDown(Keys.Enter)) return;
+        PlayMenuSound(ESoundsEffects.MenuEnter);
         switch (_selectedOption)
         {
             case EMenuScreenOptions.Play:
+                SoundEffects.StopMusic();
                 StartGame();
                 break;
             case EMenuScreenOptions.Leaderboard:
@@ -80,7 +95,7 @@ public class MainScreen(
 
     private void StartGame()
     {
-        SpaceShip spaceShip = new(graphics, spriteBatch, contentManager);
+        SpaceShip spaceShip = new(graphics, spriteBatch, contentManager, game);
         PlayScreen playScreen = new(game,spaceShip, graphics, contentManager, spriteBatch);
         ScreenManager.ChangeScreen(playScreen);
     }
@@ -142,7 +157,6 @@ public class MainScreen(
     private void DrawDescription()
     {
         string text = "Use the arrow keys to move between menu items and press enter to select the option.";
-        float textWidth = _gameDescription.MeasureString(text).X / 2;
         spriteBatch.DrawString(_gameDescription, text, new Vector2(100,graphics.PreferredBackBufferHeight - 100), Color.White);
     }
 
