@@ -157,7 +157,6 @@ public class MainScreen(
     private void DrawDescription()
     {
         string text = "Use the arrow keys to move between menu items and press enter to select the option.";
-        float textWidth = _gameDescription.MeasureString(text).X / 2;
         spriteBatch.DrawString(_gameDescription, text, new Vector2(100,graphics.PreferredBackBufferHeight - 100), Color.White);
     }
 
