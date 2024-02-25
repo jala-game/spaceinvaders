@@ -204,6 +204,12 @@
 /processorParam:Quality=Best
 /build:songs/invaderkilled.wav
 
+#begin songs/menuenter.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:songs/menuenter.wav
+
 #begin songs/menuselection.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
