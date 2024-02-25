@@ -192,9 +192,9 @@
 /processorParam:Quality=Best
 /build:songs/explosion.mp3
 
-#begin songs/shoot.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
+#begin songs/shoot.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:songs/shoot.mp3
+/build:songs/shoot.wav
 

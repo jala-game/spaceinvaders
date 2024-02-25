@@ -55,7 +55,7 @@ public class SoundEffects
 
     public static void PlaySoundEffect(Game game)
     {
-        var soundEffect = game.Content.Load<SoundEffect>("songs/enemyExplosion");
+        var soundEffect = game.Content.Load<SoundEffect>("songs/shoot");
         soundEffect.Play();
     }
 }
