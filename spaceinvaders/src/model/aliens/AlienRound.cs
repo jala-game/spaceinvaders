@@ -56,19 +56,22 @@ public class AlienRound
     {
         foreach (IEnemyGroup enemy in enemies) {
             enemy.IncreaseX(SPEED);
-            InvertDirectionAndFallIfEnemyLimitIsFilled(enemy);
         }
+        InvertDirectionAndFallIfEnemyLimitIsFilled();
     }
 
-    private void InvertDirectionAndFallIfEnemyLimitIsFilled(IEnemyGroup enemy) {
-        bool isRightLimited = enemy.Bounds.Position.X + enemy.GetTexture().Width >= _graphics.PreferredBackBufferWidth;
-        bool isLeftLimited = enemy.Bounds.Position.X <= 0;
-        if ((isRightLimited || isLeftLimited) && !enemy.IsDead()) {
-            enemies.ForEach(e => {
-                e.InvertDirection();
-                e.Fall();
-            });
-            SPEED+= 0.5f;
+    private void InvertDirectionAndFallIfEnemyLimitIsFilled() {
+        foreach (IEnemyGroup enemy in enemies) {
+            bool isRightLimited = enemy.Bounds.Position.X + enemy.GetTexture().Width >= _graphics.PreferredBackBufferWidth;
+            bool isLeftLimited = enemy.Bounds.Position.X <= 0;
+            if ((isRightLimited || isLeftLimited) && !enemy.IsDead()) {
+                enemies.ForEach(e => {
+                    e.InvertDirection();
+                    e.Fall();
+                });
+                SPEED+= 0.5f;
+                return;
+            }
         }
     }
 
