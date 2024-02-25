@@ -10,8 +10,7 @@ public class SoundEffects
 {
     private static Song _mySound;
     private static SoundEffect _myEffect;
-    
-    
+
     public static void LoadMusic(Game game, ESoundsEffects effec)
     {
         switch (effec)
@@ -24,7 +23,7 @@ public class SoundEffects
                 break;
         }
     }
-    
+
     public static void LoadEffect(Game game, ESoundsEffects effec)
     {
         switch (effec)
@@ -51,7 +50,6 @@ public class SoundEffects
     public static void StopMusic()
     {
         if (MediaPlayer.State != MediaState.Stopped) MediaPlayer.Stop();
-        
     }
 
     public static void PlaySoundEffect(Game game)
