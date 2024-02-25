@@ -22,13 +22,12 @@ public class MainScreen(
     private SpriteFont _gameDescription = game.Content.Load<SpriteFont>("fonts/PixeloidMono");
     private EMenuScreenOptions _selectedOption = EMenuScreenOptions.Play;
     private float delayToPress = 10f;
-    private SoundEffects _soundEffects;
     public override void Initialize() { }
 
     public override void LoadContent()
     {
-        _soundEffects = new SoundEffects(game, ESoundsEffects.BackgroundSongForMenu);
-        _soundEffects.PlayEffects(true);
+        SoundEffects.LoadMusic(game, ESoundsEffects.BackgroundSongForMenu);
+        SoundEffects.PlayEffects(true);
     }
 
     public override void Update(GameTime gameTime)
@@ -72,7 +71,7 @@ public class MainScreen(
         switch (_selectedOption)
         {
             case EMenuScreenOptions.Play:
-                _soundEffects.StopMusic();
+                SoundEffects.StopMusic();
                 StartGame();
                 break;
             case EMenuScreenOptions.Leaderboard:

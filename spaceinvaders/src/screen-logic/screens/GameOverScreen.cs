@@ -21,11 +21,11 @@ public class GameOverScreen(
     private SpriteFont _gameMenuFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
     private EMenuOptionsGameOver _selectedOption = EMenuOptionsGameOver.SaveGame;
     private float delayToPress = 10f;
-    private SoundEffects _soundEffects = new SoundEffects(game, ESoundsEffects.BackgroundSongForMenu);
 
     public override void LoadContent()
     {
-        _soundEffects.PlayEffects(true);
+        SoundEffects.LoadMusic(game, ESoundsEffects.BackgroundSongForMenu);
+        SoundEffects.PlayEffects(true);
     }
 
     public override void Update(GameTime gameTime)
@@ -77,7 +77,7 @@ public class GameOverScreen(
 
     private void LeaveTheGame()
     {
-        _soundEffects.StopMusic();
+        SoundEffects.StopMusic();
         MainScreen mainScreen = new MainScreen(game,graphics,contentManager,spriteBatch );
         ScreenManager.ChangeScreen(mainScreen);
     }

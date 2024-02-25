@@ -25,12 +25,12 @@ public class PlayScreen(
     private int _addLifeManage = 1000;
     private int _numberOfHordes = 0;
     private Explosion explosion = null;
-    private SoundEffects _soundEffects = new SoundEffects(game, ESoundsEffects.BackgroundSong);
     private AlienRound alienRound = new(contentManager, spriteBatch, graphics);
 
     public override void LoadContent()
     {
-        _soundEffects.PlayEffects(true, 0.2f);
+        SoundEffects.LoadMusic(game, ESoundsEffects.BackgroundSong);
+        SoundEffects.PlayEffects(true, 0.2f);
     }
 
     public override void Update(GameTime gameTime)
@@ -76,7 +76,7 @@ public class PlayScreen(
     }
 
     private void LoadGameOverScreen() {
-        _soundEffects.StopMusic();
+        SoundEffects.StopMusic();
         GameOverScreen gameOverScreen = new(game,graphics, contentManager, spriteBatch, _score.GetScore());
         ScreenManager.ChangeScreen(gameOverScreen);
         _barricades.Dispose();

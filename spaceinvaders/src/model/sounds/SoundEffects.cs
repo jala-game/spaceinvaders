@@ -8,46 +8,47 @@ namespace spaceinvaders.model.sounds;
 
 public class SoundEffects
 {
-    private Song _mySound;
-
-    public SoundEffects(Game game,ESoundsEffects effect )
-    {
-        _mySound = LoadSounds(game, effect);
-    }
+    private static Song _mySound;
+    private static SoundEffect _myEffect;
     
-    private static Song LoadSounds(Game game, ESoundsEffects effec)
+    
+    public static void LoadMusic(Game game, ESoundsEffects effec)
     {
-        Song soundEffect = null;
-
         switch (effec)
         {
             case ESoundsEffects.BackgroundSong:
-                soundEffect = game.Content.Load<Song>("songs/backgroundSong");
+                _mySound = game.Content.Load<Song>("songs/backgroundSong");
                 break;
             case ESoundsEffects.BackgroundSongForMenu:
-                soundEffect = game.Content.Load<Song>("songs/backgroundSongForMenus");
-                break;
-            case ESoundsEffects.SpaceShipDead:
-                soundEffect = game.Content.Load<Song>("songs/explosion");
-                break;
-            case ESoundsEffects.EnemyDead:
-                soundEffect = game.Content.Load<Song>("songs/enemyExplosion");
-                break;
-            case ESoundsEffects.ShootSpaceShip:
-                soundEffect = game.Content.Load<Song>("songs/shoot");
+                _mySound = game.Content.Load<Song>("songs/backgroundSongForMenus");
                 break;
         }
-        return soundEffect;
+    }
+    
+    public static void LoadEffect(Game game, ESoundsEffects effec)
+    {
+        switch (effec)
+        {
+            case ESoundsEffects.SpaceShipDead:
+                _myEffect = game.Content.Load<SoundEffect>("songs/explosion");
+                break;
+            case ESoundsEffects.EnemyDead:
+                _myEffect = game.Content.Load<SoundEffect>("songs/invaderkilled");
+                break;
+            case ESoundsEffects.ShootSpaceShip:
+                _myEffect = game.Content.Load<SoundEffect>("songs/shoot");
+                break;
+        }
     }
 
-    public void PlayEffects(bool loop, float volume = 1f)
+    public static void PlayEffects(bool loop, float volume = 1f)
     {
         MediaPlayer.Play(_mySound);
         MediaPlayer.IsRepeating = loop;
         MediaPlayer.Volume = volume;
     }
 
-    public void StopMusic()
+    public static void StopMusic()
     {
         if (MediaPlayer.State != MediaState.Stopped) MediaPlayer.Stop();
         
@@ -55,7 +56,7 @@ public class SoundEffects
 
     public static void PlaySoundEffect(Game game)
     {
-        var soundEffect = game.Content.Load<SoundEffect>("songs/shoot");
+        var soundEffect = _myEffect;
         soundEffect.Play();
     }
 }
