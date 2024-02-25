@@ -39,10 +39,11 @@ public class SoundEffects
         return soundEffect;
     }
 
-    public void PlayEffects(bool loop)
+    public void PlayEffects(bool loop, float volume = 1f)
     {
         MediaPlayer.Play(_mySound);
         MediaPlayer.IsRepeating = loop;
+        MediaPlayer.Volume = volume;
     }
 
     public void StopMusic()

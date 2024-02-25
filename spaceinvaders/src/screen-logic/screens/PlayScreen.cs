@@ -35,7 +35,7 @@ public class PlayScreen(
 
     public override void LoadContent()
     {
-        _soundEffects.PlayEffects(true);
+        _soundEffects.PlayEffects(true, 0.2f);
     }
 
     public override void Update(GameTime gameTime)
