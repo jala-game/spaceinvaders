@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using spaceinvaders.model.barricades;
+using spaceinvaders.model.sounds;
 using spaceinvaders.services;
 
 public class GameOverScreen(
@@ -20,8 +21,12 @@ public class GameOverScreen(
     private SpriteFont _gameMenuFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
     private EMenuOptionsGameOver _selectedOption = EMenuOptionsGameOver.SaveGame;
     private float delayToPress = 10f;
-    public override void Initialize() { }
-    public override void LoadContent() { }
+    private SoundEffects _soundEffects = new SoundEffects(game, ESoundsEffects.BackgroundSongForMenu);
+
+    public override void LoadContent()
+    {
+        _soundEffects.PlayEffects(true);
+    }
 
     public override void Update(GameTime gameTime)
     {
@@ -72,6 +77,7 @@ public class GameOverScreen(
 
     private void LeaveTheGame()
     {
+        _soundEffects.StopMusic();
         MainScreen mainScreen = new MainScreen(game,graphics,contentManager,spriteBatch );
         ScreenManager.ChangeScreen(mainScreen);
     }
