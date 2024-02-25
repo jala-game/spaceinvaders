@@ -46,18 +46,21 @@ public class GameOverScreen(
         {
             _selectedOption--;
             delayToPress = resetDelay;
+            PlaySoundEffect(ESoundsEffects.MenuSelection);
         }
 
         if (kstate.IsKeyDown(Keys.Down) && _selectedOption < EMenuOptionsGameOver.LeaveGame)
         {
             _selectedOption++;
             delayToPress = resetDelay;
+            PlaySoundEffect(ESoundsEffects.MenuSelection);
         }
     }
 
     private void SendMenuOption(KeyboardState kstate)
     {
         if (!kstate.IsKeyDown(Keys.Enter)) return;
+        PlaySoundEffect(ESoundsEffects.MenuEnter);
         switch (_selectedOption)
         {
             case EMenuOptionsGameOver.SaveGame:
@@ -138,5 +141,11 @@ public class GameOverScreen(
                 DrawMenuItem("> Leave the game", graphics.PreferredBackBufferHeight / 2 + 250,Color.Red);
                 break;
         }
+    }
+    
+    private void PlaySoundEffect(ESoundsEffects effects)
+    {
+        SoundEffects.LoadEffect(game, effects);
+        SoundEffects.PlaySoundEffect(0.4f);
     }
 }
