@@ -116,7 +116,7 @@ public class MainScreen(
     {
         string text = "Space Invaders";
         float textWidth = _gameFont.MeasureString(text).X / 2;
-        spriteBatch.DrawString(_gameFont, text, new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidth ,100), Color.White);
+        spriteBatch.DrawString(_gameFont, text, new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidth ,100), Color.Gold);
     }
 
     private void DrawMenu()

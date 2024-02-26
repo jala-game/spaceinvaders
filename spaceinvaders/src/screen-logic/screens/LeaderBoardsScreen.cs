@@ -52,7 +52,7 @@ public class LeaderBoardsScreen(
     {
         string text = "HIGH SCORES";
         float textWidth = _title.MeasureString(text).X / 2;
-        spriteBatch.DrawString(_title,text,new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidth,50),Color.Green);
+        spriteBatch.DrawString(_title,text,new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidth,50),Color.Gold);
     }
 
     private void DrawHeaders()
@@ -94,7 +94,7 @@ public class LeaderBoardsScreen(
         };
 
         string[] placingOptions = new[] { "ST","ND","RD","TH"};
-        string placingPosition = positionUser > 3 ? placingOptions[3] : placingOptions[positionUser];
+        string placingPosition = positionUser + _placingManage > 3 ? placingOptions[3] : placingOptions[positionUser];
 
         string[] dataForUser = new[] { $"{positionUser + 1 + _placingManage}{placingPosition}", $"{user.Score}", $"{user.Name}" };
         
@@ -131,13 +131,13 @@ public class LeaderBoardsScreen(
         switch (_chooseMenu)
         {
             case  EMenuOptionsLeaderBoards.LeaveGame:
-                DrawMenuItem(100, "> Back", Color.Green);
+                DrawMenuItem(100, "> Back", Color.Red);
                 break;
             case EMenuOptionsLeaderBoards.RightArrow:
-                DrawMenuItem(graphics.PreferredBackBufferWidth/2 - (_genericFont.MeasureString($">").X / 2) + 70, ">", Color.Green);
+                DrawMenuItem(graphics.PreferredBackBufferWidth/2 - (_genericFont.MeasureString($">").X / 2) + 70, ">", Color.Red);
                 break;
             case EMenuOptionsLeaderBoards.LeftArrow:
-                DrawMenuItem(graphics.PreferredBackBufferWidth/2 - (_genericFont.MeasureString($"<").X / 2) - 70, "<", Color.Green);
+                DrawMenuItem(graphics.PreferredBackBufferWidth/2 - (_genericFont.MeasureString($"<").X / 2) - 70, "<", Color.Red);
                 break;
         }
     }

@@ -37,7 +37,7 @@ public class RedEnemy : IEnemyEntity
         _spriteBatch = spriteBatch;
         _texture = texture;
         SoundEffects.LoadEffect(game,ESoundsEffects.RedShip);
-        SoundEffects.PlaySoundEffect(0.7f);
+        SoundEffects.PlaySoundEffect(0.3f);
     }
 
     public void OnCollision(CollisionEventArgs collisionInfo)

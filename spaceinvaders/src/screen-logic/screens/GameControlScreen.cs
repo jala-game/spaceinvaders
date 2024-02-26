@@ -114,13 +114,13 @@ public class GameControlScreen(
         switch (_chooseMenu)
         {
             case  EMenuOptionsLeaderBoards.LeaveGame:
-                DrawMenuItem(100, "> Back", Color.Green);
+                DrawMenuItem(100, "> Back", Color.Red);
                 break;
             case EMenuOptionsLeaderBoards.RightArrow:
-                DrawMenuItem(graphics.PreferredBackBufferWidth/2 - (_genericFont.MeasureString($">").X / 2) + 70, ">", Color.Green);
+                DrawMenuItem(graphics.PreferredBackBufferWidth/2 - (_genericFont.MeasureString($">").X / 2) + 70, ">", Color.Red);
                 break;
             case EMenuOptionsLeaderBoards.LeftArrow:
-                DrawMenuItem(graphics.PreferredBackBufferWidth/2 - (_genericFont.MeasureString($"<").X / 2) - 70, "<", Color.Green);
+                DrawMenuItem(graphics.PreferredBackBufferWidth/2 - (_genericFont.MeasureString($"<").X / 2) - 70, "<", Color.Red);
                 break;
         }
     }
@@ -146,7 +146,7 @@ public class GameControlScreen(
 
     private void DrawControls()
     {
-        DrawTitle("Controls for Ship", null);
+        DrawTitle("Controls for Ship",  Color.Gold);
         DrawKeyControls();
     }
 
