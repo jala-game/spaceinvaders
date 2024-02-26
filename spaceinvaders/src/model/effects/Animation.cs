@@ -14,17 +14,19 @@ public class Animation
     private bool _active = true;
     private SpriteBatch _spriteBatch;
     public bool repeat = false;
+    private int _voidLastSprites;
 
-    public Animation(SpriteBatch spriteBatch, Texture2D texture, int framesX, int framesY, float frameTime, int row = 1)
+    public Animation(SpriteBatch spriteBatch, Texture2D texture, int framesX, int framesY, float frameTime, int voidLastSprites=0)
     {
         _texture = texture;
         _frameTime = frameTime;
         _frameTimeLeft = _frameTime;
         _frames = framesX;
         _spriteBatch = spriteBatch;
+        _voidLastSprites = voidLastSprites;
         var frameWidth = _texture.Width / framesX;
         var frameHeight = _texture.Height / framesY;
-        for (int lines = 0; lines < row; lines++) {
+        for (int lines = 0; lines < framesY; lines++) {
             for (int i = 0; i < _frames; i++)
             {
                 _sourceRectangles.Add(new(i * frameWidth, lines * frameHeight, frameWidth, frameHeight));
@@ -59,16 +61,20 @@ public class Animation
 
         _frameTimeLeft -= 3;
 
-        if (_frameTimeLeft <= 0)
+        if (_frameTimeLeft <= 0 && _sourceRectangles.Count - _voidLastSprites > _frame + 1)
         {
             _frameTimeLeft += _frameTime;
             _frame++;
+        }
+
+        if (_sourceRectangles.Count - _voidLastSprites <= _frame + 1) {
+            Stop();
         }
     }
 
     public void Draw(Vector2 pos)
     {
-        if (!_active) return;
+        if (!_active && !repeat) return;
         _spriteBatch.Draw(_texture, pos, _sourceRectangles[_frame], Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 1);
     }
 }

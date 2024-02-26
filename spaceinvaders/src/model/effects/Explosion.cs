@@ -9,7 +9,7 @@ public class Explosion {
     public Explosion(SpriteBatch spriteBatch, ContentManager content, Vector2 pos)
     {
         Texture2D a = content.Load<Texture2D>("effects/explosion");
-        _animation = new(spriteBatch, a, 6, 6, 5f, 6);
+        _animation = new(spriteBatch, a, 6, 6, 5f);
         _pos = pos;
     }
 

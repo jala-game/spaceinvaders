@@ -9,7 +9,7 @@ public class SpiralYellow {
     public SpiralYellow(SpriteBatch spriteBatch, ContentManager content, Vector2 pos)
     {
         Texture2D a = content.Load<Texture2D>("effects/spiralyellow");
-        _animation = new(spriteBatch, a, 5, 10, 5f, 10);
+        _animation = new(spriteBatch, a, 5, 10, 10f, 2);
         _pos = pos;
         _animation.repeat = true;
     }
