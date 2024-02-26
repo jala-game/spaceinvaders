@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
+using spaceinvaders.model.barricades;
+using spaceinvaders.model.sounds;
 
 public class RedEnemy : IEnemyEntity
 {
@@ -18,7 +20,7 @@ public class RedEnemy : IEnemyEntity
     private readonly int isRightOrLeft;
 
 
-    public RedEnemy(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
+    public RedEnemy(Game game, ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
     {
         Texture2D texture = contentManager.Load<Texture2D>("aliens/red-alien-ship");
         _graphics = graphics;
@@ -33,6 +35,8 @@ public class RedEnemy : IEnemyEntity
 
         _spriteBatch = spriteBatch;
         _texture = texture;
+        SoundEffects.LoadEffect(game,ESoundsEffects.RedShip);
+        SoundEffects.PlaySoundEffect(0.9f);
     }
 
     public void OnCollision(CollisionEventArgs collisionInfo)

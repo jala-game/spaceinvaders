@@ -43,6 +43,9 @@ public class SoundEffects
             case ESoundsEffects.MenuSelection:
                 _myEffect = game.Content.Load<SoundEffect>("songs/menuselection");
                 break;
+            case ESoundsEffects.RedShip:
+                _myEffect = game.Content.Load<SoundEffect>("songs/redship-song");
+                break;
         }
     }
 

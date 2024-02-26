@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -19,7 +20,7 @@ public class PlayScreen(
 {
     private readonly List<IEnemyGroup> _enemies = [];
     private RedEnemy _redEnemy;
-    private int _initialTime;
+    private int _initialTime = 0;
     private readonly Score _score = new(graphics, spriteBatch, contentManager);
     private Barricades _barricades = new(game);
     private int _addLifeManage = 1000;
@@ -85,13 +86,14 @@ public class PlayScreen(
 
     private void SpawnRedShip(GameTime gameTime)
     {
-        int actualMinute = int.Parse(gameTime.TotalGameTime.Minutes.ToString());
-        int differenceToSpawnRedShip = actualMinute - _initialTime;
-        const int minutes = 1;
-        if (differenceToSpawnRedShip == minutes)
+        int actualSecond = int.Parse(gameTime.TotalGameTime.Seconds.ToString());
+        Console.WriteLine(_initialTime);
+        Console.WriteLine(gameTime.TotalGameTime.Seconds.ToString());
+        int differenceToSpawnRedShip = actualSecond - _initialTime;
+        const int seconds = 59;
+        if (differenceToSpawnRedShip == seconds)
         {
-            _redEnemy = new RedEnemy(contentManager, spriteBatch, graphics);
-            _initialTime = actualMinute;
+            _redEnemy = new RedEnemy(game, contentManager, spriteBatch, graphics);
         }
     }
 
