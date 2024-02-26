@@ -27,6 +27,7 @@ public class PlayScreen(
     private int _numberOfHordes = 0;
     private Explosion explosion = null;
     private AlienRound alienRound = new(contentManager, spriteBatch, graphics);
+    private int gameTimeSecond = 0;
 
     public override void LoadContent()
     {
@@ -90,7 +91,7 @@ public class PlayScreen(
         Console.WriteLine(_initialTime);
         Console.WriteLine(gameTime.TotalGameTime.Seconds.ToString());
         int differenceToSpawnRedShip = actualSecond - _initialTime;
-        const int seconds = 10;
+        const int seconds = 59;
         if (differenceToSpawnRedShip == seconds)
         {
             _redEnemy = new RedEnemy(game, contentManager, spriteBatch, graphics);
