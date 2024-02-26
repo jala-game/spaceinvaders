@@ -12,7 +12,7 @@ public class Vortex
     public Vortex(SpriteBatch spriteBatch, ContentManager content, Vector2 pos)
     {
         Texture2D vortexTexture = content.Load<Texture2D>("effects/vortex");
-        _animation = new(spriteBatch, vortexTexture, 5, 6, 5f);
+        _animation = new(spriteBatch, vortexTexture, 5, 6, 12f);
         _animation.repeat = true;
         _pos = pos;
     }

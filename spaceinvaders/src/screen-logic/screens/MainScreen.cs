@@ -22,9 +22,11 @@ public class MainScreen(
     private SpriteFont _gameFontSmall = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
     private SpriteFont _gameDescription = game.Content.Load<SpriteFont>("fonts/PixeloidMono");
     private EMenuScreenOptions _selectedOption = EMenuScreenOptions.Play;
-    private SpiralYellow spiralYellowAnimation = new SpiralYellow(spriteBatch, contentManager, new Vector2(20, 20));
+    private SpiralYellow spiralYellowAnimation =
+        new SpiralYellow(spriteBatch, contentManager, new Vector2(graphics.PreferredBackBufferWidth / 2 + 400 , 70));
     private float delayToPress = 10f;
-    private Vortex _vortex = new Vortex(spriteBatch, contentManager, new Vector2(100, 200));
+    private Vortex _vortex =
+        new Vortex(spriteBatch, contentManager, new Vector2(200, graphics.PreferredBackBufferHeight / 2 - 100));
     public override void Initialize() { }
 
     public override void LoadContent()
