@@ -90,7 +90,7 @@ public class PlayScreen(
         Console.WriteLine(_initialTime);
         Console.WriteLine(gameTime.TotalGameTime.Seconds.ToString());
         int differenceToSpawnRedShip = actualSecond - _initialTime;
-        const int seconds = 59;
+        const int seconds = 10;
         if (differenceToSpawnRedShip == seconds)
         {
             _redEnemy = new RedEnemy(game, contentManager, spriteBatch, graphics);

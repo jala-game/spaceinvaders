@@ -18,6 +18,7 @@ public class RedEnemy : IEnemyEntity
     private readonly float ALIEN_SPEED_X = 2.5f;
     private readonly Random random = new();
     private readonly int isRightOrLeft;
+    private float rotator = 0;
 
 
     public RedEnemy(Game game, ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
@@ -46,13 +47,14 @@ public class RedEnemy : IEnemyEntity
 
     public void Update()
     {
+        rotator +=  0.05f;
         IsOutsideFromMap();
         Movement();
     }
 
     private void IsOutsideFromMap() {
         bool rightLimit = _graphics.PreferredBackBufferWidth > Bounds.Position.X + _texture.Width / 2;
-        bool leftLimit = 0 + _texture.Width / 2 < Bounds.Position.X;
+        bool leftLimit = 0 - _texture.Width < Bounds.Position.X;
         if (isRightOrLeft == 0 && !rightLimit || isRightOrLeft == 1 && !leftLimit)
         {
             isDead = true;
@@ -74,17 +76,24 @@ public class RedEnemy : IEnemyEntity
 
     public void Draw()
     {
+        Vector2 origin = new(_texture.Width / 2, _texture.Height / 2);
         _spriteBatch.Draw(
             _texture,
-            Bounds.Position,
-            Color.White
+            new Vector2(Bounds.Position.X + _texture.Width / 2, Bounds.Position.Y + _texture.Height / 2),
+            null,
+            Color.White,
+            rotator,
+            origin,
+            Vector2.One,
+            SpriteEffects.None,
+            0f
         );
     }
 
     public bool IsDead() {
         return isDead;
     }
-    
+
     public int GetPoint()
     {
         Random random = new();

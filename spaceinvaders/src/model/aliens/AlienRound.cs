@@ -60,7 +60,7 @@ public class AlienRound
 
     private void IncreaseXAllEnemy() {
         foreach (IEnemyGroup enemy in enemies) {
-            //enemy.IncreaseX(SPEED);
+            enemy.IncreaseX(SPEED);
         }
     }
 

@@ -47,17 +47,17 @@ public class FrontEnemy : IEnemyGroup {
     {
         Vector2 origin = new(_texture.Width / 2, _texture.Height / 2);
 
-    _spriteBatch.Draw(
-        _texture,
-        new Vector2(Bounds.Position.X + _texture.Width / 2, Bounds.Position.Y + _texture.Height / 2),
-        null,
-        Color.White,
-        rotator,
-        origin,
-        Vector2.One,
-        SpriteEffects.None,
-        0f
-    );
+        _spriteBatch.Draw(
+            _texture,
+            new Vector2(Bounds.Position.X + _texture.Width / 2, Bounds.Position.Y + _texture.Height / 2),
+            null,
+            Color.White,
+            rotator,
+            origin,
+            Vector2.One,
+            SpriteEffects.None,
+            0f
+        );
     }
 
     public void InvertDirection() {
