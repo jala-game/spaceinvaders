@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using spaceinvaders.model;
 using spaceinvaders.model.barricades;
+using spaceinvaders.model.effects;
 using spaceinvaders.model.sounds;
 using spaceinvaders.screen_logic.screens;
 
@@ -22,6 +23,7 @@ public class MainScreen(
     private SpriteFont _gameDescription = game.Content.Load<SpriteFont>("fonts/PixeloidMono");
     private EMenuScreenOptions _selectedOption = EMenuScreenOptions.Play;
     private float delayToPress = 10f;
+    private Vortex _vortex = new Vortex(spriteBatch, contentManager, new Vector2(100, 200));
     public override void Initialize() { }
 
     public override void LoadContent()
@@ -32,6 +34,7 @@ public class MainScreen(
 
     public override void Update(GameTime gameTime)
     {
+        _vortex.Update(gameTime);
         var kstate = Keyboard.GetState();
 
         delayToPress--;
@@ -48,6 +51,7 @@ public class MainScreen(
         DrawMenu();
         DrawDescription();
         DrawItemMenuActive();
+        _vortex.Draw();
     }
 
     private void ModifyMenuSelection(KeyboardState kstate)
