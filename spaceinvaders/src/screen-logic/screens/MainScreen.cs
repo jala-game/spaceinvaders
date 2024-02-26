@@ -25,8 +25,8 @@ public class MainScreen(
     private SpiralYellow spiralYellowAnimation =
         new SpiralYellow(spriteBatch, contentManager, new Vector2(graphics.PreferredBackBufferWidth / 2 + 400 , 70));
     private float delayToPress = 10f;
-    private Vortex _vortex =
-        new Vortex(spriteBatch, contentManager, new Vector2(200, graphics.PreferredBackBufferHeight / 2 - 100));
+    private StairExplosion _vortex =
+        new StairExplosion(spriteBatch, contentManager, new Vector2(200, graphics.PreferredBackBufferHeight / 2 - 100));
     public override void Initialize() { }
 
     public override void LoadContent()
