@@ -216,6 +216,12 @@
 /processorParam:Quality=Best
 /build:songs/menuselection.wav
 
+#begin songs/redship-song.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:songs/redship-song.wav
+
 #begin songs/shoot.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
