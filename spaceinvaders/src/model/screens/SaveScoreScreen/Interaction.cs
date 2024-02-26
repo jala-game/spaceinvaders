@@ -1,4 +1,9 @@
-public interface IInteraction {
+using spaceinvaders.enums;
+
+namespace spaceinvaders.model.screens.SaveScoreScreen;
+
+public interface IInteraction
+{
     public void SetActivated();
     public string GetLetter();
     public bool GetIsActivated();

@@ -1,21 +1,29 @@
+using spaceinvaders.enums;
+
+namespace spaceinvaders.model.screens.SaveScoreScreen;
+
 public class DoneButton(string letter) : IInteraction
 {
-    private bool IsActivated = false;
-    private readonly InteractionEnum type = InteractionEnum.BUTTON;
+    private const InteractionEnum Type = InteractionEnum.Button;
+    private bool _isActivated;
 
-    public void SetActivated() {
-        IsActivated = !IsActivated;
+    public void SetActivated()
+    {
+        _isActivated = !_isActivated;
     }
 
-    public string GetLetter() {
+    public string GetLetter()
+    {
         return letter;
     }
 
-    public bool GetIsActivated() {
-        return IsActivated;
+    public bool GetIsActivated()
+    {
+        return _isActivated;
     }
 
-    public new InteractionEnum GetType() {
-        return type;
+    public new InteractionEnum GetType()
+    {
+        return Type;
     }
 }

@@ -9,8 +9,8 @@ namespace spaceinvaders;
 public class Game1 : Game
 {
     private readonly GraphicsDeviceManager _graphics;
-    private SpriteBatch _spriteBatch;
     private Texture2D _background;
+    private SpriteBatch _spriteBatch;
 
     public Game1()
     {
@@ -19,7 +19,7 @@ public class Game1 : Game
         IsMouseVisible = true;
 
         _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 300;
-        _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height -100;
+        _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - 100;
 
         _graphics.ApplyChanges();
     }
@@ -40,7 +40,7 @@ public class Game1 : Game
         Content.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
         Content.Load<SpriteFont>("fonts/PixeloidMono");
         Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
-        
+
         Content.Load<Song>("songs/backgroundSong");
         Content.Load<Song>("songs/backgroundSongForMenus");
         Content.Load<SoundEffect>("songs/explosion");
@@ -50,14 +50,16 @@ public class Game1 : Game
         Content.Load<SoundEffect>("songs/menuselection");
     }
 
-    private void LoadScreenManager() {
-        MainScreen mainScreen = new(this,_graphics, Content, _spriteBatch);
+    private void LoadScreenManager()
+    {
+        MainScreen mainScreen = new(this, _graphics, Content, _spriteBatch);
         ScreenManager.ChangeScreen(mainScreen);
     }
 
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+            Keyboard.GetState().IsKeyDown(Keys.Escape))
             LoadScreenManager();
 
         ScreenManager.Update(gameTime);
@@ -71,7 +73,8 @@ public class Game1 : Game
 
         _spriteBatch.Begin();
 
-        _spriteBatch.Draw(_background, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
+        _spriteBatch.Draw(_background,
+            new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
         ScreenManager.Draw(gameTime);
 
         _spriteBatch.End();

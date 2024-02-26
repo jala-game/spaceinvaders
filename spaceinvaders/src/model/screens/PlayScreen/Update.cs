@@ -6,114 +6,101 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
-using spaceinvaders.model;
+using spaceinvaders.model.aliens;
+using spaceinvaders.model.aliens.ships;
+using spaceinvaders.model.aliens.ships.queue_aliens;
 using spaceinvaders.model.barricades;
-using spaceinvaders.model.sounds;
+using spaceinvaders.utils;
 
-public class PlayScreenUpdate()
+namespace spaceinvaders.model.screens.PlayScreen;
+
+public class PlayScreenUpdate
 {
-    public Game game;
-    public List<IEnemyGroup> enemies;
-    public RedEnemy redEnemy;
-    public SpaceShip ship;
-    public GraphicsDeviceManager graphics;
-    public ContentManager contentManager;
-    public SpriteBatch spriteBatch;
-    public Barricades barricades;
-    public Score score;
-    public AlienRound alienRound;
-    public int addLifeManage;
-    private Explosion explosion = null;
+    public int AddLifeManage;
+    public AlienRound AlienRound;
+    public Barricades Barricades;
+    public ContentManager ContentManager;
+    public List<IEnemyGroup> Enemies;
+    private Explosion _explosion;
+    public Game Game;
+    public GraphicsDeviceManager Graphics;
+    public RedEnemy RedEnemy;
+    public Score Score;
+    public SpaceShip Ship;
+    public SpriteBatch SpriteBatch;
 
-    public void EnemiesUpdate() {
-        foreach (IEnemyGroup enemy in enemies)
-        {
-            enemy.Update();
-        }
+    public void EnemiesUpdate()
+    {
+        foreach (var enemy in Enemies) enemy.Update();
 
-        redEnemy?.Update();
+        RedEnemy?.Update();
     }
 
-    public Explosion GetExplosion() {
-        return explosion;
-    }
-
-    public void ExplosionUpdate(GameTime gameTime) {
-        explosion?.Update(gameTime);
+    public Explosion GetExplosion()
+    {
+        return _explosion;
     }
 
     public void EnemyBulletUpdate()
     {
-        foreach (IEnemyGroup enemy in enemies)
+        foreach (var bullet in Enemies.Select(enemy => enemy.GetBullet()))
         {
-            Bullet bullet = enemy.GetBullet();
             bullet?.Update();
 
-            if (bullet != null && bullet.Bounds.Intersects(ship.Bounds))
+            if (bullet != null && bullet.Bounds.Intersects(Ship.Bounds))
             {
                 bullet.OnCollision(null);
-                ship.OnCollision(null);
-                explosion = new(spriteBatch, contentManager, ship.Bounds.Position);
+                Ship.OnCollision(null);
+                _explosion = new Explosion(SpriteBatch, ContentManager, Ship.Bounds.Position);
             }
 
-            if (bullet != null && bullet.Bounds.Intersects(ship.bullet?.Bounds))
+            if (bullet != null && bullet.Bounds.Intersects(Ship.Bullet?.Bounds))
             {
                 bullet.OnCollision(null);
-                ship.bullet.OnCollision(null);
+                Ship.Bullet.OnCollision(null);
             }
 
-            if (bullet != null)
-            {
-                CollisionBulletAndBarricades(bullet);
-            }
+            if (bullet != null) CollisionBulletAndBarricades(bullet);
         }
     }
 
     public void SpaceShipBulletUpdate()
     {
-        if (ship.bullet == null) return;
+        if (Ship.Bullet == null) return;
 
-        ship.bullet.Update();
+        Ship.Bullet.Update();
 
-        foreach (IEnemyGroup enemy in enemies)
+        foreach (var enemy in Enemies.Where(enemy => Ship.Bullet != null && Ship.Bullet.Bounds.Intersects(enemy.Bounds)))
         {
-            if (ship.bullet != null && ship.bullet.Bounds.Intersects(enemy.Bounds))
-            {
-                score.SetScore(enemy.GetPoint());
-                enemy.OnCollision(null);
-                ship.bullet.OnCollision(null);
-                explosion = new(spriteBatch, contentManager, enemy.Bounds.Position);
-                SoundEffects.LoadEffect(game, ESoundsEffects.EnemyDead);
-                SoundEffects.PlaySoundEffect();
-            }
-        }
-
-        enemies.RemoveAll(e => e.IsDead());
-
-        if (ship.bullet != null)
-        {
-            CollisionBulletAndBarricades(ship.bullet);
-        }
-
-        if (redEnemy == null) return;
-
-        bool intersectBetweenRedEnemyAndBullet = ship.bullet.Bounds.Intersects(redEnemy.Bounds);
-        bool spaceShipBulletExists = ship.bullet != null;
-
-        if (spaceShipBulletExists && intersectBetweenRedEnemyAndBullet)
-        {
-            score.SetScore(redEnemy.GetPoint());
-            redEnemy.OnCollision(null);
-            explosion = new(spriteBatch, contentManager, redEnemy.Bounds.Position);
-            SoundEffects.LoadEffect(game, ESoundsEffects.EnemyDead);
+            Score.SetScore(enemy.GetPoint());
+            enemy.OnCollision(null);
+            Ship.Bullet.OnCollision(null);
+            _explosion = new Explosion(SpriteBatch, ContentManager, enemy.Bounds.Position);
+            SoundEffects.LoadEffect(Game, ESoundsEffects.EnemyDead);
             SoundEffects.PlaySoundEffect();
         }
+
+        Enemies.RemoveAll(e => e.IsDead());
+
+        if (Ship.Bullet != null) CollisionBulletAndBarricades(Ship.Bullet);
+
+        if (RedEnemy == null) return;
+
+        var intersectBetweenRedEnemyAndBullet = Ship.Bullet.Bounds.Intersects(RedEnemy.Bounds);
+        var spaceShipBulletExists = Ship.Bullet != null;
+
+        if (!spaceShipBulletExists || !intersectBetweenRedEnemyAndBullet) return;
+        Score.SetScore(RedEnemy.GetPoint());
+        RedEnemy.OnCollision(null);
+        _explosion = new Explosion(SpriteBatch, ContentManager, RedEnemy.Bounds.Position);
+        SoundEffects.LoadEffect(Game, ESoundsEffects.EnemyDead);
+        SoundEffects.PlaySoundEffect();
     }
 
     private void CollisionBulletAndBarricades(ICollisionActor bullet)
     {
         ArgumentNullException.ThrowIfNull(bullet);
-        foreach (var blockPart in barricades.BarricadeBlocks.SelectMany(barricadeBlock =>
+        foreach (var blockPart in Barricades.BarricadeBlocks.SelectMany(barricadeBlock =>
                      barricadeBlock.BarricadeBlockParts))
         {
             if (!blockPart.Bounds.Intersects(bullet.Bounds)) continue;
@@ -125,10 +112,8 @@ public class PlayScreenUpdate()
 
     public void IncreaseLife()
     {
-        if (score.GetScore() >= addLifeManage)
-        {
-            addLifeManage += 1000;
-            ship.AddLifeForShip();
-        }
+        if (Score.GetScore() < AddLifeManage) return;
+        AddLifeManage += 1000;
+        Ship.AddLifeForShip();
     }
 }

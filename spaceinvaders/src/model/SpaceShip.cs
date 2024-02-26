@@ -1,56 +1,57 @@
-using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
-using spaceinvaders.model;
+using spaceinvaders.enums;
 using spaceinvaders.model.barricades;
-using spaceinvaders.model.sounds;
+using spaceinvaders.utils;
 
-public class SpaceShip : Entity
+namespace spaceinvaders.model;
+
+public class SpaceShip : IEntity
 {
-    public readonly Game game;
-    public readonly Texture2D texture;
-    private readonly GraphicsDeviceManager graphics;
-    private readonly SpriteBatch _spriteBatch;
     private readonly ContentManager _contentManager;
+    private readonly SpriteBatch _spriteBatch;
+    private readonly Game _game;
+    private readonly GraphicsDeviceManager _graphics;
 
-    public IShapeF Bounds { get; }
-    public Bullet bullet;
+    private const int PlayerSpeed = 10;
+    private readonly Texture2D _texture;
     private bool _isDead;
     private int _numberOfLives;
+    public Bullet Bullet;
 
-    private readonly int PLAYER_SPEED = 10;
-
-    public SpaceShip(GraphicsDeviceManager _graphics, SpriteBatch spriteBatch, ContentManager contentManager, Game _game) {
-        Random random = new();
-        // int randomShip = random.Next(1, 3);
-        texture = contentManager.Load<Texture2D>($"ship1");
+    public SpaceShip(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, ContentManager contentManager,
+        Game game)
+    {
+        _texture = contentManager.Load<Texture2D>("ship1");
 
 
-        int heightTop = _graphics.PreferredBackBufferHeight;
-        int widthCenter = _graphics.PreferredBackBufferWidth / 2;
+        var heightTop = graphics.PreferredBackBufferHeight;
+        var widthCenter = graphics.PreferredBackBufferWidth / 2;
 
-        int centralizeByTextureWidth = widthCenter - texture.Width / 2;
-        int centralizeByTextureHeight = heightTop - texture.Height;
+        var centralizeByTextureWidth = widthCenter - _texture.Width / 2;
+        var centralizeByTextureHeight = heightTop - _texture.Height;
 
-        int MARGIN = 50;
-        int heightWithMargin = centralizeByTextureHeight - MARGIN;
+        const int margin = 50;
+        var heightWithMargin = centralizeByTextureHeight - margin;
 
         Vector2 position = new(centralizeByTextureWidth, heightWithMargin);
 
-        Bounds = new RectangleF(position, new Size2(texture.Width, texture.Height));
+        Bounds = new RectangleF(position, new Size2(_texture.Width, _texture.Height));
 
-        graphics = _graphics;
+        this._graphics = graphics;
         _contentManager = contentManager;
         _spriteBatch = spriteBatch;
         _isDead = false;
         _numberOfLives = 3;
 
-        game = _game;
+        this._game = game;
     }
+
+    public IShapeF Bounds { get; }
 
     public void Update()
     {
@@ -64,41 +65,10 @@ public class SpaceShip : Entity
         RemoveBulletIfIsDead();
     }
 
-    private void MoveToRight(KeyboardState kstate) {
-        bool rightLimit = graphics.PreferredBackBufferWidth > Bounds.Position.X + texture.Width;
-        if ((kstate.IsKeyDown(SpaceShipMovementKeys.Right) || kstate.IsKeyDown(SpaceShipMovementKeys.KeyD)) && rightLimit) {
-            Vector2 newPosition = new(PLAYER_SPEED + Bounds.Position.X, Bounds.Position.Y);
-            Bounds.Position = newPosition;
-        }
-    }
-
-    private void MoveToLeft(KeyboardState kstate) {
-        bool leftLimit = 0 < Bounds.Position.X;
-        if ((kstate.IsKeyDown(SpaceShipMovementKeys.Left) || kstate.IsKeyDown(SpaceShipMovementKeys.KeyA)) && leftLimit) {
-            Vector2 newPosition = new(Bounds.Position.X - PLAYER_SPEED, Bounds.Position.Y);
-            Bounds.Position = newPosition;
-        };
-    }
-
-    private void Shoot(KeyboardState kstate) {
-        if (kstate.IsKeyDown(SpaceShipMovementKeys.Shoot) && bullet == null) {
-            Texture2D bulletTexture = _contentManager.Load<Texture2D>("blue-bullet");
-            SoundEffects.LoadEffect(game,ESoundsEffects.ShootSpaceShip);
-            SoundEffects.PlaySoundEffect();
-            bullet = new Bullet(Bounds.Position, bulletTexture, _spriteBatch, graphics, texture.Width, TypeBulletEnum.PLAYER);
-        }
-    }
-
-    private void RemoveBulletWhenLeaveFromMap() {
-        if (bullet != null && bullet.Bounds.Position.Y < 0) {
-            bullet = null;
-        }
-    }
-
     public void Draw()
     {
         _spriteBatch.Draw(
-            texture,
+            _texture,
             Bounds.Position,
             Color.White
         );
@@ -109,9 +79,45 @@ public class SpaceShip : Entity
         RemoveLifeForShip();
     }
 
-    public void RemoveBulletIfIsDead()
+    private void MoveToRight(KeyboardState kstate)
     {
-        if (bullet != null && bullet.GetIsDead()) bullet = null;
+        var rightLimit = _graphics.PreferredBackBufferWidth > Bounds.Position.X + _texture.Width;
+        if ((!kstate.IsKeyDown(SpaceShipMovementKeys.Right) && !kstate.IsKeyDown(SpaceShipMovementKeys.KeyD)) ||
+            !rightLimit) return;
+        Vector2 newPosition = new(PlayerSpeed + Bounds.Position.X, Bounds.Position.Y);
+        Bounds.Position = newPosition;
+    }
+
+    private void MoveToLeft(KeyboardState kstate)
+    {
+        var leftLimit = 0 < Bounds.Position.X;
+        if ((kstate.IsKeyDown(SpaceShipMovementKeys.Left) || kstate.IsKeyDown(SpaceShipMovementKeys.KeyA)) && leftLimit)
+        {
+            Vector2 newPosition = new(Bounds.Position.X - PlayerSpeed, Bounds.Position.Y);
+            Bounds.Position = newPosition;
+        }
+
+        ;
+    }
+
+    private void Shoot(KeyboardState kstate)
+    {
+        if (!kstate.IsKeyDown(SpaceShipMovementKeys.Shoot) || Bullet != null) return;
+        var bulletTexture = _contentManager.Load<Texture2D>("blue-bullet");
+        SoundEffects.LoadEffect(_game, ESoundsEffects.ShootSpaceShip);
+        SoundEffects.PlaySoundEffect();
+        Bullet = new Bullet(Bounds.Position, bulletTexture, _spriteBatch, _graphics, _texture.Width,
+            TypeBulletEnum.Player);
+    }
+
+    private void RemoveBulletWhenLeaveFromMap()
+    {
+        if (Bullet != null && Bullet.Bounds.Position.Y < 0) Bullet = null;
+    }
+
+    private void RemoveBulletIfIsDead()
+    {
+        if (Bullet != null && Bullet.GetIsDead()) Bullet = null;
     }
 
     public void AddLifeForShip()
@@ -121,7 +127,7 @@ public class SpaceShip : Entity
 
     private void RemoveLifeForShip()
     {
-        SoundEffects.LoadEffect(game, ESoundsEffects.SpaceShipDead);
+        SoundEffects.LoadEffect(_game, ESoundsEffects.SpaceShipDead);
         SoundEffects.PlaySoundEffect(0.2f);
         if (_numberOfLives > 1)
         {
@@ -142,7 +148,7 @@ public class SpaceShip : Entity
         _isDead = true;
     }
 
-    public int GetLifes()
+    public int GetLives()
     {
         return _numberOfLives;
     }

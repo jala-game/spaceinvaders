@@ -1,14 +1,12 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using spaceinvaders.model;
 using spaceinvaders.model.barricades;
-using spaceinvaders.model.sounds;
 using spaceinvaders.screen_logic.screens;
+using spaceinvaders.utils;
 
 public class MainScreen(
     Game game,
@@ -17,12 +15,15 @@ public class MainScreen(
     SpriteBatch spriteBatch
 ) : GameScreenModel
 {
-    private SpriteFont _gameFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
-    private SpriteFont _gameFontSmall = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
-    private SpriteFont _gameDescription = game.Content.Load<SpriteFont>("fonts/PixeloidMono");
+    private readonly SpriteFont _gameDescription = game.Content.Load<SpriteFont>("fonts/PixeloidMono");
+    private readonly SpriteFont _gameFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoGameOver");
+    private readonly SpriteFont _gameFontSmall = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
     private EMenuScreenOptions _selectedOption = EMenuScreenOptions.Play;
     private float delayToPress = 10f;
-    public override void Initialize() { }
+
+    public override void Initialize()
+    {
+    }
 
     public override void LoadContent()
     {
@@ -39,7 +40,6 @@ public class MainScreen(
 
         ModifyMenuSelection(kstate);
         SendMenuOption(kstate);
-
     }
 
     public override void Draw(GameTime gameTime)
@@ -52,7 +52,7 @@ public class MainScreen(
 
     private void ModifyMenuSelection(KeyboardState kstate)
     {
-        float resetDelay = 10;
+        const float resetDelay = 10;
         if (kstate.IsKeyDown(Keys.Up) && _selectedOption > 0)
         {
             _selectedOption--;
@@ -65,12 +65,11 @@ public class MainScreen(
             delayToPress = resetDelay;
             PlayMenuSound(ESoundsEffects.MenuSelection);
         }
-        
     }
 
     private void PlayMenuSound(ESoundsEffects eSoundsEffects)
     {
-        SoundEffects.LoadEffect(game,eSoundsEffects);
+        SoundEffects.LoadEffect(game, eSoundsEffects);
         SoundEffects.PlaySoundEffect(0.4f);
     }
 
@@ -96,33 +95,34 @@ public class MainScreen(
     private void StartGame()
     {
         SpaceShip spaceShip = new(graphics, spriteBatch, contentManager, game);
-        PlayScreen playScreen = new(game,spaceShip, graphics, contentManager, spriteBatch);
+        PlayScreen playScreen = new(game, spaceShip, graphics, contentManager, spriteBatch);
         ScreenManager.ChangeScreen(playScreen);
     }
 
     private void LeaderBoardsStart()
     {
-        LeaderBoardsScreen leaderBoardsScreen = new LeaderBoardsScreen(game, graphics, contentManager, spriteBatch);
+        var leaderBoardsScreen = new LeaderBoardsScreen(game, graphics, contentManager, spriteBatch);
         ScreenManager.ChangeScreen(leaderBoardsScreen);
     }
 
     private void ControlScreen()
     {
-        GameControlScreen GameControlScreen = new(game,graphics,contentManager, spriteBatch);
-        ScreenManager.ChangeScreen(GameControlScreen);
+        GameControlScreen gameControlScreen = new(game, graphics, contentManager, spriteBatch);
+        ScreenManager.ChangeScreen(gameControlScreen);
     }
 
     private void DrawTitle()
     {
-        string text = "Space Invaders";
-        float textWidth = _gameFont.MeasureString(text).X / 2;
-        spriteBatch.DrawString(_gameFont, text, new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidth ,100), Color.White);
+        const string text = "Space Invaders";
+        var textWidth = _gameFont.MeasureString(text).X / 2;
+        spriteBatch.DrawString(_gameFont, text, new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidth, 100),
+            Color.White);
     }
 
     private void DrawMenu()
     {
-        List<string> stringsMenu = new List<string>() {"  Play Game","  View Leaderboards","  Game Control" };
-        int baseY = 400;
+        var stringsMenu = new List<string> { "  Play Game", "  View Leaderboards", "  Game Control" };
+        var baseY = 400;
 
         stringsMenu.ForEach(e =>
         {
@@ -133,9 +133,10 @@ public class MainScreen(
 
     private void DrawMenuItem(string text, int y, Color? color)
     {
-        string textBase = "  Play Game";
-        float textWidthItem1 = _gameFontSmall.MeasureString(textBase).X / 2 + 45;
-        spriteBatch.DrawString(_gameFontSmall, text, new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidthItem1 ,y),color ?? Color.White);
+        const string textBase = "  Play Game";
+        var textWidthItem1 = _gameFontSmall.MeasureString(textBase).X / 2 + 45;
+        spriteBatch.DrawString(_gameFontSmall, text,
+            new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidthItem1, y), color ?? Color.White);
     }
 
     private void DrawItemMenuActive()
@@ -146,20 +147,18 @@ public class MainScreen(
                 DrawMenuItem("> Play Game", 400, Color.Red);
                 break;
             case EMenuScreenOptions.Leaderboard:
-                DrawMenuItem("> View Leaderboards", 500,Color.Red);
+                DrawMenuItem("> View Leaderboards", 500, Color.Red);
                 break;
             case EMenuScreenOptions.Controls:
-                DrawMenuItem("> Game Control", 600,Color.Red);
+                DrawMenuItem("> Game Control", 600, Color.Red);
                 break;
         }
     }
 
     private void DrawDescription()
     {
-        string text = "Use the arrow keys to move between menu items and press enter to select the option.";
-        spriteBatch.DrawString(_gameDescription, text, new Vector2(100,graphics.PreferredBackBufferHeight - 100), Color.White);
+        const string text = "Use the arrow keys to move between menu items and press enter to select the option.";
+        spriteBatch.DrawString(_gameDescription, text, new Vector2(100, graphics.PreferredBackBufferHeight - 100),
+            Color.White);
     }
-
 }
-
-

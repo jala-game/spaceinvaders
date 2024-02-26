@@ -1,4 +1,7 @@
-public enum TypeBulletEnum {
-    PLAYER,
-    ALIEN
+namespace spaceinvaders.enums;
+
+public enum TypeBulletEnum
+{
+    Player,
+    Alien
 }

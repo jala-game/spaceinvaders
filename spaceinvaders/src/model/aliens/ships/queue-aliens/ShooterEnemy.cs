@@ -4,27 +4,31 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
+using spaceinvaders.enums;
+
+namespace spaceinvaders.model.aliens.ships.queue_aliens;
 
 public class ShooterEnemy : IEnemyGroup
 {
-    public IShapeF Bounds { get; }
+    private readonly ContentManager _contentManager;
 
     private readonly GraphicsDeviceManager _graphics;
+    private readonly int _point = 40;
     private readonly SpriteBatch _spriteBatch;
     private readonly Texture2D _texture;
-    private readonly ContentManager _contentManager;
-    private bool isDead = false;
-    private bool directionRight = true;
-    public Bullet bullet;
-    private int _point = 40;
+    private Bullet _bullet;
+    private bool _directionRight = true;
+    private bool _isDead;
 
-    public ShooterEnemy(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, int x, int y) {
-        Texture2D texture = contentManager.Load<Texture2D>("aliens/shooter-alien-ship");
+    public ShooterEnemy(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, int x,
+        int y)
+    {
+        var texture = contentManager.Load<Texture2D>("aliens/shooter-alien-ship");
         _graphics = graphics;
         _texture = texture;
 
-        int height = y;
-        int width = x - texture.Width / 2;
+        var height = y;
+        var width = x - texture.Width / 2;
         Vector2 position = new(width, height);
         Bounds = new RectangleF(position, new Size2(texture.Width, texture.Height));
 
@@ -32,41 +36,24 @@ public class ShooterEnemy : IEnemyGroup
         _contentManager = contentManager;
     }
 
+    public IShapeF Bounds { get; }
+
     public bool IsDead()
     {
-        return isDead;
+        return _isDead;
     }
 
     public void OnCollision(CollisionEventArgs collisionInfo)
     {
-        isDead = true;
+        _isDead = true;
     }
 
     public void Update()
     {
-        int randomShotValue = RandomShotValue();
+        var randomShotValue = RandomShotValue();
         Shoot(randomShotValue);
         RemoveBulletIfIsDead();
         RemoveBulletWhenLeaveFromMap();
-
-    }
-
-    private void Shoot(int randomShotValue){
-        if (randomShotValue == 5 && bullet == null){
-            Texture2D bulletTexture = _contentManager.Load<Texture2D>("red-bullet");
-            bullet = new Bullet(Bounds.Position, bulletTexture, _spriteBatch, _graphics, _texture.Width, TypeBulletEnum.ALIEN);
-        }
-    }
-
-    private void RemoveBulletWhenLeaveFromMap() {
-        if (bullet!= null && bullet.Bounds.Position.Y > _graphics.PreferredBackBufferHeight) {
-            bullet = null;
-        }
-    }
-
-    public void RemoveBulletIfIsDead()
-    {
-        if (bullet != null && bullet.GetIsDead()) bullet = null;
     }
 
     public void Draw()
@@ -78,35 +65,58 @@ public class ShooterEnemy : IEnemyGroup
         );
     }
 
-    public void InvertDirection() {
-        directionRight = !directionRight;
+    public void InvertDirection()
+    {
+        _directionRight = !_directionRight;
     }
 
-    public void IncreaseX(float value) {
-        float valueModified = directionRight ? value : -value;
+    public void IncreaseX(float value)
+    {
+        var valueModified = _directionRight ? value : -value;
         Bounds.Position += new Vector2(valueModified, 0);
     }
 
-    public void Fall() {
+    public void Fall()
+    {
         Bounds.Position += new Vector2(0, 50);
     }
 
     public Bullet GetBullet()
     {
-        return bullet;
+        return _bullet;
     }
 
-    public Texture2D GetTexture() {
+    public Texture2D GetTexture()
+    {
         return _texture;
-    }
-
-    private int RandomShotValue(){
-        Random random = new Random();
-        return random.Next(0, 500);
     }
 
     public int GetPoint()
     {
         return _point;
+    }
+
+    private void Shoot(int randomShotValue)
+    {
+        if (randomShotValue != 5 || _bullet != null) return;
+        var bulletTexture = _contentManager.Load<Texture2D>("red-bullet");
+        _bullet = new Bullet(Bounds.Position, bulletTexture, _spriteBatch, _graphics, _texture.Width,
+            TypeBulletEnum.Alien);
+    }
+
+    private void RemoveBulletWhenLeaveFromMap()
+    {
+        if (_bullet != null && _bullet.Bounds.Position.Y > _graphics.PreferredBackBufferHeight) _bullet = null;
+    }
+
+    private void RemoveBulletIfIsDead()
+    {
+        if (_bullet != null && _bullet.GetIsDead()) _bullet = null;
+    }
+
+    private static int RandomShotValue()
+    {
+        var random = new Random();
+        return random.Next(0, 500);
     }
 }

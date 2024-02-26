@@ -1,20 +1,22 @@
+using System;
 using System.Net.WebSockets;
-using System.Threading;
 
-public class WebSocketManager {
-    private static WebSocketManager instance;
-    public static WebSocketManager GetInstance() {
-        instance ??= new WebSocketManager();
-        return instance;
+namespace spaceinvaders.services;
+
+public class WebSocketManager
+{
+    private static WebSocketManager _instance;
+
+    private readonly ClientWebSocket _webSocketClient = new();
+
+    public static WebSocketManager GetInstance()
+    {
+        _instance ??= new WebSocketManager();
+        return _instance;
     }
 
-    private readonly ClientWebSocket webSocketClient;
-
-    public WebSocketManager() {
-        webSocketClient = new ClientWebSocket();
-    }
-
-    public async void Connect() {
-        await webSocketClient.ConnectAsync(new System.Uri("ws://localhost:8080"), default);
+    public async void Connect()
+    {
+        await _webSocketClient.ConnectAsync(new Uri("ws://localhost:8080"), default);
     }
 }

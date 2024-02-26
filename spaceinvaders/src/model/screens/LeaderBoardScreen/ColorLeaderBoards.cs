@@ -6,26 +6,31 @@ namespace spaceinvaders.model;
 
 public class ColorLeaderBoards
 {
-    private Color[] colors;
-    
-    public ColorLeaderBoards(){ ModifyColors();}
-    
-    public Color RandomColor(int numberOfColor)
+    private Color[] _colors;
+
+    public ColorLeaderBoards()
     {
-        if (numberOfColor > colors.Length || numberOfColor == -1) return Color.White;
-        return colors[numberOfColor];
+        ModifyColors();
     }
 
-    public void ModifyColors()
+    public Color RandomColor(int numberOfColor)
     {
-        if (colors != null)
+        if (numberOfColor > _colors.Length || numberOfColor == -1) return Color.White;
+        return _colors[numberOfColor];
+    }
+
+    private void ModifyColors()
+    {
+        if (_colors != null)
         {
-            colors.Shuffle(new Random());
+            _colors.Shuffle(new Random());
             return;
         }
-        
-        colors = new[] { Color.White, Color.Red, Color.Yellow, Color.Orange, Color.Green, Color.Cyan, 
-            Color.Blue,Color.Azure,Color.Gold, Color.Magenta};
-        
+
+        _colors =
+        [
+            Color.White, Color.Red, Color.Yellow, Color.Orange, Color.Green, Color.Cyan,
+            Color.Blue, Color.Azure, Color.Gold, Color.Magenta
+        ];
     }
 }

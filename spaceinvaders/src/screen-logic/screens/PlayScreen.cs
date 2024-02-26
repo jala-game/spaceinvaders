@@ -1,12 +1,15 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using spaceinvaders.model;
+using spaceinvaders.model.aliens;
+using spaceinvaders.model.aliens.ships;
+using spaceinvaders.model.aliens.ships.queue_aliens;
 using spaceinvaders.model.barricades;
-using spaceinvaders.model.sounds;
+using spaceinvaders.model.screens.PlayScreen;
+using spaceinvaders.utils;
 
 namespace spaceinvaders.screen_logic.screens;
 
@@ -18,16 +21,16 @@ public class PlayScreen(
     SpriteBatch spriteBatch)
     : GameScreenModel
 {
+    private const int InitialTime = 0;
+    private readonly Barricades _barricades = new(game);
     private readonly List<IEnemyGroup> _enemies = [];
-    private RedEnemy _redEnemy;
-    private int _initialTime = 0;
     private readonly Score _score = new(graphics, spriteBatch, contentManager);
-    private Barricades _barricades = new(game);
     private int _addLifeManage = 1000;
-    private int _numberOfHordes = 0;
-    private Explosion explosion = null;
-    private AlienRound alienRound = new(contentManager, spriteBatch, graphics);
-    private int gameTimeSecond = 0;
+    private AlienRound _alienRound = new(contentManager, spriteBatch, graphics);
+    private Explosion _explosion;
+    private int _gameTimeSecond = 0;
+    private int _numberOfWaves;
+    private RedEnemy _redEnemy;
 
     public override void LoadContent()
     {
@@ -37,134 +40,123 @@ public class PlayScreen(
 
     public override void Update(GameTime gameTime)
     {
-        if (ship.GetIsDead()) {
+        if (ship.GetIsDead())
+        {
             LoadGameOverScreen();
             return;
         }
 
-        PlayScreenUpdate playScreenUpdate = new() {
-            game=game,
-            enemies=_enemies,
-            redEnemy=_redEnemy,
-            ship=ship,
-            contentManager=contentManager,
-            graphics=graphics,
-            spriteBatch=spriteBatch,
-            barricades=_barricades,
-            score=_score,
-            alienRound=alienRound,
-            addLifeManage=_addLifeManage
+        PlayScreenUpdate playScreenUpdate = new()
+        {
+            Game = game,
+            Enemies = _enemies,
+            RedEnemy = _redEnemy,
+            Ship = ship,
+            ContentManager = contentManager,
+            Graphics = graphics,
+            SpriteBatch = spriteBatch,
+            Barricades = _barricades,
+            Score = _score,
+            AlienRound = _alienRound,
+            AddLifeManage = _addLifeManage
         };
         SpawnRedShip(gameTime);
         RemoveRedShip();
         playScreenUpdate.EnemiesUpdate();
-        playScreenUpdate.alienRound.Update();
+        playScreenUpdate.AlienRound.Update();
         playScreenUpdate.EnemyBulletUpdate();
-        playScreenUpdate.ship.Update();
+        playScreenUpdate.Ship.Update();
         playScreenUpdate.IncreaseLife();
 
-        int addLifeFromUpdate = playScreenUpdate.addLifeManage;
+        var addLifeFromUpdate = playScreenUpdate.AddLifeManage;
         if (addLifeFromUpdate != _addLifeManage) _addLifeManage = addLifeFromUpdate;
 
         playScreenUpdate.SpaceShipBulletUpdate();
-        GenerateNewHordeOfEnemies();
-        ColisionEnemyWithSpaceShip();
-        playScreenUpdate.barricades.Update(gameTime);
+        GenerateNewWaveOfEnemies();
+        CollisionEnemyWithSpaceShip();
+        playScreenUpdate.Barricades.Update(gameTime);
 
-        Explosion newExplosion = playScreenUpdate.GetExplosion();
-        if (newExplosion != null) explosion = newExplosion;
-        explosion?.Update(gameTime);
+        var newExplosion = playScreenUpdate.GetExplosion();
+        if (newExplosion != null) _explosion = newExplosion;
+        _explosion?.Update(gameTime);
 
         base.Update(gameTime);
     }
 
-    private void LoadGameOverScreen() {
+    private void LoadGameOverScreen()
+    {
         SoundEffects.StopMusic();
-        GameOverScreen gameOverScreen = new(game,graphics, contentManager, spriteBatch, _score.GetScore());
+        GameOverScreen gameOverScreen = new(game, graphics, contentManager, spriteBatch, _score.GetScore());
         ScreenManager.ChangeScreen(gameOverScreen);
         _barricades.Dispose();
     }
 
     private void SpawnRedShip(GameTime gameTime)
     {
-        int actualSecond = int.Parse(gameTime.TotalGameTime.Seconds.ToString());
-        Console.WriteLine(_initialTime);
-        Console.WriteLine(gameTime.TotalGameTime.Seconds.ToString());
-        int differenceToSpawnRedShip = actualSecond - _initialTime;
+        var actualSecond = int.Parse(gameTime.TotalGameTime.Seconds.ToString());
+        var differenceToSpawnRedShip = actualSecond - InitialTime;
         const int seconds = 59;
-        if (differenceToSpawnRedShip == seconds)
-        {
-            _redEnemy = new RedEnemy(game, contentManager, spriteBatch, graphics);
-        }
+        if (differenceToSpawnRedShip == seconds) _redEnemy = new RedEnemy(game, contentManager, spriteBatch, graphics);
     }
 
     private void RemoveRedShip()
     {
-        if (_redEnemy != null && _redEnemy.IsDead())
-        {
-            _redEnemy = null;
-        }
+        if (_redEnemy != null && _redEnemy.IsDead()) _redEnemy = null;
     }
 
     public override void Draw(GameTime gameTime)
     {
-        ship.bullet?.Draw();
+        ship.Bullet?.Draw();
         ship.Draw();
         _score.Draw();
         DrawLife();
         DrawEnemies();
         _redEnemy?.Draw();
-        DrawHorderText();
+        DrawWaverText();
         base.Draw(gameTime);
-        explosion?.Draw();
+        _explosion?.Draw();
     }
 
     private void DrawEnemies()
     {
-        foreach (IEnemyGroup enemy in _enemies)
+        foreach (var enemy in _enemies)
         {
             enemy.Draw();
 
-            Bullet bullet = enemy.GetBullet();
+            var bullet = enemy.GetBullet();
             bullet?.Draw();
         }
     }
 
     private void DrawLife()
     {
-        SpriteFont spriteFont = game.Content.Load<SpriteFont>("fonts/PixeloidMono");
-        spriteBatch.DrawString(spriteFont, $"LIFE {ship.GetLifes()}", new Vector2(50, 50), Color.White);
+        var spriteFont = game.Content.Load<SpriteFont>("fonts/PixeloidMono");
+        spriteBatch.DrawString(spriteFont, $"LIFE {ship.GetLives()}", new Vector2(50, 50), Color.White);
     }
 
-    private void GenerateNewHordeOfEnemies()
+    private void GenerateNewWaveOfEnemies()
     {
         if (_enemies.Count > 0) return;
-        alienRound = new(contentManager, spriteBatch, graphics);
-        alienRound.GetEnemies().ForEach(e =>
-        {
-            _enemies.Add(e);
-        });
-        _numberOfHordes += 1;
+        _alienRound = new AlienRound(contentManager, spriteBatch, graphics);
+        _alienRound.GetEnemies().ForEach(e => { _enemies.Add(e); });
+        _numberOfWaves += 1;
     }
 
-    private void DrawHorderText()
+    private void DrawWaverText()
     {
-        string textHorder = $"HORDE {_numberOfHordes}";
-        SpriteFont spriteFont = game.Content.Load<SpriteFont>("fonts/PixeloidMono");
-        float textWidth = spriteFont.MeasureString(textHorder).X / 2;
+        var textWaver = $"Wave {_numberOfWaves}";
+        var spriteFont = game.Content.Load<SpriteFont>("fonts/PixeloidMono");
+        var textWidth = spriteFont.MeasureString(textWaver).X / 2;
 
-        spriteBatch.DrawString(spriteFont, textHorder,
-            new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidth , 50), Color.White);
+        spriteBatch.DrawString(spriteFont, textWaver,
+            new Vector2(graphics.PreferredBackBufferWidth / 2 - textWidth, 50), Color.White);
     }
 
-    private void ColisionEnemyWithSpaceShip()
+    private void CollisionEnemyWithSpaceShip()
     {
         _enemies.ForEach(e =>
         {
-            if (ship.Bounds.Intersects(e.Bounds))
-            {
-                ship.SetIsDead();
-            }
+            if (ship.Bounds.Intersects(e.Bounds)) ship.SetIsDead();
 
             if (e.Bounds.Position.Y < ship.Bounds.Position.Y) return;
             ship.SetIsDead();

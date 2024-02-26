@@ -3,44 +3,49 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
+using spaceinvaders.model;
+using spaceinvaders.model.aliens.ships.queue_aliens;
 
-public class FrontEnemy : IEnemyGroup {
-        public IShapeF Bounds { get; }
-
+public class FrontEnemy : IEnemyGroup
+{
+    private const int Point = 10;
     private readonly GraphicsDeviceManager _graphics;
     private readonly SpriteBatch _spriteBatch;
     private readonly Texture2D _texture;
-    private bool isDead = false;
-    private bool directionRight = true;
-    private float rotator = 0;
-    private int _point = 10;
+    private bool _directionRight = true;
+    private bool _isDead;
+    private float _rotator;
 
-    public FrontEnemy(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, int x, int y) {
-        Texture2D texture = contentManager.Load<Texture2D>("aliens/front-alien-ship");
+    public FrontEnemy(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, int x,
+        int y)
+    {
+        var texture = contentManager.Load<Texture2D>("aliens/front-alien-ship");
         _graphics = graphics;
         _texture = texture;
 
-        int height = y;
-        int width = x - texture.Width / 2;
+        var height = y;
+        var width = x - texture.Width / 2;
         Vector2 position = new(width, height);
         Bounds = new RectangleF(position, new Size2(texture.Width, texture.Height));
 
         _spriteBatch = spriteBatch;
     }
 
+    public IShapeF Bounds { get; }
+
     public bool IsDead()
     {
-        return isDead;
+        return _isDead;
     }
 
     public void OnCollision(CollisionEventArgs collisionInfo)
     {
-        isDead = true;
+        _isDead = true;
     }
 
     public void Update()
     {
-        rotator +=  directionRight ? 0.1f : -0.1f;
+        _rotator += _directionRight ? 0.1f : -0.1f;
     }
 
     public void Draw()
@@ -52,7 +57,7 @@ public class FrontEnemy : IEnemyGroup {
             new Vector2(Bounds.Position.X + _texture.Width / 2, Bounds.Position.Y + _texture.Height / 2),
             null,
             Color.White,
-            rotator,
+            _rotator,
             origin,
             Vector2.One,
             SpriteEffects.None,
@@ -60,16 +65,19 @@ public class FrontEnemy : IEnemyGroup {
         );
     }
 
-    public void InvertDirection() {
-        directionRight = !directionRight;
+    public void InvertDirection()
+    {
+        _directionRight = !_directionRight;
     }
 
-    public void IncreaseX(float value) {
-        float valueModified = directionRight ? value : -value;
+    public void IncreaseX(float value)
+    {
+        var valueModified = _directionRight ? value : -value;
         Bounds.Position += new Vector2(valueModified, 0);
     }
 
-    public void Fall() {
+    public void Fall()
+    {
         Bounds.Position += new Vector2(0, 50);
     }
 
@@ -78,13 +86,13 @@ public class FrontEnemy : IEnemyGroup {
         return null;
     }
 
-    public Texture2D GetTexture() {
+    public Texture2D GetTexture()
+    {
         return _texture;
     }
-    
+
     public int GetPoint()
     {
-        return _point;
+        return Point;
     }
-    
 }

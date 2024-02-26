@@ -5,7 +5,6 @@ namespace spaceinvaders.model.barricades;
 
 public class Barricades : GameComponent
 {
-    public List<BarricadeBlock> BarricadeBlocks { get; }
     private const int BarricadeQuantity = 4;
 
     public Barricades(Game game) : base(game)
@@ -13,6 +12,8 @@ public class Barricades : GameComponent
         BarricadeBlocks = new List<BarricadeBlock>(BarricadeQuantity);
         Initialize();
     }
+
+    public List<BarricadeBlock> BarricadeBlocks { get; }
 
     public override void Initialize()
     {
@@ -41,10 +42,7 @@ public class Barricades : GameComponent
 
     protected override void Dispose(bool disposing)
     {
-        foreach (var barricadeBlock in BarricadeBlocks)
-        {
-            barricadeBlock.Dispose();
-        }
+        foreach (var barricadeBlock in BarricadeBlocks) barricadeBlock.Dispose();
 
         base.Dispose(disposing);
     }

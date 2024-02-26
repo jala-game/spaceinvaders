@@ -11,7 +11,7 @@ public static class BarricadeFormatList
         { BarricadeGeometry.Square, new BarricadePositions(0, 25, 25) },
         { BarricadeGeometry.RightTriangle, new BarricadePositions(0, 50, 25) },
         { BarricadeGeometry.LittleLeftTriangle, new BarricadePositions(0, 75, 12) },
-        { BarricadeGeometry.LittleRightTriangle, new BarricadePositions(0,88, 12) }
+        { BarricadeGeometry.LittleRightTriangle, new BarricadePositions(0, 88, 12) }
     };
 
     public static BarricadePositions GetFormat(BarricadeGeometry geometry)

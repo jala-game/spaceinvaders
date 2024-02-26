@@ -11,8 +11,16 @@ using RectangleF = MonoGame.Extended.RectangleF;
 
 namespace spaceinvaders.model.barricades;
 
-public class BarricadeBlockPart : DrawableGameComponent, Entity
+public class BarricadeBlockPart : DrawableGameComponent, IEntity
 {
+    public BarricadeBlockPart(Game game, BarricadeGeometry kindOfBarricadeGeometry, Point newPoint) : base(game)
+    {
+        NewPoint = newPoint;
+        KindOfBarricadeGeometry = kindOfBarricadeGeometry;
+        game.Components.Add(this);
+        Initialize();
+    }
+
     private Texture2D ContentBarricadeTexture2D { get; set; }
     private Rectangle PartRectangle { get; set; }
     private BarricadePositions PositionOfTheBarricadeIntoTheContentDraw { get; set; }
@@ -22,12 +30,18 @@ public class BarricadeBlockPart : DrawableGameComponent, Entity
     private List<IObserver> Observers { get; } = [];
     public IShapeF Bounds { get; private set; }
 
-    public BarricadeBlockPart(Game game, BarricadeGeometry kindOfBarricadeGeometry, Point newPoint) : base(game)
+    public void OnCollision(CollisionEventArgs collisionInfo)
     {
-        NewPoint = newPoint;
-        KindOfBarricadeGeometry = kindOfBarricadeGeometry;
-        game.Components.Add(this);
-        Initialize();
+        TakeDamage();
+    }
+
+
+    public void Update()
+    {
+    }
+
+    public void Draw()
+    {
     }
 
     public override void Initialize()
@@ -64,10 +78,7 @@ public class BarricadeBlockPart : DrawableGameComponent, Entity
 
     private void NotifyObservers()
     {
-        foreach (var observer in Observers)
-        {
-            observer.Notify(this);
-        }
+        foreach (var observer in Observers) observer.Notify(this);
     }
 
     private void TakeDamage()
@@ -88,19 +99,5 @@ public class BarricadeBlockPart : DrawableGameComponent, Entity
         Game.Components.Remove(this);
         Observers.Clear();
         base.Dispose(disposing);
-    }
-
-    public void OnCollision(CollisionEventArgs collisionInfo)
-    {
-        TakeDamage();
-    }
-
-
-    public void Update()
-    {
-    }
-
-    public void Draw()
-    {
     }
 }

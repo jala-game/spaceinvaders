@@ -1,12 +1,11 @@
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using spaceinvaders.model.barricades;
 
-namespace spaceinvaders.model.sounds;
+namespace spaceinvaders.utils;
 
-public class SoundEffects
+public abstract class SoundEffects
 {
     private static Song _mySound;
     private static SoundEffect _myEffect;
@@ -26,27 +25,16 @@ public class SoundEffects
 
     public static void LoadEffect(Game game, ESoundsEffects effect)
     {
-        switch (effect)
+        _myEffect = effect switch
         {
-            case ESoundsEffects.SpaceShipDead:
-                _myEffect = game.Content.Load<SoundEffect>("songs/explosion");
-                break;
-            case ESoundsEffects.EnemyDead:
-                _myEffect = game.Content.Load<SoundEffect>("songs/invaderkilled");
-                break;
-            case ESoundsEffects.ShootSpaceShip:
-                _myEffect = game.Content.Load<SoundEffect>("songs/shoot");
-                break;
-            case ESoundsEffects.MenuEnter:
-                _myEffect = game.Content.Load<SoundEffect>("songs/menuenter");
-                break;
-            case ESoundsEffects.MenuSelection:
-                _myEffect = game.Content.Load<SoundEffect>("songs/menuselection");
-                break;
-            case ESoundsEffects.RedShip:
-                _myEffect = game.Content.Load<SoundEffect>("songs/redship-song");
-                break;
-        }
+            ESoundsEffects.SpaceShipDead => game.Content.Load<SoundEffect>("songs/explosion"),
+            ESoundsEffects.EnemyDead => game.Content.Load<SoundEffect>("songs/invaderkilled"),
+            ESoundsEffects.ShootSpaceShip => game.Content.Load<SoundEffect>("songs/shoot"),
+            ESoundsEffects.MenuEnter => game.Content.Load<SoundEffect>("songs/menuenter"),
+            ESoundsEffects.MenuSelection => game.Content.Load<SoundEffect>("songs/menuselection"),
+            ESoundsEffects.RedShip => game.Content.Load<SoundEffect>("songs/redship-song"),
+            _ => _myEffect
+        };
     }
 
     public static void PlayEffects(bool loop, float volume = 1f)
@@ -64,7 +52,7 @@ public class SoundEffects
     public static void PlaySoundEffect(float volume = 0.1f)
     {
         var soundEffect = _myEffect;
-        SoundEffectInstance soundEffectInstance = soundEffect.CreateInstance();
+        var soundEffectInstance = soundEffect.CreateInstance();
         soundEffectInstance.Volume = volume;
         soundEffectInstance.Play();
     }

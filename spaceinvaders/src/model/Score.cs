@@ -6,11 +6,11 @@ namespace spaceinvaders.model;
 
 public class Score
 {
-    private int _score;
+    private readonly ContentManager _contentManager;
     private readonly GraphicsDeviceManager _graphics;
     private readonly SpriteBatch _spriteBatch;
     private readonly SpriteFont _spriteFont;
-    private readonly ContentManager _contentManager;
+    private int _score;
 
     public Score(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, ContentManager contentManager)
     {
@@ -35,6 +35,7 @@ public class Score
 
     public void Draw()
     {
-        _spriteBatch.DrawString(_spriteFont, $"SCORE {_score}", new Vector2(_graphics.PreferredBackBufferWidth - 250, 50), Color.White);
+        _spriteBatch.DrawString(_spriteFont, $"SCORE {_score}",
+            new Vector2(_graphics.PreferredBackBufferWidth - 250, 50), Color.White);
     }
 }

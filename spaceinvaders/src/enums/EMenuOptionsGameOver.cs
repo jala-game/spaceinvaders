@@ -3,5 +3,5 @@ namespace spaceinvaders.model.barricades;
 public enum EMenuOptionsGameOver
 {
     SaveGame = 1,
-    LeaveGame = 2,
+    LeaveGame = 2
 }

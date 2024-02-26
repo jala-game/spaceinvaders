@@ -4,51 +4,53 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
+using spaceinvaders.enums;
+using spaceinvaders.model.aliens.ships;
+using spaceinvaders.model.aliens.ships.queue_aliens;
 
 public class AlienQueue : IEnemyEntity
 {
-    public IShapeF Bounds { get; }
-    private readonly List<IEnemyGroup> enemies = new();
-    private readonly GraphicsDeviceManager _graphics;
+    private const bool isDead = false;
+    private readonly List<IEnemyGroup> _enemies = [];
     private readonly SpriteBatch _spriteBatch;
-    private readonly bool isDead = false;
 
-    public AlienQueue(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics, AlienEnum enemyType, int y=200) {
-        _graphics = graphics;
+    public AlienQueue(ContentManager contentManager, SpriteBatch spriteBatch, GraphicsDeviceManager graphics,
+        AlienEnum enemyType, int y = 200)
+    {
         _spriteBatch = spriteBatch;
 
-        int ENEMY_LIMIT = 11;
-        int MARGIN = 80;
-        switch (enemyType) {
+        const int enemyLimit = 11;
+        const int margin = 80;
+        switch (enemyType)
+        {
             case AlienEnum.SHOOTER:
-                for (int i = 1; i <= ENEMY_LIMIT; i++) {
-                    enemies.Add(new ShooterEnemy(contentManager, spriteBatch, _graphics, i * MARGIN, y));
-                }
+                for (var i = 1; i <= enemyLimit; i++)
+                    _enemies.Add(new ShooterEnemy(contentManager, spriteBatch, graphics, i * margin, y));
                 break;
 
             case AlienEnum.BIRD:
-                for (int i = 1; i <= ENEMY_LIMIT; i++) {
-                    enemies.Add(new BirdEnemy(contentManager, spriteBatch, _graphics, i * MARGIN, y));
-                }
+                for (var i = 1; i <= enemyLimit; i++)
+                    _enemies.Add(new BirdEnemy(contentManager, spriteBatch, graphics, i * margin, y));
                 break;
             case AlienEnum.FRONT:
-                for (int i = 1; i <= ENEMY_LIMIT; i++) {
-                    enemies.Add(new FrontEnemy(contentManager, spriteBatch, _graphics, i * MARGIN, y));
-                }
+                for (var i = 1; i <= enemyLimit; i++)
+                    _enemies.Add(new FrontEnemy(contentManager, spriteBatch, graphics, i * margin, y));
                 break;
         }
     }
 
-    public void Update() {}
+    public IShapeF Bounds { get; }
+
+    public void Update()
+    {
+    }
 
     public void OnCollision(CollisionEventArgs collisionInfo)
     {
-        //
     }
 
     public void Draw()
     {
-        //
     }
 
     public bool IsDead()
@@ -56,7 +58,8 @@ public class AlienQueue : IEnemyEntity
         return isDead;
     }
 
-    public List<IEnemyGroup> GetEnemies() {
-        return enemies;
+    public IEnumerable<IEnemyGroup> GetEnemies()
+    {
+        return _enemies;
     }
 }

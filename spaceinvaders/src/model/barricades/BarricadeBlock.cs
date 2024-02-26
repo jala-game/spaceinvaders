@@ -8,14 +8,20 @@ public class BarricadeBlock : GameComponent, IObserver
 {
     private const int BlockPartRows = 3;
     private const int BlockPartColumns = 4;
-    public List<BarricadeBlockPart> BarricadeBlockParts { get; }
-    private Point BlockInitialPoint { get; }
 
     public BarricadeBlock(Game game, Point blockInitialPoint) : base(game)
     {
         BlockInitialPoint = blockInitialPoint;
         BarricadeBlockParts = [];
         Initialize();
+    }
+
+    public List<BarricadeBlockPart> BarricadeBlockParts { get; }
+    private Point BlockInitialPoint { get; }
+
+    public void Notify(BarricadeBlockPart part)
+    {
+        BarricadeBlockParts.Remove(part);
     }
 
     public override void Initialize()
@@ -77,17 +83,9 @@ public class BarricadeBlock : GameComponent, IObserver
         base.Update(gameTime);
     }
 
-    public void Notify(BarricadeBlockPart part)
-    {
-        BarricadeBlockParts.Remove(part);
-    }
-
     protected override void Dispose(bool disposing)
     {
-        foreach (var barricadeBlockPart in BarricadeBlockParts)
-        {
-            barricadeBlockPart.Dispose();
-        }
+        foreach (var barricadeBlockPart in BarricadeBlockParts) barricadeBlockPart.Dispose();
 
         base.Dispose(disposing);
     }
