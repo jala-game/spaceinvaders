@@ -13,6 +13,7 @@ public class Animation
     private float _frameTimeLeft;
     private bool _active = true;
     private SpriteBatch _spriteBatch;
+    public bool repeat = false;
 
     public Animation(SpriteBatch spriteBatch, Texture2D texture, int framesX, int framesY, float frameTime, int row = 1)
     {
@@ -49,6 +50,10 @@ public class Animation
 
     public void Update(GameTime gameTime)
     {
+        if (repeat && !_active) {
+            _active = true;
+            Reset();
+        }
         if (!_active) return;
         if (_sourceRectangles.Count <= _frame + 1) Stop();
 

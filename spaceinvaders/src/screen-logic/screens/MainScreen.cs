@@ -22,6 +22,7 @@ public class MainScreen(
     private SpriteFont _gameFontSmall = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
     private SpriteFont _gameDescription = game.Content.Load<SpriteFont>("fonts/PixeloidMono");
     private EMenuScreenOptions _selectedOption = EMenuScreenOptions.Play;
+    private SpiralYellow spiralYellowAnimation = new SpiralYellow(spriteBatch, contentManager, new Vector2(20, 20));
     private float delayToPress = 10f;
     private Vortex _vortex = new Vortex(spriteBatch, contentManager, new Vector2(100, 200));
     public override void Initialize() { }
@@ -42,6 +43,7 @@ public class MainScreen(
 
         ModifyMenuSelection(kstate);
         SendMenuOption(kstate);
+        spiralYellowAnimation.Update(gameTime);
 
     }
 
@@ -52,6 +54,7 @@ public class MainScreen(
         DrawDescription();
         DrawItemMenuActive();
         _vortex.Draw();
+        spiralYellowAnimation.Draw();
     }
 
     private void ModifyMenuSelection(KeyboardState kstate)
