@@ -4,19 +4,19 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace spaceinvaders.model.effects;
 
-public class Vortex
+public class CirclePurple
 {
     private Animation _animation;
     private Vector2 _pos;
 
-    public Vortex(SpriteBatch spriteBatch, ContentManager content, Vector2 pos)
+    public CirclePurple(SpriteBatch spriteBatch, ContentManager content, Vector2 pos)
     {
-        Texture2D vortexTexture = content.Load<Texture2D>("effects/vortex");
-        _animation = new(spriteBatch, vortexTexture, 5, 6, 16f);
-        _animation.repeat = true;
+        Texture2D circlePurple = content.Load<Texture2D>("effects/circle-purple");
+        _animation = new(spriteBatch, circlePurple, 5,5 , 15f, 1);
         _pos = pos;
+        _animation.repeat = true;
     }
-    
+
     public void Update(GameTime gameTime)
     {
         _animation.Update(gameTime);

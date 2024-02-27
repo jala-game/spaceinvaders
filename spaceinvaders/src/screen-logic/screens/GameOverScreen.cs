@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using spaceinvaders.model.barricades;
+using spaceinvaders.model.effects;
 using spaceinvaders.model.sounds;
 using spaceinvaders.services;
 
@@ -21,11 +22,16 @@ public class GameOverScreen(
     private SpriteFont _gameMenuFont = game.Content.Load<SpriteFont>("fonts/PixeloidMonoMenu");
     private EMenuOptionsGameOver _selectedOption = EMenuOptionsGameOver.SaveGame;
     private float delayToPress = 10f;
+    private StarExplosion _starExplosion;
+    private CirclePurple _circlePurple;
 
     public override void LoadContent()
     {
         SoundEffects.LoadMusic(game, ESoundsEffects.BackgroundSongForMenu);
         SoundEffects.PlayEffects(true, 0.2f);
+        _starExplosion = new StarExplosion(spriteBatch, contentManager, new Vector2(150, 50));
+        _circlePurple = new CirclePurple(spriteBatch, contentManager,
+            new Vector2(graphics.PreferredBackBufferWidth - 200,graphics.PreferredBackBufferHeight - 200));
     }
 
     public override void Update(GameTime gameTime)
@@ -37,6 +43,8 @@ public class GameOverScreen(
 
         ModifyMenuSelection(kstate);
         SendMenuOption(kstate);
+        _starExplosion.Update(gameTime);
+        _circlePurple.Update(gameTime);
     }
 
     private void ModifyMenuSelection(KeyboardState kstate)
@@ -90,6 +98,8 @@ public class GameOverScreen(
         DrawScore();
         DrawMenu();
         DrawItemMenuActive();
+        _starExplosion.Draw();
+        _circlePurple.Draw();
     }
 
     private void DrawGameOver() {

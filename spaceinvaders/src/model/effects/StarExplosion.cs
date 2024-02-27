@@ -4,15 +4,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace spaceinvaders.model.effects;
 
-public class Vortex
+public class StarExplosion
 {
     private Animation _animation;
     private Vector2 _pos;
 
-    public Vortex(SpriteBatch spriteBatch, ContentManager content, Vector2 pos)
+    public StarExplosion(SpriteBatch spriteBatch, ContentManager content, Vector2 pos)
     {
-        Texture2D vortexTexture = content.Load<Texture2D>("effects/vortex");
-        _animation = new(spriteBatch, vortexTexture, 5, 6, 16f);
+        Texture2D stairExplosion = content.Load<Texture2D>("effects/stair-explosion");
+        _animation = new(spriteBatch, stairExplosion, 5, 4, 20f);
         _animation.repeat = true;
         _pos = pos;
     }

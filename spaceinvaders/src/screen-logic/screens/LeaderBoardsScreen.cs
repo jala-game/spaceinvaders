@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using spaceinvaders.model;
 using spaceinvaders.model.barricades;
+using spaceinvaders.model.effects;
 using spaceinvaders.model.sounds;
 
 namespace spaceinvaders.screen_logic.screens;
@@ -23,10 +24,17 @@ public class LeaderBoardsScreen(
     private float delayToPress = 10f;
     private int _placingManage = 0;
     private ColorLeaderBoards _colors = new();
+    private Vortex _vortex;
+    private CirclePurple _circlePurple;
 
     public override void Initialize() { }
 
-    public override void LoadContent() { }
+    public override void LoadContent()
+    {
+        _vortex = new Vortex(spriteBatch, contentManager, 
+            new Vector2(graphics.PreferredBackBufferWidth - 200, graphics.PreferredBackBufferHeight - 200));
+        _circlePurple = new CirclePurple(spriteBatch, contentManager, new Vector2(100,10));
+    }
 
     public override void Update(GameTime gameTime)
     {
@@ -37,6 +45,8 @@ public class LeaderBoardsScreen(
         
         ModifyMenuSelection(kstate);
         SendMenuOption(kstate);
+        _vortex.Update(gameTime);
+        _circlePurple.Update(gameTime);
     }
 
     public override void Draw(GameTime gameTime)
@@ -46,6 +56,8 @@ public class LeaderBoardsScreen(
         DrawLeaderBoards();
         DrawMenu();
         DrawMenuItemActive();
+        _vortex.Draw();
+        _circlePurple.Draw();
     }
 
     private void DrawTitle()
